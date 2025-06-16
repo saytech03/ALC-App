@@ -13,37 +13,11 @@ export const useAuthStore = create((set) => ({
 	signup: async (credentials) => {
 		set({ isSigningUp: true });
 		try {
-			// Map frontend fields to backend expected fields
-			const registerData = {
-				name: credentials.username, // Map username to name
-				email: credentials.email,
-				password: credentials.password,
-				occupation: credentials.occupation.toUpperCase() // Convert to uppercase as backend expects
-			};
-			
-			const response = await axios.post("/api/auth/register", registerData);
-			
-			// Extract data from response
-			const { id, name, email, occupation, message } = response.data;
-			
-			// Create user object (no token yet as it's pending OTP verification)
-			const user = {
-				id,
-				name,
-				email,
-				occupation
-			};
-			
-			set({ 
-				user, 
-				isSigningUp: false 
-			});
-			
-			// Show the message from backend (OTP verification message)
-			toast.success(message || "Account created successfully! Please check your email for OTP verification.");
-			
+			const response = await axios.post("/api/auth/register", credentials);
+			set({ user: response.data.user, isSigningUp: false });
+			toast.success("Account created successfully");
 		} catch (error) {
-			toast.error(error.response?.data?.message || "Signup failed");
+			toast.error(error.response.data.message || "Signup failed");
 			set({ isSigningUp: false, user: null });
 		}
 	},
@@ -51,64 +25,26 @@ export const useAuthStore = create((set) => ({
 	login: async (credentials) => {
 		set({ isLoggingIn: true });
 		try {
-			const response = await axios.post("/api/auth/login", credentials);
-			
-			// Extract data from response based on your API structure
-			const { id, name, email, occupation, token, membershipId, message } = response.data;
-			
-			// Create user object
-			const user = {
-				id,
-				name,
-				email,
-				occupation,
-				membershipId
-			};
-			
-			// Store token in localStorage for persistence
-			if (token) {
-				localStorage.setItem("token", token);
-				// Set axios default header for future requests
-				axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-			}
-			
-			set({ 
-				user, 
-				token, 
-				isLoggingIn: false 
-			});
-			
-			toast.success("Logged in successfully");
+			const response = await axios.post("/api/v1/auth/login", credentials);
+			set({ user: response.data.user, isLoggingIn: false });
 		} catch (error) {
-			set({ isLoggingIn: false, user: null, token: null });
-			toast.error(error.response?.data?.message || "Login failed");
+			set({ isLoggingIn: false, user: null });
+			toast.error(error.response.data.message || "Login failed");
 		}
 	},
 	
 	logout: async () => {
 		set({ isLoggingOut: true });
 		try {
-			await axios.post("/api/auth/logout");
-			
-			// Clear token from localStorage
-			localStorage.removeItem("token");
-			
-			// Remove axios default header
-			delete axios.defaults.headers.common["Authorization"];
-			
-			set({ 
-				user: null, 
-				token: null, 
-				isLoggingOut: false 
-			});
-			
+			await axios.post("/api/v1/auth/logout");
+			set({ user: null, isLoggingOut: false });
 			toast.success("Logged out successfully");
 		} catch (error) {
 			set({ isLoggingOut: false });
-			toast.error(error.response?.data?.message || "Logout failed");
+			toast.error(error.response.data.message || "Logout failed");
 		}
 	},
-	
+    
 	authCheck: async () => {
 		set({ isCheckingAuth: true });
 		try {
