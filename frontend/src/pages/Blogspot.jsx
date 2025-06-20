@@ -205,7 +205,7 @@ const Blogspot = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400  to-orange-600">
+    <div className='min-h-screen w-full ai-bg'>
       {/* Navigation Header */}
       <Navbar />
       
@@ -449,7 +449,7 @@ const Blogspot = () => {
           </div>
 
           {/* All Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {filteredArticles.map((article) => (
               <article 
                 key={article.id} 
@@ -543,25 +543,6 @@ const Blogspot = () => {
           </div>
         </div>
       </section>
-
-      {/* Bottom Gradient */}
-      <div className="h-16 bg-gradient-to-t from-white to-transparent"></div>
-      
-      <style jsx>{`
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </div>
   );
 };

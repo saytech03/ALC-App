@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar'
 
 function EventPage() {
   return (
-    <div className="relative bg-blue-400 min-h-screen" style={{fontFamily: 'Arima, sans-serif'}}>
+    <div className='min-h-screen w-full geo-bg'>
      <Navbar/>
     </div>
   )

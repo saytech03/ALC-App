@@ -25,7 +25,7 @@ const Navbar = () => {
                   {/* Logo - Far Left */}
                   <div className="flex items-left ml-2">
                     <img
-                      src="/logo1.png"
+                      src="/ellip-logo1.png"
                       alt="Art Law Communion Logo"
                       className="w-14 h-12 rounded-lg shadow-lg"
                     />
@@ -34,30 +34,30 @@ const Navbar = () => {
                   {/* Icons - Far Right */}
                   <div className="flex items-center gap-3 mr-1">
                     {/* Contact Us Icon */}
-                    <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Contact Us
                     </Link>
                     
-                    <Link to="/" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Home
                     </Link>
                     
                     {/* Member Icon */}
-                    <Link to="/member" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/member" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       About Us
                     </Link>
 
-                    <Link to="/event" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/event" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Events
                     </Link>
 
-                    <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Blogspot
                     </Link>
 
 
                     {/* Login Icon */}
-                    <Link to="/login" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-700 rounded-full">
+                    <Link to="/login" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Login
                     </Link>
                   </div>
