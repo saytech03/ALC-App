@@ -55,7 +55,6 @@ const Navbar = () => {
                       Blogspot
                     </Link>
 
-
                     {/* Login Icon */}
                     <Link to="/login" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Login

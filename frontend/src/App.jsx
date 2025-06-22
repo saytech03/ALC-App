@@ -11,6 +11,7 @@ import MembersPage from "./pages/MembersPage";
 import ContactPage from "./pages/ContactPage";
 import Footer from "./components/Footer";
 import EventPage from "./pages/EventPage";
+import { AuthProvider } from "./store/AuthContext";
 
 function App() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +61,7 @@ function App() {
 
 	return (
 		<>
+		  <AuthProvider>
 			<Routes>
 				<Route path='/' element={<HomePage />} />
 				<Route path='/login' element={<LoginPage />} />
@@ -72,6 +74,7 @@ function App() {
 			</Routes>
             <Footer/>
 			<Toaster />
+		</AuthProvider>
 		</>
 	);
 }
