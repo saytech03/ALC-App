@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Navbar from '../components/Navbar';
+import AltNavbar from '../components/AltNavbar'; 
 
-const MembersPage = () => {
+const MembersPage_ = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [imgLoading, setImgLoading] = useState(true);
 
@@ -77,7 +77,7 @@ const MembersPage = () => {
 
   return (
     <div className="min-h-screen py-20 px-8 relative rainbow-bg">
-      <Navbar/>
+      <AltNavbar/>
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
 				{imgLoading && (
 					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
@@ -216,4 +216,4 @@ const MembersPage = () => {
   );
 };
 
-export default MembersPage;
+export default MembersPage_;

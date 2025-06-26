@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import HomePage_ from "./pages/HomePage_";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
@@ -7,10 +8,14 @@ import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import Blogspot from "./pages/Blogspot";
+import Blogspot_ from "./pages/Blogspot_";
 import MembersPage from "./pages/MembersPage";
+import MembersPage_ from "./pages/MembersPage_";
 import ContactPage from "./pages/ContactPage";
+import ContactPage_ from "./pages/ContactPage_";
 import Footer from "./components/Footer";
 import EventPage from "./pages/EventPage";
+import EventPage_ from "./pages/EventPage_";
 import { AuthProvider } from "./store/AuthContext";
 
 function App() {
@@ -71,6 +76,11 @@ function App() {
 				<Route path='/contact' element={<ContactPage />} />
 				<Route path='/event' element={<EventPage />} />
 				<Route path='/*' element={<NotFoundPage />} />
+				<Route path='/h' element={<HomePage_ />} />
+				<Route path='/blogh' element={<Blogspot_ />} />
+				<Route path='/memberh' element={<MembersPage_ />} />
+				<Route path='/contacth' element={<ContactPage_ />} />
+				<Route path='/eventh' element={<EventPage_ />} />
 			</Routes>
             <Footer/>
 			<Toaster />

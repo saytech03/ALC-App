@@ -50,7 +50,7 @@ const LoginPage = () => {
 				
 				// Redirect to home page after successful login
 				setTimeout(() => {
-					navigate('/', { replace: true });
+					navigate('/h', { replace: true });
 				}, 1000);
 			} else {
 				setError(response?.message || 'Login failed');

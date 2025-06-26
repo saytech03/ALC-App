@@ -59,6 +59,10 @@ const Navbar = () => {
                     <Link to="/login" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Login
                     </Link>
+
+                    <Link to="/signup" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      SignUp
+                    </Link>
                   </div>
                 </div>
               </header>

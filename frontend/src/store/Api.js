@@ -5,7 +5,8 @@ const API_CONFIG = {
     AUTH: {
       REGISTER: '/api/auth/register',
       LOGIN: '/api/auth/login',
-      VERIFY_OTP: '/api/auth/verify-otp'
+      VERIFY_OTP: '/api/auth/verify-otp' ,
+      LOGOUT: '/api/auth/logout'
     }
   },
   HEADERS: {

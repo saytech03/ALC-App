@@ -1,8 +1,8 @@
 import { useState} from 'react';
 import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import AltNavbar from '../components/AltNavbar'; 
 
-const HomeScreen = () => {
+const HomePage_ = () => {
   const [email, setEmail] = useState('');
   const [imgLoading, setImgLoading] = useState(true);
   
@@ -28,11 +28,11 @@ const HomeScreen = () => {
   return (
     <div className="relative bg-white min-h-screen" style={{fontFamily: 'Arima, sans-serif'}}>
       {/* Navbar */}
-      <Navbar/>
+      <AltNavbar/>
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
-				{imgLoading && (
-					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-				)}
+                {imgLoading && (
+                    <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+                )}
       {/* Hero Section */}
       <div 
         className="relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-center bg-no-repeat"
@@ -277,4 +277,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default HomePage_;
