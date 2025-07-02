@@ -9,7 +9,7 @@ class AuthService {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    
+        
     const config = {
       headers: {
         ...this.defaultHeaders,
@@ -21,9 +21,9 @@ class AuthService {
     try {
       console.log('Making auth request to:', url);
       const response = await fetch(url, config);
-      
+            
       const responseData = await response.json();
-      
+            
       if (!response.ok) {
         throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
       }
@@ -41,13 +41,13 @@ class AuthService {
       method: 'POST',
       body: JSON.stringify(userData),
     });
-    
+        
     // Store temporary registration data for OTP verification
     if (response.success) {
       localStorage.setItem('temp_user_email', userData.email);
       localStorage.setItem('registration_pending', 'true');
     }
-    
+        
     return response;
   }
 
@@ -57,7 +57,7 @@ class AuthService {
       method: 'POST',
       body: JSON.stringify(otpData),
     });
-    
+        
     // Clear temporary registration data and store auth token
     if (response.success && response.token) {
       localStorage.removeItem('temp_user_email');
@@ -65,7 +65,7 @@ class AuthService {
       localStorage.setItem('auth_token', response.token);
       localStorage.setItem('user_data', JSON.stringify(response.user));
     }
-    
+        
     return response;
   }
 
@@ -75,13 +75,29 @@ class AuthService {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
-    
+        
     // Store auth token and user data
     if (response.success && response.token) {
       localStorage.setItem('auth_token', response.token);
       localStorage.setItem('user_data', JSON.stringify(response.user));
     }
-    
+        
+    return response;
+  }
+
+  // Login with patron ID
+  async loginWithPatron(patronCredentials) {
+    const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN_PATRON, {
+      method: 'POST',
+      body: JSON.stringify(patronCredentials),
+    });
+        
+    // Store auth token and user data
+    if (response.success && response.token) {
+      localStorage.setItem('auth_token', response.token);
+      localStorage.setItem('user_data', JSON.stringify(response.user));
+    }
+        
     return response;
   }
 

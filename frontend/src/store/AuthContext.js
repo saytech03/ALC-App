@@ -1,5 +1,5 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import authService from './authService.js';
 
 const AuthContext = createContext();
@@ -68,6 +68,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithPatron = async (patronCredentials) => {
+    try {
+      const response = await authService.loginWithPatron(patronCredentials);
+      if (response.success) {
+        setUser(response.user);
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -82,6 +94,7 @@ export const AuthProvider = ({ children }) => {
     register,
     verifyOTP,
     login,
+    loginWithPatron,
     logout,
     getTempEmail: () => authService.getTempEmail()
   };
