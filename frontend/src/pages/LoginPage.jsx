@@ -9,8 +9,14 @@ const LoginPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
-	const { login } = useAuth();
+	const { login, loginWithPatron } = useAuth();
 	const navigate = useNavigate();
+
+	// Function to detect if input is email or patron ID
+	const isEmail = (input) => {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(input);
+	};
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -22,24 +28,32 @@ const LoginPage = () => {
 			return;
 		}
 
-		// Email validation
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if (!emailRegex.test(email)) {
-			setError('Please enter a valid email address');
-			return;
-		}
+		const inputValue = email.trim();
+		const isEmailLogin = isEmail(inputValue);
 
 		try {
 			setLoading(true);
 			
-			const loginData = {
-				email: email.trim().toLowerCase(),
-				password: password
-			};
+			let loginData;
+			let response;
 
-			console.log('Login data being sent:', { email: loginData.email }); // Don't log password
-
-			const response = await login(loginData);
+			if (isEmailLogin) {
+				// Email login
+				loginData = {
+					email: inputValue.toLowerCase(),
+					password: password
+				};
+				console.log('Email login data being sent:', { email: loginData.email });
+				response = await login(loginData);
+			} else {
+				// Patron ID login
+				loginData = {
+					patronId: inputValue,
+					password: password
+				};
+				console.log('Patron login data being sent:', { patronId: loginData.patronId });
+				response = await loginWithPatron(loginData);
+			}
 			
 			console.log('Login response:', response);
 			
@@ -69,12 +83,27 @@ const LoginPage = () => {
 				
 				switch (status) {
 					case 400:
-						toast.error('Invalid credentials');
-						showToast = true;
+						if (data?.details) {
+							// Handle validation errors for patron login
+							const validationErrors = Object.values(data.details).join(', ');
+							errorMessage = validationErrors;
+						} else {
+							toast.error('Invalid credentials');
+							showToast = true;
+						}
 						break;
 					case 401:
-						toast.error('Invalid credentials');
-						showToast = true;
+						// Handle specific patron login errors
+						if (data?.message === 'Invalid Patron ID') {
+							toast.error('Invalid Patron ID');
+							showToast = true;
+						} else if (data?.message === 'Invalid password') {
+							toast.error('Invalid password');
+							showToast = true;
+						} else {
+							toast.error('Invalid credentials');
+							showToast = true;
+						}
 						break;
 					case 403:
 						errorMessage = data?.message || 'Account not verified. Please check your email for verification.';
@@ -97,8 +126,17 @@ const LoginPage = () => {
 					lowerMessage.includes('incorrect') ||
 					lowerMessage.includes('credentials') ||
 					lowerMessage.includes('password') ||
-					lowerMessage.includes('email')) {
-					toast.error('Invalid credentials');
+					lowerMessage.includes('email') ||
+					lowerMessage.includes('patron')) {
+					
+					// Handle specific patron error messages
+					if (lowerMessage.includes('patron id')) {
+						toast.error('Invalid Patron ID');
+					} else if (lowerMessage.includes('password')) {
+						toast.error('Invalid password');
+					} else {
+						toast.error('Invalid credentials');
+					}
 					showToast = true;
 				} else {
 					errorMessage = error.message;
@@ -143,12 +181,12 @@ const LoginPage = () => {
 					<form className='space-y-4' onSubmit={handleLogin}>
 						<div>
 							<label htmlFor='email' className='text-sm font-medium text-gray-300 block'>
-								Email
+								Email/ALC Patron ID
 							</label>
 							<input
-								type='email'
+								type='text'
 								className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring'
-								placeholder='you@example.com'
+								placeholder='you@example.com or ALCWB0003'
 								id='email'
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
