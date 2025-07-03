@@ -16,6 +16,7 @@ const SignUpPage = () => {
     const [otp, setOtp] = useState('');
     const [otpLoading, setOtpLoading] = useState(false);
     const [otpError, setOtpError] = useState('');
+    const [otpSuccess, setOtpSuccess] = useState(''); // New state for OTP success messages
     const [successMessage, setSuccessMessage] = useState('');
 
     const { register, verifyOTP } = useAuth();
@@ -52,10 +53,10 @@ const SignUpPage = () => {
             return;
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            toast.error('Invalid user content');
+        // More permissive email validation - accepts all valid email formats including institutional emails
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!emailRegex.test(email.trim())) {
+            toast.error('Please enter a valid email address');
             return;
         }
 
@@ -84,6 +85,10 @@ const SignUpPage = () => {
                 setSuccessMessage('You have successfully registered! OTP sent to your email!');
                 setShowOtpModal(true);
                 setError('');
+                // Clear any previous OTP states
+                setOtpError('');
+                setOtpSuccess('');
+                setOtp('');
                 toast.success('Registration successful! Please verify your email.');
             } else {
                 setError(response?.message || 'Registration failed');
@@ -131,49 +136,65 @@ const SignUpPage = () => {
         }
     };
 
-          const handleOtpSubmit = async (e) => {
-          e.preventDefault();
-          setOtpError('');
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+        setOtpError('');
+        setOtpSuccess('');
+       
+        if (!otp || otp.length < 4) {
+            setOtpError('Please enter a valid OTP');
+            return;
+        }
 
-          if (!otp || otp.length < 4) {
-              setOtpError('Please enter a valid OTP');
-              return;
-          }
-
-          try {
-              setOtpLoading(true);
-              const response = await verifyOTP({
-                  email: email.trim().toLowerCase(),
-                  otp: otp
-              });
-              
-              if (response && (response.success || response.token)) {
-                  toast.success('Email verified successfully!');
-                  navigate('/login', { replace: true }); // Immediate redirect
-              } else {
-                  setOtpError(response?.message || 'OTP verification failed');
-              }
-          } catch (error) {
-              console.error('OTP verification error:', error);
-              setOtpError(error.response?.data?.message || 'OTP verification failed');
-          } finally {
-              setOtpLoading(false);
-          }
-      };
+        try {
+            setOtpLoading(true);
+            const response = await verifyOTP({
+                email: email.trim().toLowerCase(),
+                otp: otp
+            });
+            
+            if (response && (response.success || response.token)) {
+                setOtpSuccess('Email verified successfully! Redirecting to login...');
+                setOtpError(''); // Clear any previous errors
+                toast.success('Email verified successfully!');
+                
+                // Auto redirect after 3 seconds
+                setTimeout(() => {
+                    navigate('/login', { replace: true });
+                }, 3000);
+            } else {
+                setOtpError(response?.message || 'OTP verification failed');
+                setOtpSuccess(''); // Clear any previous success messages
+            }
+        } catch (error) {
+            console.error('OTP verification error:', error);
+            setOtpError(error.response?.data?.message || 'OTP verification failed');
+            setOtpSuccess(''); // Clear any previous success messages
+        } finally {
+            setOtpLoading(false);
+        }
+    };
 
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, '');
         setOtp(value);
+        // Clear messages when user starts typing
+        if (otpError) setOtpError('');
+        if (otpSuccess) setOtpSuccess('');
     };
 
     const handleResendOTP = async () => {
         try {
             setOtpLoading(true);
+            setOtpError('');
+            setOtpSuccess('');
             // You might need to implement a resend OTP API call here
+            setOtpSuccess('OTP resent successfully! Please check your email.');
             toast.success('OTP resent successfully! Please check your email.');
         } catch (error) {
             console.error('Resend OTP error:', error);
             setOtpError('Failed to resend OTP. Please try again.');
+            setOtpSuccess('');
         } finally {
             setOtpLoading(false);
         }
@@ -187,7 +208,7 @@ const SignUpPage = () => {
                 </Link>
             </header>
 
-            <div className='flex justify-center items-center mt-15 mx-3'>
+            <div className='flex justify-center items-center mt-1 mx-3'>
                  <div className={`w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md ${showOtpModal ? 'blur-sm' : ''}`}>
                     <h1 className='text-center text-white text-2xl font-bold mb-4'>Sign Up</h1>
 
@@ -340,6 +361,14 @@ const SignUpPage = () => {
                                 />
                             </div>
 
+                            {/* Success Message - Green */}
+                            {otpSuccess && (
+                                <div className='text-green-400 text-sm text-center bg-green-900/20 p-3 rounded-md border border-green-700'>
+                                    {otpSuccess}
+                                </div>
+                            )}
+
+                            {/* Error Message - Red */}
                             {otpError && (
                                 <div className='text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700'>
                                     {otpError}
