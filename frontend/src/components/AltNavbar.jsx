@@ -59,8 +59,13 @@ const AltNavbar = () => {
                     
                     {/* Member Icon */}
                     <Link to="/memberh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Team
+                    </Link>
+
+                    <Link to="/auh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       About Us
                     </Link>
+
                     <Link to="/eventh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Events
                     </Link>

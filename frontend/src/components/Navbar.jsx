@@ -44,8 +44,13 @@ const Navbar = () => {
                     
                     {/* Member Icon */}
                     <Link to="/member" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Team
+                    </Link>
+
+                    <Link to="/au" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       About Us
                     </Link>
+
 
                     <Link to="/event" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Events

@@ -75,12 +75,14 @@ function App() {
 				<Route path='/member' element={<MembersPage />} />
 				<Route path='/contact' element={<ContactPage />} />
 				<Route path='/event' element={<EventPage />} />
+				<Route path='/au' element={<AboutPage />} />
 				<Route path='/*' element={<NotFoundPage />} />
 				<Route path='/h' element={<HomePage_ />} />
 				<Route path='/blogh' element={<Blogspot_ />} />
 				<Route path='/memberh' element={<MembersPage_ />} />
 				<Route path='/contacth' element={<ContactPage_ />} />
 				<Route path='/eventh' element={<EventPage_ />} />
+				<Route path='/auh' element={<AboutPage_ />} />
 			</Routes>
             <Footer/>
 			<Toaster />

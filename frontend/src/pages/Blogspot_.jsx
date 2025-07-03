@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, Calendar, User, Clock, Eye, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink } from 'lucide-react';
-import AltNavbar from '../components/AltNavbar';
+import Navbar from '../components/Navbar';
 
-const Blogspot_ = () => {
+const Blogspot = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
@@ -22,7 +22,7 @@ const Blogspot_ = () => {
       reactions: 542,
       likes: 398,
       popularity: 98,
-      featured: true,
+      featured: false,
       realUrl: "https://www.lawoftheledger.com/2024/12/articles/nfts/nft-legal-issues/",
       image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2232&q=80",
       subheadings: [
@@ -56,75 +56,6 @@ const Blogspot_ = () => {
     },
     {
       id: 3,
-      title: "U.S. Government Study: No NFT-Specific Legislation Needed Yet",
-      author: "CoinDesk Legal Analysis",
-      introduction: "A comprehensive U.S. government study concludes that current intellectual property laws are adequate to deal with copyright and trademark concerns associated with NFTs, avoiding the need for new legislation.",
-      category: "NFT LAW",
-      date: "March 13, 2024",
-      readTime: "8 min read",
-      views: "16.9K",
-      comments: 124,
-      reactions: 298,
-      likes: 189,
-      popularity: 91,
-      featured: false,
-      realUrl: "https://www.coindesk.com/policy/2024/03/13/us-govt-study-concludes-no-nft-specific-legislation-needed-yet-current-copyright-laws-adequate",
-      image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=2012&q=80",
-      subheadings: [
-        "USPTO and Copyright Office Joint Study",
-        "Current Laws vs New Legislation",
-        "Industry Implications",
-        "Future Regulatory Outlook"
-      ]
-    },
-    {
-      id: 4,
-      title: "It Takes Two to Tango: The Importance of Artist-Gallery Contracts",
-      author: "Scotti Hill, Center for Art Law",
-      introduction: "Beneath the veneer of originality and artistic merit lie monetarily-driven representation agreements and consignment contracts. This comprehensive analysis explores why carefully crafted contracts between artists and galleries are both practical and imperative for successful commercial relationships.",
-      category: "CONTRACTS",
-      date: "August 15, 2016",
-      readTime: "12 min read",
-      views: "8.7K",
-      comments: 34,
-      reactions: 156,
-      likes: 112,
-      popularity: 87,
-      featured: false,
-      realUrl: "https://itsartlaw.org/2016/08/15/it-takes-two-to-tango-the-importance-of-artist-gallery-contracts/",
-      image: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
-      subheadings: [
-        "Standard Artist-Gallery Contract Elements",
-        "UCC Section 9-102 and NY Arts Law",
-        "The Richard Prince-Gagosian Gallery Case Study",
-        "Practical Protections for Artists"
-      ]
-    },
-    {
-      id: 5,
-      title: "Spanish Court Rules in Favor of NFTs Over Authors in Landmark Copyright Case",
-      author: "Kluwer Copyright Blog Legal Analysis",
-      introduction: "In the first major European court decision involving NFTs and copyright law, a Spanish court has ruled that NFT creation does not necessarily infringe authors' rights, setting important precedent for the relationship between blockchain technology and intellectual property.",
-      category: "NFT LAW",
-      date: "April 22, 2024",
-      readTime: "7 min read",
-      views: "12.3K",
-      comments: 89,
-      reactions: 267,
-      likes: 203,
-      popularity: 89,
-      featured: false,
-      realUrl: "https://copyrightblog.kluweriplaw.com/2024/04/22/first-duel-between-nfts-and-copyright-before-the-spanish-courts-nfts-1-authors-0/",
-      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2032&q=80",
-      subheadings: [
-        "Understanding NFTs as Digital Metadata",
-        "The Court's Reasoning and Legal Framework",
-        "Implications for EU Copyright Law",
-        "Future NFT Litigation Outlook"
-      ]
-    },
-    {
-      id: 6,
       title: "How A Bird Transformed Art Law Forever: The Brâncuși vs. United States Case",
       author: "Priyanshu Kar",
       introduction: "In 1926, Constantin Brâncuși's abstract sculpture 'Bird in Space' was seized by U.S. customs officials who refused to recognize it as art, leading to a landmark legal battle that would forever change how courts define artistic expression and reshape the boundaries of modern art.",
@@ -136,7 +67,7 @@ const Blogspot_ = () => {
       reactions: 3,
       likes: 3,
       popularity: 99,
-      featured: false,
+      featured: true,
       realUrl: "https://substack.com/@artlawcommunion/note/p-165113912?r=5s5n5l",
       image: "./birlawabs.png",
       subheadings: [
@@ -207,7 +138,7 @@ const Blogspot_ = () => {
   return (
     <div className='min-h-screen w-full ai-bg'>
       {/* Navigation Header */}
-      <AltNavbar />
+      <Navbar />
       
       {/* Hero Section with Featured Article */}
       <section className="pt-20 pb-12">
@@ -547,4 +478,4 @@ const Blogspot_ = () => {
   );
 };
 
-export default Blogspot_;
+export default Blogspot;
