@@ -16,6 +16,8 @@ import ContactPage_ from "./pages/ContactPage_";
 import Footer from "./components/Footer";
 import EventPage from "./pages/EventPage";
 import EventPage_ from "./pages/EventPage_";
+import AboutPage from "./pages/AboutPage"
+import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
 
 function App() {
@@ -75,7 +77,7 @@ function App() {
 				<Route path='/member' element={<MembersPage />} />
 				<Route path='/contact' element={<ContactPage />} />
 				<Route path='/event' element={<EventPage />} />
-				<Route path='/au' element={<AboutPage />} />
+				<Route path='/au' element={<AboutPage/>} />
 				<Route path='/*' element={<NotFoundPage />} />
 				<Route path='/h' element={<HomePage_ />} />
 				<Route path='/blogh' element={<Blogspot_ />} />
