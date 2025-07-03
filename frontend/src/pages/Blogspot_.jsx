@@ -135,7 +135,7 @@ const Blogspot_ = () => {
       comments: 0,
       reactions: 3,
       likes: 3,
-      popularity: 34,
+      popularity: 99,
       featured: false,
       realUrl: "https://substack.com/@artlawcommunion/note/p-165113912?r=5s5n5l",
       image: "./birlawabs.png",
