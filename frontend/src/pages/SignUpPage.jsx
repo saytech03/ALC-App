@@ -363,14 +363,14 @@ const SignUpPage = () => {
 
                             {/* Success Message - Green */}
                             {otpSuccess && (
-                                <div className='text-green-400 text-sm text-center bg-green-900/20 p-3 rounded-md border border-green-700'>
+                                <div className='text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700'>
                                     {otpSuccess}
                                 </div>
                             )}
 
                             {/* Error Message - Red */}
                             {otpError && (
-                                <div className='text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700'>
+                                <div className='text-green-400 text-sm text-center bg-green-900/20 p-3 rounded-md border border-green-700'>
                                     {otpError}
                                 </div>
                             )}

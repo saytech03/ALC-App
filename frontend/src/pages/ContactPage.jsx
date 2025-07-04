@@ -36,7 +36,7 @@ const ContactPage = () => {
           <div className="max-w-2xl mx-auto px-4"> {/* Reduced max-width and centered */}
             <div className="flex justify-center"> {/* Added flex centering */}
               {/*Form*/}
-              <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-lg"> {/* Added max-width constraint */}
+              <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-lg mt-7"> {/* Added max-width constraint */}
                 <div className="mb-8 mt-7">
                   <h2 className="text-4xl font-bold text-gray-900 mb-4 text-center">Get in Touch</h2> {/* Centered title */}
                   <p className="text-gray-600 text-center"> {/* Centered subtitle */}

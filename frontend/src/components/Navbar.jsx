@@ -27,37 +27,36 @@ const Navbar = () => {
                     <img
                       src="/ellip-logo1.png"
                       alt="Art Law Communion Logo"
-                      className="w-14 h-12 rounded-lg shadow-lg"
+                      className="w-23 h-22 rounded-lg shadow-lg"
                     />
+                    <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
+                      <div className="text-xl font-bold leading-tight">ART</div>
+                      <div className="text-xl font-bold leading-tight">LAW</div>
+                      <div className="text-xl font-bold leading-tight">COMMUNION</div>
+                    </div>
                   </div>
                   
                   {/* Icons - Far Right */}
                   <div className="flex items-center gap-3 mr-1">
                     {/* Contact Us Icon */}
-                    <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Contact Us
-                    </Link>
+                    
                     
                     <Link to="/" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Home
                     </Link>
                     
-                    {/* Member Icon */}
-                    <Link to="/member" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Team
-                    </Link>
 
                     <Link to="/au" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       About Us
                     </Link>
 
-
-                    <Link to="/event" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Events
+                    {/* Member Icon */}
+                    <Link to="/member" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Team
                     </Link>
 
-                    <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Blogspot
+                    <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Contact Us
                     </Link>
 
                     {/* Login Icon */}
@@ -65,9 +64,6 @@ const Navbar = () => {
                       Login
                     </Link>
 
-                    <Link to="/signup" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      SignUp
-                    </Link>
                   </div>
                 </div>
               </header>
