@@ -8,14 +8,11 @@ import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import Blogspot from "./pages/Blogspot";
-import Blogspot_ from "./pages/Blogspot_";
 import MembersPage from "./pages/MembersPage";
 import MembersPage_ from "./pages/MembersPage_";
 import ContactPage from "./pages/ContactPage";
 import ContactPage_ from "./pages/ContactPage_";
 import Footer from "./components/Footer";
-import EventPage from "./pages/EventPage";
-import EventPage_ from "./pages/EventPage_";
 import AboutPage from "./pages/AboutPage"
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
@@ -76,14 +73,11 @@ function App() {
 				<Route path='/blog' element={<Blogspot />} />
 				<Route path='/member' element={<MembersPage />} />
 				<Route path='/contact' element={<ContactPage />} />
-				<Route path='/event' element={<EventPage />} />
 				<Route path='/au' element={<AboutPage/>} />
 				<Route path='/*' element={<NotFoundPage />} />
 				<Route path='/h' element={<HomePage_ />} />
-				<Route path='/blogh' element={<Blogspot_ />} />
 				<Route path='/memberh' element={<MembersPage_ />} />
 				<Route path='/contacth' element={<ContactPage_ />} />
-				<Route path='/eventh' element={<EventPage_ />} />
 				<Route path='/auh' element={<AboutPage_ />} />
 			</Routes>
             <Footer/>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, Calendar, User, Clock, Eye, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import AltNavbar from '../components/AltNavbar';
 
 const Blogspot = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -138,13 +138,13 @@ const Blogspot = () => {
   return (
     <div className='min-h-screen w-full ai-bg'>
       {/* Navigation Header */}
-      <Navbar />
+      <AltNavbar />
       
       {/* Hero Section with Featured Article */}
       <section className="pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Featured Article Banner */}
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-16">
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-16 mt-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               {/* Content Side */}
               <div className="p-8 lg:p-12 flex flex-col justify-center">

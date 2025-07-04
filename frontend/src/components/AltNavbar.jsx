@@ -11,7 +11,7 @@ const AltNavbar = () => {
 	const navigate = useNavigate();
 
 	const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-    
+
     useEffect(() => {
 		const handleScroll = () => {
 			const scrollTop = window.scrollY;
@@ -37,41 +37,45 @@ const AltNavbar = () => {
                 isScrolled ? 'bg-black' : 'bg-transparent'
               }`}>
                 <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
-                  {/* Logo - Far Left */}
-                  <div className="flex items-left ml-2">
+                  {/* Logo and Text - Far Left */}
+                  <div className="flex items-center gap-4 ml-2">
                     <img
                       src="/ellip-logo1.png"
                       alt="Art Law Communion Logo"
-                      className="w-14 h-12 rounded-lg shadow-lg"
+                      className="w-23 h-22 rounded-lg shadow-lg"
                     />
+                    <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
+                      <div className="text-xl font-bold leading-tight">ART</div>
+                      <div className="text-xl font-bold leading-tight">LAW</div>
+                      <div className="text-xl font-bold leading-tight">COMMUNION</div>
+                    </div>
                   </div>
-                  
+                                    
                   {/* Icons - Far Right */}
                   <div className="flex items-center gap-3 mr-1">
                     {/* Contact Us Icon */}
-                    <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Contact Us
-                    </Link>
-                    
+                                                              
                     <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Home
                     </Link>
                     
+                    <Link to="/auh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      About Us
+                    </Link>
+                                        
                     {/* Member Icon */}
                     <Link to="/memberh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
                       Team
                     </Link>
-
-                    <Link to="/auh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      About Us
+                                        
+                    <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Blog
                     </Link>
-
-                    <Link to="/eventh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Events
+                    
+                    <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+                      Contact Us
                     </Link>
-                    <Link to="/blogh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Blogspot
-                    </Link>
+                    
                     {/* Logout Button */}
                     <button 
                       onClick={handleLogout}

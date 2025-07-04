@@ -17,27 +17,6 @@ const Footer = () => {
 						artlawcommunion@gmail.com
 					</a>
 					
-					{/* Phone Number */}
-					<a
-						href='tel:+919432368966'
-						className='flex items-center gap-2 font-medium hover:text-white transition-colors'
-					>
-						<div className='w-8 h-8 bg-white rounded-lg flex items-center justify-center'>
-							<Phone size={16} className='text-black' />
-						</div>
-						+91 94323 68966
-					</a>
-					
-					{/* Alternate Phone Number */}
-					<a
-						href='tel:+917439938133'
-						className='flex items-center gap-2 font-medium hover:text-white transition-colors'
-					>
-						<div className='w-8 h-8 bg-white rounded-lg flex items-center justify-center'>
-							<PhoneCall size={16} className='text-black' />
-						</div>
-						+91 74399 38133
-					</a>
 				</div>
 
 				{/* Right side - Social Media Links */}

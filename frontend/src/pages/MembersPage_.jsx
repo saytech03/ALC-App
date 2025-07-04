@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AltNavbar from '../components/AltNavbar'; 
+import AltNavbar from '../components/AltNavbar';
 
 const MembersPage_ = () => {
   const [selectedMember, setSelectedMember] = useState(null);
@@ -84,11 +84,8 @@ const MembersPage_ = () => {
 				)}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-16">
-          <p className="text-black text-sm font-light mt-4 tracking-wider uppercase">
-            Our Past Present & Future
-          </p>
-          <h1 className="text-black text-5xl md:text-6xl font-light tracking-wide">
+        <div className="mb-14 mt-20">
+          <h1 className="text-white text-5xl md:text-6xl font-light tracking-wide">
             The Team
           </h1>
         </div>
