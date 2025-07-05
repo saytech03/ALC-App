@@ -198,12 +198,6 @@ const MembersPage_ = () => {
                   )}
                 </div>
 
-                {/* Close instruction */}
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 text-center">
-                    Click anywhere outside to close
-                  </p>
-                </div>
               </div>
             </div>
           </div>
