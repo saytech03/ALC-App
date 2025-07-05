@@ -4,22 +4,7 @@ const Footer = () => {
 	return (
 		<footer className='py-6 md:px-8 md:py-0 bg-black text-white border-t border-gray-800'>
 			<div className='flex flex-col items-center justify-between gap-6 md:h-24 md:flex-row'>
-				{/* Left side - Contact Links */}
-				<div className='flex flex-col md:flex-row items-center gap-6 md:gap-8 text-balance text-center text-sm leading-loose text-muted-foreground md:text-left'>
-					{/* Email Link */}
-					<a
-						href='mailto:artlawcommunion@gmail.com'
-						className='flex items-center gap-2 font-medium hover:text-white transition-colors'
-					>
-						<div className='w-8 h-8 bg-white rounded-lg flex items-center justify-center'>
-							<Mail size={16} className='text-black' />
-						</div>
-						artlawcommunion@gmail.com
-					</a>
-					
-				</div>
-
-				{/* Right side - Social Media Links */}
+				{/* Left side - Social Media Links */}
 				<div className='flex items-center gap-4'>
 					{/* Instagram Link */}
 					<a
@@ -49,6 +34,22 @@ const Footer = () => {
 						className='w-8 h-8 bg-white rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors'
 					>
 						<Linkedin size={16} className='text-black' />
+					</a>
+				</div>
+
+				{/* Center - Copyright */}
+				<div className='text-center text-sm text-white'>
+					 © 2025, Art Law Communion, All Rights Reserved
+				</div>
+
+				{/* Right side - Email */}
+				<div className='flex items-center gap-2 text-sm'>
+					<Mail size={16} className='text-white' />
+					<a
+						href='mailto:artlawcommunion@gmail.com'
+						className='hover:text-gray-300 transition-colors'
+					>
+						artlawcommunion@gmail.com
 					</a>
 				</div>
 			</div>
