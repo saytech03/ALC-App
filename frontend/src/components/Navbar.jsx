@@ -39,7 +39,7 @@ const Navbar = () => {
         {/* Logo - Far Left */}
         <div className="flex items-left ml-2">
           <img
-            src="/ellip-logo1.png"
+            src="/alc_logo.png"
             alt="Art Law Communion Logo"
             className="w-23 h-22 rounded-lg shadow-lg"
           />

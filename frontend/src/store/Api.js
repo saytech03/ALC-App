@@ -10,7 +10,8 @@ const API_CONFIG = {
       LOGOUT: '/api/auth/logout'
     },
     USER: {
-      GET_USER: '/api/users'
+      GET_USER: '/api/users',
+      GET_USER_DETAILS: '/api/users' // Same endpoint but with email parameter
     }
   },
   HEADERS: {

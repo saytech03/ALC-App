@@ -101,6 +101,25 @@ class AuthService {
     return response;
   }
 
+  // Get detailed user information by email
+  async getUserDetails(email) {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const endpoint = `${API_CONFIG.ENDPOINTS.USER.GET_USER_DETAILS}?email=${encodeURIComponent(email)}`;
+    
+    const response = await this.request(endpoint, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  }
+
   // Check if user has pending OTP verification
   isRegistrationPending() {
     return localStorage.getItem('registration_pending') === 'true';

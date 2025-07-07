@@ -67,7 +67,7 @@ const HomePage = () => {
   };
     
   return (
-    <div className="relative bg-white min-h-screen" style={{fontFamily: 'Arima, sans-serif'}}>
+    <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
       {/* Navbar */}
       <Navbar/>
       
@@ -206,7 +206,7 @@ const HomePage = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-family: Arial, sans-serif;
+          font-family: Arima, sans-serif;
           box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
 
