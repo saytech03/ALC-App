@@ -67,7 +67,7 @@ const HomePage_ = () => {
   };
     
   return (
-    <div className="relative bg-white min-h-screen" style={{fontFamily: 'Arima, sans-serif'}}>
+    <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
       {/* Navbar */}
       <AltNavbar/>
       

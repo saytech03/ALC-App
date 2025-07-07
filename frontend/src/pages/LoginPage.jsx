@@ -157,7 +157,7 @@ const LoginPage = () => {
 			<header className='max-w-6xl mx-auto flex items-center justify-between p-4'>
 				<div className="flex items-center gap-4 ml-2">
 				<Link to={"/"}>
-					<img src='/ellip-logo1.png' alt='logo' className='w-24' />
+					<img src='/alc_logo.png' alt='logo' className='w-24' />
 				</Link>
 				<div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
                       <div className="text-xl font-bold leading-tight">ART</div>

@@ -37,9 +37,9 @@ function App() {
 				<div className='flex flex-col justify-center items-center bg-black h-full'>
 					{/* Replace with your logo image - Slow Elegant Blink */}
 					<img 
-						src="/ellip_logo.png" 
+						src="/alc_logo.png" 
 						alt="Loading..." 
-						className="w-50 h-40 mb-4 animate-slow-blink"
+						className="w-50 h-50 mb-4 animate-slow-blink"
 					/>
 					<p className="text-white text-lg font-medium">Loading...</p>
 				</div>
@@ -56,7 +56,7 @@ function App() {
 					}
 					
 					.animate-slow-blink {
-						animation: slow-blink 1.2s ease-in-out infinite;
+						animation: slow-blink 1.1s ease-in-out infinite;
 					}
 				`}</style>
 			</div>

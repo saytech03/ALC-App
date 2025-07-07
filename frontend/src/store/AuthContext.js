@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         const userData = authService.getCurrentUser();
         setUser(userData);
       }
-      
+            
       // Check if registration is pending OTP verification
       setIsRegistrationPending(authService.isRegistrationPending());
     } catch (error) {
@@ -80,6 +80,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUserDetails = async (email) => {
+    try {
+      const response = await authService.getUserDetails(email);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -95,6 +104,7 @@ export const AuthProvider = ({ children }) => {
     verifyOTP,
     login,
     loginWithPatron,
+    getUserDetails,
     logout,
     getTempEmail: () => authService.getTempEmail()
   };
