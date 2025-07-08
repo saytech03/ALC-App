@@ -89,6 +89,43 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const uploadProfileImage = async (imageFile) => {
+    try {
+      const response = await authService.uploadProfileImage(imageFile);
+      if (response.success && response.user) {
+        setUser(response.user);
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteProfileImage = async () => {
+    try {
+      const response = await authService.deleteProfileImage();
+      if (response.success) {
+        const updatedUser = { ...user, profileImageUrl: null };
+        setUser(updatedUser);
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await authService.updateProfile(profileData);
+      if (response.success && response.user) {
+        setUser(response.user);
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -105,6 +142,9 @@ export const AuthProvider = ({ children }) => {
     login,
     loginWithPatron,
     getUserDetails,
+    uploadProfileImage,
+    deleteProfileImage,
+    updateProfile,
     logout,
     getTempEmail: () => authService.getTempEmail()
   };

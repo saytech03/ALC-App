@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import AboutPage from "./pages/AboutPage"
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -65,24 +66,45 @@ function App() {
 
 	return (
 		<>
-		  <AuthProvider>
-			<Routes>
-				<Route path='/' element={<HomePage />} />
-				<Route path='/login' element={<LoginPage />} />
-				<Route path='/signup' element={<SignUpPage />} />
-				<Route path='/blog' element={<Blogspot />} />
-				<Route path='/member' element={<MembersPage />} />
-				<Route path='/contact' element={<ContactPage />} />
-				<Route path='/au' element={<AboutPage/>} />
-				<Route path='/*' element={<NotFoundPage />} />
-				<Route path='/h' element={<HomePage_ />} />
-				<Route path='/memberh' element={<MembersPage_ />} />
-				<Route path='/contacth' element={<ContactPage_ />} />
-				<Route path='/auh' element={<AboutPage_ />} />
-			</Routes>
-            <Footer/>
-			<Toaster />
-		</AuthProvider>
+			<AuthProvider>
+				<Routes>
+					{/* Public routes */}
+					<Route path='/' element={<HomePage />} />
+					<Route path='/login' element={<LoginPage />} />
+					<Route path='/signup' element={<SignUpPage />} />
+					<Route path='/blog' element={<Blogspot />} />
+					<Route path='/member' element={<MembersPage />} />
+					<Route path='/contact' element={<ContactPage />} />
+					<Route path='/au' element={<AboutPage/>} />
+					
+					{/* Protected routes - only accessible when logged in */}
+					<Route path='/h' element={
+						<ProtectedRoute>
+							<HomePage_ />
+						</ProtectedRoute>
+					} />
+					<Route path='/memberh' element={
+						<ProtectedRoute>
+							<MembersPage_ />
+						</ProtectedRoute>
+					} />
+					<Route path='/contacth' element={
+						<ProtectedRoute>
+							<ContactPage_ />
+						</ProtectedRoute>
+					} />
+					<Route path='/auh' element={
+						<ProtectedRoute>
+							<AboutPage_ />
+						</ProtectedRoute>
+					} />
+					
+					{/* 404 route */}
+					<Route path='/*' element={<NotFoundPage />} />
+				</Routes>
+				<Footer/>
+				<Toaster />
+			</AuthProvider>
 		</>
 	);
 }
