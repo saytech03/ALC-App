@@ -35,6 +35,36 @@ class AuthService {
     }
   }
 
+  // Special request method for file uploads (multipart/form-data)
+  async requestWithFile(endpoint, options = {}) {
+    const url = `${this.baseURL}${endpoint}`;
+    
+    const config = {
+      headers: {
+        // Don't set Content-Type for FormData - browser will set it with boundary
+        'Accept': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    try {
+      console.log('Making file upload request to:', url);
+      const response = await fetch(url, config);
+            
+      const responseData = await response.json();
+            
+      if (!response.ok) {
+        throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+      }
+
+      return responseData;
+    } catch (error) {
+      console.error('File upload request failed:', error);
+      throw error;
+    }
+  }
+
   // Register new user
   async register(userData) {
     const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.REGISTER, {
@@ -116,6 +146,81 @@ class AuthService {
         'Authorization': `Bearer ${token}`,
       },
     });
+
+    return response;
+  }
+
+  // Upload profile image
+  async uploadProfileImage(imageFile) {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const formData = new FormData();
+    formData.append('profileImage', imageFile);
+
+    const response = await this.requestWithFile(API_CONFIG.ENDPOINTS.USER.UPLOAD_PROFILE_IMAGE, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    // Update stored user data if successful
+    if (response.success && response.user) {
+      localStorage.setItem('user_data', JSON.stringify(response.user));
+    }
+
+    return response;
+  }
+
+  // Delete profile image
+  async deleteProfileImage() {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const response = await this.request(API_CONFIG.ENDPOINTS.USER.DELETE_PROFILE_IMAGE, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    // Update stored user data if successful
+    if (response.success) {
+      const currentUser = this.getCurrentUser();
+      if (currentUser) {
+        currentUser.profileImageUrl = null;
+        localStorage.setItem('user_data', JSON.stringify(currentUser));
+      }
+    }
+
+    return response;
+  }
+
+  // Update user profile
+  async updateProfile(profileData) {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const response = await this.request(API_CONFIG.ENDPOINTS.USER.UPDATE_PROFILE, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    // Update stored user data if successful
+    if (response.success && response.user) {
+      localStorage.setItem('user_data', JSON.stringify(response.user));
+    }
 
     return response;
   }

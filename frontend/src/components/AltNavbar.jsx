@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut, Menu, Search, User, X } from "lucide-react";
+import { LogOut, Menu, Search, User, X, Camera, Upload, Trash2 } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
 
@@ -11,8 +11,12 @@ const AltNavbar = () => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const [loadingUserDetails, setLoadingUserDetails] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [deletingImage, setDeletingImage] = useState(false);
   const dropdownRef = useRef(null);
-  const { logout, user, getUserDetails } = useAuth();
+  const fileInputRef = useRef(null);
+  const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = useAuth();
   const navigate = useNavigate();
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -168,6 +172,81 @@ const AltNavbar = () => {
     }
   };
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const response = await uploadProfileImage(file);
+      
+      if (response.success) {
+        toast.success('Profile image updated successfully!');
+        // Update userDetails state to reflect the new image
+        if (userDetails) {
+          setUserDetails(prev => ({
+            ...prev,
+            profileImageUrl: response.user.profileImageUrl
+          }));
+        }
+        setShowImageUpload(false);
+      } else {
+        toast.error('Failed to upload image: ' + response.message);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image: ' + error.message);
+    } finally {
+      setUploadingImage(false);
+      // Clear file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleImageDelete = async () => {
+    if (!userDetails?.profileImageUrl) return;
+
+    if (!window.confirm('Are you sure you want to delete your profile image?')) {
+      return;
+    }
+
+    setDeletingImage(true);
+    try {
+      const response = await deleteProfileImage();
+      
+      if (response.success) {
+        toast.success('Profile image deleted successfully!');
+        // Update userDetails state to reflect the deletion
+        setUserDetails(prev => ({
+          ...prev,
+          profileImageUrl: null
+        }));
+        setShowImageUpload(false);
+      } else {
+        toast.error('Failed to delete image: ' + response.message);
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast.error('Failed to delete image: ' + error.message);
+    } finally {
+      setDeletingImage(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -271,19 +350,40 @@ const AltNavbar = () => {
             </div>
             
             <div className="space-y-4">
-              {/* Profile Image */}
-              {userDetails.profileImageUrl && (
-                <div className="flex justify-center mb-4">
-                  <img 
-                    src={userDetails.profileImageUrl} 
-                    alt="Profile" 
-                    className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
+              {/* Profile Image Section */}
+              <div className="flex flex-col items-center mb-4">
+                <div className="relative group">
+                  <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300">
+                    {userDetails.profileImageUrl ? (
+                      <img 
+                        src={userDetails.profileImageUrl} 
+                        alt="Profile" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <User size={32} className="text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Camera overlay on hover */}
+                  <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                       onClick={() => setShowImageUpload(true)}>
+                    <Camera size={20} className="text-white" />
+                  </div>
                 </div>
-              )}
+                
+                <button 
+                  onClick={() => setShowImageUpload(true)}
+                  className="mt-2 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  {userDetails.profileImageUrl ? 'Change Photo' : 'Add Photo'}
+                </button>
+              </div>
               
               {/* User Information */}
               <div className="space-y-3">
@@ -332,6 +432,80 @@ const AltNavbar = () => {
           </div>
         </div>
       )}
+
+      {/* Image Upload Modal */}
+      {showImageUpload && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">Profile Image</h3>
+              <button 
+                onClick={() => setShowImageUpload(false)}
+                className="text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Current Image Preview */}
+              <div className="flex justify-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-300">
+                  {userDetails?.profileImageUrl ? (
+                    <img 
+                      src={userDetails.profileImageUrl} 
+                      alt="Current Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <User size={40} className="text-gray-400" />
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Upload Guidelines */}
+              <div className="text-sm text-gray-500 text-center">
+                <p>Upload a profile image (JPG, PNG, GIF)</p>
+                <p>Maximum file size: 5MB</p>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex flex-col space-y-2">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Upload size={16} />
+                  {uploadingImage ? 'Uploading...' : 'Upload New Image'}
+                </button>
+                
+                {userDetails?.profileImageUrl && (
+                  <button
+                    onClick={handleImageDelete}
+                    disabled={deletingImage}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Trash2 size={16} />
+                    {deletingImage ? 'Deleting...' : 'Delete Image'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden File Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        className="hidden"
+      />
     </header>
   );
 };

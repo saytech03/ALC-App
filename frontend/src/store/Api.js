@@ -11,7 +11,10 @@ const API_CONFIG = {
     },
     USER: {
       GET_USER: '/api/users',
-      GET_USER_DETAILS: '/api/users' // Same endpoint but with email parameter
+      GET_USER_DETAILS: '/api/users', // Same endpoint but with email parameter
+      UPDATE_PROFILE: '/api/users/profile',
+      UPLOAD_PROFILE_IMAGE: '/api/users/profile/upload-image',
+      DELETE_PROFILE_IMAGE: '/api/users/profile/delete-image'
     }
   },
   HEADERS: {
