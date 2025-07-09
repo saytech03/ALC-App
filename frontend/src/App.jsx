@@ -74,11 +74,6 @@ function App() {
 					<Route path='/login' element={<LoginPage />} />
 					<Route path='/signup' element={<SignUpPage />} />
 					<Route path='/bl' element={<Blog />} />
-					<Route path='/blog' element={
-						<ProtectedRoute>
-							<Blogspot />
-						</ProtectedRoute>
-					} />
 					<Route path='/member' element={<MembersPage />} />
 					<Route path='/contact' element={<ContactPage />} />
 					<Route path='/au' element={<AboutPage/>} />
@@ -92,6 +87,11 @@ function App() {
 					<Route path='/memberh' element={
 						<ProtectedRoute>
 							<MembersPage_ />
+						</ProtectedRoute>
+					} />
+					<Route path='/blog' element={
+						<ProtectedRoute>
+							<Blogspot />
 						</ProtectedRoute>
 					} />
 					<Route path='/contacth' element={
