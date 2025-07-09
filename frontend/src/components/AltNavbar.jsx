@@ -278,9 +278,8 @@ const AltNavbar = () => {
           </div>
         </div>
                                           
-        {/* Icons - Far Right */}
-        <div className="flex items-center gap-3 mr-1">
-          {/* Navigation Links */}
+        {/* Desktop Navigation - Hidden on mobile */}
+        <div className="hidden md:flex items-center gap-3 mr-1">
           <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Home
           </Link>
@@ -312,9 +311,7 @@ const AltNavbar = () => {
             
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div 
-                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
-              >
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                 <button 
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
                   onClick={fetchUserDetails}
@@ -333,7 +330,92 @@ const AltNavbar = () => {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Button - Visible only on mobile */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* User Icon with Dropdown - Mobile */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+                isDropdownOpen 
+                  ? 'bg-gray-700 text-blue-400' 
+                  : 'bg-gray-800 text-white hover:text-blue-400 hover:bg-gray-700'
+              }`}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <User size={20} />
+            </button>
+            
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <button 
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                  onClick={fetchUserDetails}
+                  disabled={loadingUserDetails}
+                >
+                  {loadingUserDetails ? 'Loading...' : 'User Details'}
+                </button>
+                <button  
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+          
+          {/* Mobile Menu Toggle Button */}
+          <button 
+            onClick={toggleMobileMenu}
+            className="text-white p-2 rounded-full hover:bg-gray-700"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Content */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black border-t border-gray-800 w-full py-4 px-6">
+          <Link 
+            to="/h" 
+            className="block text-white py-3 hover:text-blue-400"
+            onClick={toggleMobileMenu}
+          >
+            Home
+          </Link>
+          <Link 
+            to="/auh" 
+            className="block text-white py-3 hover:text-blue-400"
+            onClick={toggleMobileMenu}
+          >
+            About Us
+          </Link>
+          <Link 
+            to="/memberh" 
+            className="block text-white py-3 hover:text-blue-400"
+            onClick={toggleMobileMenu}
+          >
+            Team
+          </Link>
+          <Link 
+            to="/blog" 
+            className="block text-white py-3 hover:text-blue-400"
+            onClick={toggleMobileMenu}
+          >
+            Blog
+          </Link>
+          <Link 
+            to="/contacth" 
+            className="block text-white py-3 hover:text-blue-400"
+            onClick={toggleMobileMenu}
+          >
+            Contact Us
+          </Link>
+        </div>
+      )}
 
       {/* User Details Modal */}
       {showUserDetails && userDetails && (
