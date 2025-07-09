@@ -31,6 +31,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isAuthenticated = () => {
+    return !!user && authService.isAuthenticated();
+  };
+
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
@@ -136,7 +140,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isRegistrationPending,
-    isAuthenticated: !!user,
+    isAuthenticated, // Added this method
     register,
     verifyOTP,
     login,
