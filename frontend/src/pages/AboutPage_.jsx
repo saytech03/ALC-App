@@ -1,31 +1,30 @@
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import AltNavbar from '../components/AltNavbar';
 
-function AboutPage() {
+function AboutPage_() {
   return (
     <div 
       className="min-h-screen bg-cover bg-center bg-no-repeat relative"
       style={{
-        backgroundImage: "url('/path/to/your/image.jpg')" // <-- ADD YOUR IMAGE PATH HERE
+        backgroundImage: "url('./desert_.jpg')"
       }}
     >
-      {/* Optional overlay for better text readability */}
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      {/* Navbar - Removed extra wrapper div */}
+      <AltNavbar />
       
-      {/* Navbar */}
-      <div className="relative z-10">
-        <Navbar />
-      </div>
-      
-      {/* Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen">
-        <div className="text-center text-white">
-          <h1 className="text-4xl font-bold mb-4">About Us</h1>
-          <p className="text-xl">Your content goes here</p>
+      {/* Content - Adjusted z-index and padding-top to account for fixed navbar */}
+      <div className="pt-20 flex items-center justify-center min-h-screen">
+        <div className="text-center text-white bg-black bg-opacity-50 p-8 rounded-lg max-w-4xl mx-4">
+          <h1 className="text-4xl font-bold mb-6">About Us</h1>
+          <p className="text-xl mb-4">Welcome to our organization</p>
+          <p className="text-lg">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. 
+            Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus 
+            rhoncus ut eleifend nibh porttitor.
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
-export default AboutPage;
+export default AboutPage_;
