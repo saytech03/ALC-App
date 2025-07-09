@@ -40,7 +40,7 @@ const ContactPage_ = () => {
                 <div className="mb-8 mt-7">
                   <h2 className="text-4xl font-bold text-gray-900 mb-4 text-center">Get in Touch</h2> {/* Centered title */}
                   <p className="text-gray-600 text-center"> {/* Centered subtitle */}
-                    Reach out for inquiries, support, and collaboration opportunities.
+                   Wish to Contribute with your original ideas or  have inquiries or want to collaborate? - Write to us
                   </p>
                 </div>
 

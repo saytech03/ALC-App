@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Paperclip, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 const ContactPage = () => {
   const [email, setEmail] = useState('');
+  const [attachedFile, setAttachedFile] = useState(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -19,6 +21,7 @@ const ContactPage = () => {
   const handleContactSubmit = (e) => {
     e.preventDefault();
     console.log('Contact form submitted:', formData);
+    console.log('Attached file:', attachedFile);
     // Handle form submission here
   };
 
@@ -27,6 +30,24 @@ const ContactPage = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (allowedTypes.includes(file.type)) {
+        setAttachedFile(file);
+      } else {
+        alert('Please select only PDF or DOCX files');
+        e.target.value = '';
+      }
+    }
+  };
+
+  const removeAttachment = () => {
+    setAttachedFile(null);
+    document.getElementById('file-input').value = '';
   };
 
   return (
@@ -40,7 +61,7 @@ const ContactPage = () => {
                 <div className="mb-8 mt-7">
                   <h2 className="text-4xl font-bold text-gray-900 mb-4 text-center">Get in Touch</h2> {/* Centered title */}
                   <p className="text-gray-600 text-center"> {/* Centered subtitle */}
-                    Reach out for inquiries, support, and collaboration opportunities.
+                    Wish to Contribute with your original ideas or  have inquiries or want to collaborate? - Write to us
                   </p>
                 </div>
 
@@ -91,6 +112,40 @@ const ContactPage = () => {
                         className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500"
                         required
                       ></textarea>
+                    </div>
+
+                    {/* File Attachment */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Attach File (PDF or DOCX only)
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg cursor-pointer transition-colors">
+                          <Paperclip className="w-5 h-5 text-gray-600" />
+                          <span className="text-gray-700">Choose File</span>
+                          <input
+                            id="file-input"
+                            type="file"
+                            accept=".pdf,.docx"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                        {attachedFile && (
+                          <div className="flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg">
+                            <span className="text-sm text-blue-700 truncate max-w-32">
+                              {attachedFile.name}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={removeAttachment}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* reCAPTCHA Placeholder */}

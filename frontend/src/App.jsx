@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import Blogspot from "./pages/Blogspot";
+import Blog from "./pages/Blog";
 import MembersPage from "./pages/MembersPage";
 import MembersPage_ from "./pages/MembersPage_";
 import ContactPage from "./pages/ContactPage";
@@ -72,7 +73,12 @@ function App() {
 					<Route path='/' element={<HomePage />} />
 					<Route path='/login' element={<LoginPage />} />
 					<Route path='/signup' element={<SignUpPage />} />
-					<Route path='/blog' element={<Blogspot />} />
+					<Route path='/bl' element={<Blog />} />
+					<Route path='/blog' element={
+						<ProtectedRoute>
+							<Blogspot />
+						</ProtectedRoute>
+					} />
 					<Route path='/member' element={<MembersPage />} />
 					<Route path='/contact' element={<ContactPage />} />
 					<Route path='/au' element={<AboutPage/>} />
