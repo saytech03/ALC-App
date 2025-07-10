@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
@@ -12,8 +12,8 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, loginWithPatron } = useAuth();
-  const navigate = useNavigate();
 
+  // Function to detect if input is email or patron ID
   const isEmail = (input) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(input);
@@ -23,6 +23,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
 
+    // Basic validation
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
@@ -48,7 +49,7 @@ const LoginPage = () => {
       }
       
       if (success) {
-        toast.success('Login successful! Welcome back!');
+        toast.success('Login successful! Redirecting...');
         // Force full page reload to ensure auth state is properly initialized
         window.location.href = '/h';
       } else {
