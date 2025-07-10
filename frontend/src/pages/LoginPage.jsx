@@ -11,10 +11,9 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login, loginWithPatron, isAuthenticated } = useAuth();
+  const { login, loginWithPatron } = useAuth();
   const navigate = useNavigate();
 
-  // Function to detect if input is email or patron ID
   const isEmail = (input) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(input);
@@ -22,9 +21,8 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
 
-    // Basic validation
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
@@ -36,129 +34,29 @@ const LoginPage = () => {
     try {
       setLoading(true);
       
-      let loginData;
-      let response;
-
+      let success = false;
       if (isEmailLogin) {
-        // Email login
-        loginData = {
+        success = await login({
           email: inputValue.toLowerCase(),
           password: password
-        };
-        console.log('Email login data being sent:', { email: loginData.email });
-        response = await login(loginData);
+        });
       } else {
-        // Patron ID login
-        loginData = {
+        success = await loginWithPatron({
           patronId: inputValue,
           password: password
-        };
-        console.log('Patron login data being sent:', { patronId: loginData.patronId });
-        response = await loginWithPatron(loginData);
+        });
       }
       
-      console.log('Login response:', response);
-      
-      if (response && (response.success || response.token)) {
-        // Login successful
-        console.log('Login successful');
+      if (success) {
         toast.success('Login successful! Welcome back!');
-        
-        // Check authentication status before redirecting
-        if (isAuthenticated) {
-          navigate('/h', { replace: true });
-        } else {
-          // If not authenticated yet, wait and check again
-          const checkAuth = () => {
-            if (isAuthenticated) {
-              navigate('/h', { replace: true });
-            } else {
-              setTimeout(checkAuth, 100);
-            }
-          };
-          checkAuth();
-        }
+        // Force full page reload to ensure auth state is properly initialized
+        window.location.href = '/h';
       } else {
-        setError(response?.message || 'Login failed');
+        setError('Login failed - invalid credentials');
       }
     } catch (error) {
       console.error('Login error:', error);
-      
-      // Extract detailed error information
-      let errorMessage = 'Login failed';
-      let showToast = false;
-      
-      if (error.response) {
-        // Handle HTTP error responses
-        const status = error.response.status;
-        const data = error.response.data;
-        
-        switch (status) {
-          case 400:
-            if (data?.details) {
-              // Handle validation errors for patron login
-              const validationErrors = Object.values(data.details).join(', ');
-              errorMessage = validationErrors;
-            } else {
-              toast.error('Invalid credentials');
-              showToast = true;
-            }
-            break;
-          case 401:
-            // Handle specific patron login errors
-            if (data?.message === 'Invalid Patron ID') {
-              toast.error('Invalid Patron ID');
-              showToast = true;
-            } else if (data?.message === 'Invalid password') {
-              toast.error('Invalid password');
-              showToast = true;
-            } else {
-              toast.error('Invalid credentials');
-              showToast = true;
-            }
-            break;
-          case 403:
-            errorMessage = data?.message || 'Account not verified. Please check your email for verification.';
-            break;
-          case 404:
-            toast.error('Invalid credentials');
-            showToast = true;
-            break;
-          case 500:
-            errorMessage = 'Server error. Please try again later.';
-            break;
-          default:
-            errorMessage = data?.message || `Login failed (${status}). Please try again.`;
-        }
-      } else if (error.message) {
-        // Check if it's a credentials-related error
-        const lowerMessage = error.message.toLowerCase();
-        if (lowerMessage.includes('invalid') || 
-          lowerMessage.includes('wrong') || 
-          lowerMessage.includes('incorrect') ||
-          lowerMessage.includes('credentials') ||
-          lowerMessage.includes('password') ||
-          lowerMessage.includes('email') ||
-          lowerMessage.includes('patron')) {
-          
-          // Handle specific patron error messages
-          if (lowerMessage.includes('patron id')) {
-            toast.error('Invalid Patron ID');
-          } else if (lowerMessage.includes('password')) {
-            toast.error('Invalid password');
-          } else {
-            toast.error('Invalid credentials');
-          }
-          showToast = true;
-        } else {
-          errorMessage = error.message;
-        }
-      }
-      
-      // Only set error state if we didn't show a toast
-      if (!showToast) {
-        setError(errorMessage);
-      }
+      setError(error.message || 'Login failed');
     } finally {
       setLoading(false);
     }
