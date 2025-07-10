@@ -11,7 +11,7 @@ const LoginPage = () => {
 	const [error, setError] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 
-	const { login, loginWithPatron } = useAuth();
+	const { login, loginWithPatron, setIsAuthenticated } = useAuth(); // Added setIsAuthenticated
 	const navigate = useNavigate();
 
 	// Function to detect if input is email or patron ID
@@ -62,6 +62,10 @@ const LoginPage = () => {
 			if (response && (response.success || response.token)) {
 				// Login successful
 				console.log('Login successful');
+				
+				// Set authentication state to true
+				setIsAuthenticated(true);
+				
 				toast.success('Login successful! Welcome back!');
 				
 				// Redirect to home page after successful login
@@ -167,20 +171,6 @@ const LoginPage = () => {
                       <div className="text-xl font-bold leading-tight">COMMUNION</div>
                 </div>
 				</div>
-				
-				{/* 
-				AVATAR PLACEHOLDER - Replace this section with avatar display logic
-				When user is logged in, show one of 3 avatars here instead of the login form
-				Example:
-				{isLoggedIn ? (
-					<div className="flex items-center space-x-2">
-						<img src={selectedAvatar} alt="User Avatar" className="w-8 h-8 rounded-full" />
-						<span className="text-white">{userName}</span>
-					</div>
-				) : (
-					// Show login/signup links or login form
-				)}
-				*/}
 			</header>
 
 			<div className='flex justify-center items-center mt-20 mx-3'>
