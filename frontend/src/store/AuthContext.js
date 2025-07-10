@@ -16,31 +16,28 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Centralized function to update auth state
-  const updateAuthState = () => {
-    const token = authService.getAuthToken();
-    const userData = authService.getCurrentUser();
-    
-    if (token && userData) {
-      setUser(userData);
-      setIsAuthenticated(true);
-    } else {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
-    setLoading(false);
-  };
-
-  // Check auth status on mount and storage changes
+  // Check authentication status on app start
   useEffect(() => {
-    updateAuthState();
-    
-    const handleStorageChange = () => {
-      updateAuthState();
+    const checkAuth = async () => {
+      try {
+        const token = authService.getAuthToken();
+        const userData = authService.getCurrentUser();
+        
+        if (token && userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
     };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+
+    checkAuth();
   }, []);
 
   const register = async (userData) => {
@@ -56,9 +53,12 @@ export const AuthProvider = ({ children }) => {
   const verifyOTP = async (otpData) => {
     try {
       const response = await authService.verifyOTP(otpData);
+      
       if (response.success && response.token) {
-        updateAuthState();
+        setUser(response.user);
+        setIsAuthenticated(true);
       }
+      
       return response;
     } catch (error) {
       console.error('OTP verification error:', error);
@@ -69,9 +69,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await authService.login(credentials);
+      
       if (response.success && response.token) {
-        updateAuthState();
-        return true;
+        // Verify token was actually stored
+        if (authService.getAuthToken()) {
+          setUser(response.user);
+          setIsAuthenticated(true);
+          return true;
+        }
       }
       return false;
     } catch (error) {
@@ -83,9 +88,13 @@ export const AuthProvider = ({ children }) => {
   const loginWithPatron = async (credentials) => {
     try {
       const response = await authService.loginWithPatron(credentials);
+      
       if (response.success && response.token) {
-        updateAuthState();
-        return true;
+        if (authService.getAuthToken()) {
+          setUser(response.user);
+          setIsAuthenticated(true);
+          return true;
+        }
       }
       return false;
     } catch (error) {
@@ -96,19 +105,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     authService.logout();
-    updateAuthState();
+    setUser(null);
+    setIsAuthenticated(false);
   };
 
   const value = {
     user,
-    isAuthenticated,
-    loading,
     login,
     loginWithPatron,
     register,
     verifyOTP,
     logout,
-    updateAuthState
+    isAuthenticated,
+    loading
   };
 
   return (

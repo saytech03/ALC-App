@@ -80,7 +80,7 @@ const HomePage = () => {
       <div 
         className="relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('./gallery.png')` // Replace YOUR_IMAGE_URL_HERE with your actual image URL
+          backgroundImage: `url('./gallery_.jpeg')` // Replace YOUR_IMAGE_URL_HERE with your actual image URL
         }}
       >
         {/* pink Overlay */}
