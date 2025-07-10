@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
 
@@ -8,6 +9,7 @@ const LoginPage = () => {
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
 
 	const { login, loginWithPatron } = useAuth();
 	const navigate = useNavigate();
@@ -206,16 +208,26 @@ const LoginPage = () => {
 							<label htmlFor='password' className='text-sm font-medium text-gray-300 block'>
 								Password
 							</label>
-							<input
-								type='password'
-								className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring'
-								placeholder='••••••••'
-								id='password'
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								required
-								disabled={loading}
-							/>
+							<div className='relative'>
+								<input
+									type={showPassword ? 'text' : 'password'}
+									className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring pr-12'
+									placeholder='••••••••'
+									id='password'
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+									required
+									disabled={loading}
+								/>
+								<button
+									type='button'
+									className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors'
+									onClick={() => setShowPassword(!showPassword)}
+									disabled={loading}
+								>
+									{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+								</button>
+							</div>
 						</div>
 
 						{error && (

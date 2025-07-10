@@ -37,16 +37,16 @@ const Navbar = () => {
     }`}>
       <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
         {/* Logo - Far Left */}
-        <div className="flex items-left ml-2">
+        <div className="flex items-center ml-2">
           <img
             src="/alc_logo.png"
             alt="Art Law Communion Logo"
-            className="w-23 h-22 rounded-lg shadow-lg"
+            className="w-16 h-16 md:w-23 md:h-22 rounded-lg shadow-lg"
           />
-          <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
-            <div className="text-xl font-bold leading-tight">ART</div>
-            <div className="text-xl font-bold leading-tight">LAW</div>
-            <div className="text-xl font-bold leading-tight">COMMUNION</div>
+          <div className="text-white ml-2" style={{ fontFamily: 'Consolas, serif' }}>
+            <div className="text-sm md:text-xl font-bold leading-tight">ART</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">LAW</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">COMMUNION</div>
           </div>
         </div>
         
@@ -65,7 +65,7 @@ const Navbar = () => {
           </Link>
 
           <Link to="/bl" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-            Blog
+            ALC Fenestra
           </Link>
 
           <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
@@ -106,7 +106,97 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* Mobile Menu Button - Visible only on mobile */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* Mobile User Icon */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+                className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+                  isDropdownOpen 
+                    ? 'bg-gray-700 text-blue-400' 
+                    : 'bg-gray-800 text-white hover:text-blue-400 hover:bg-gray-700'
+                }`}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+              <User size={18} />
+            </button>
+            
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <Link 
+                  to="/login" 
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link  
+                  to="/register"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  Become a Member
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="text-white hover:text-blue-400 p-2 hover:bg-gray-900 rounded-full transition-colors"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-md">
+          <div className="flex flex-col py-4 px-6 space-y-4">
+            <Link 
+              to="/" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            
+            <Link 
+              to="/au" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+
+            <Link 
+              to="/member" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Team
+            </Link>
+
+            <Link 
+              to="/bl" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              ALC Fenestra
+            </Link>
+
+            <Link 
+              to="/contact" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

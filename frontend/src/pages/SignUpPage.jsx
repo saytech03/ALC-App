@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUpPage = () => {
     const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const SignUpPage = () => {
     const [occupation, setOccupation] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     
     // OTP related state
     const [showOtpModal, setShowOtpModal] = useState(false);
@@ -255,17 +257,27 @@ const SignUpPage = () => {
                             <label htmlFor='password' className='text-sm font-medium text-gray-300 block'>
                                 Password
                             </label>
-                            <input
-                                type='password'
-                                className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring'
-                                placeholder='••••••••'
-                                id='password'
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                disabled={loading}
-                                minLength="6"
-                            />
+                            <div className='relative'>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring pr-10'
+                                    placeholder='••••••••'
+                                    id='password'
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    disabled={loading}
+                                    minLength="6"
+                                />
+                                <button
+                                    type='button'
+                                    className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300'
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    disabled={loading}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <div>
