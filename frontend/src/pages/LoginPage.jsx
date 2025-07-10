@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, loginWithPatron } = useAuth();
+  const navigate = useNavigate();
 
   // Function to detect if input is email or patron ID
   const isEmail = (input) => {
@@ -35,25 +36,33 @@ const LoginPage = () => {
     try {
       setLoading(true);
       
-      let success = false;
+      let response;
       if (isEmailLogin) {
-        success = await login({
+        response = await login({
           email: inputValue.toLowerCase(),
           password: password
         });
       } else {
-        success = await loginWithPatron({
+        response = await loginWithPatron({
           patronId: inputValue,
           password: password
         });
       }
       
-      if (success) {
-        toast.success('Login successful! Redirecting...');
-        // Force full page reload to ensure auth state is properly initialized
-        window.location.href = '/h';
+      if (response && (response.success || response.token)) {
+        toast.success('Login successful! Welcome back!');
+        
+        // Force redirect after successful login
+        setTimeout(() => {
+         // In your handleLogin function after successful login:
+			navigate('/h', { 
+			replace: true,
+			state: { fromLogin: true }  // This tells App.js we're coming from login
+			});
+          window.location.reload(); // Force refresh to ensure auth state is updated
+        }, 1000);
       } else {
-        setError('Login failed - invalid credentials');
+        setError(response?.message || 'Login failed');
       }
     } catch (error) {
       console.error('Login error:', error);
