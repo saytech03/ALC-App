@@ -16,28 +16,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check authentication status on app start
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const token = authService.getAuthToken();
-        const userData = authService.getCurrentUser();
-        
-        if (token && userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // This function will update auth state from localStorage
+  const updateAuthState = () => {
+    const token = authService.getAuthToken();
+    const userData = authService.getCurrentUser();
+    
+    if (token && userData) {
+      setUser(userData);
+      setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
+    setLoading(false);
+  };
 
-    checkAuth();
+  // Check authentication status on app start and when auth changes
+  useEffect(() => {
+    updateAuthState();
+    
+    // Optional: Listen for storage changes from other tabs
+    const handleStorageChange = () => {
+      updateAuthState();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const register = async (userData) => {
@@ -53,12 +57,9 @@ export const AuthProvider = ({ children }) => {
   const verifyOTP = async (otpData) => {
     try {
       const response = await authService.verifyOTP(otpData);
-      
       if (response.success && response.token) {
-        setUser(response.user);
-        setIsAuthenticated(true);
+        updateAuthState(); // Update state after successful verification
       }
-      
       return response;
     } catch (error) {
       console.error('OTP verification error:', error);
@@ -69,16 +70,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await authService.login(credentials);
-      
       if (response.success && response.token) {
-        // Verify token was actually stored
-        if (authService.getAuthToken()) {
-          setUser(response.user);
-          setIsAuthenticated(true);
-          return true;
-        }
+        updateAuthState(); // Update state after successful login
       }
-      return false;
+      return response;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -88,15 +83,10 @@ export const AuthProvider = ({ children }) => {
   const loginWithPatron = async (credentials) => {
     try {
       const response = await authService.loginWithPatron(credentials);
-      
       if (response.success && response.token) {
-        if (authService.getAuthToken()) {
-          setUser(response.user);
-          setIsAuthenticated(true);
-          return true;
-        }
+        updateAuthState(); // Update state after successful login
       }
-      return false;
+      return response;
     } catch (error) {
       console.error('Patron login error:', error);
       throw error;
@@ -105,19 +95,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     authService.logout();
-    setUser(null);
-    setIsAuthenticated(false);
+    updateAuthState(); // Update state after logout
   };
 
   const value = {
     user,
+    isAuthenticated,
+    loading,
     login,
     loginWithPatron,
     register,
     verifyOTP,
     logout,
-    isAuthenticated,
-    loading
+    updateAuthState // Expose this if needed elsewhere
   };
 
   return (
