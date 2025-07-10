@@ -17,7 +17,7 @@ const AltNavbar = () => {
   const [randomAvatar, setRandomAvatar] = useState(null);
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
-  
+   
   // Get auth context and override isAuthenticated to true
   const authContext = useAuth();
   const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = authContext;
