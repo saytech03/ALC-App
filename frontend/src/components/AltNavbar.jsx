@@ -17,10 +17,15 @@ const AltNavbar = () => {
   const [randomAvatar, setRandomAvatar] = useState(null);
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
-  const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = useAuth();
+  
+  // Get auth context and override isAuthenticated to true
+  const authContext = useAuth();
+  const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = authContext;
+  const isAuthenticated = true; // Force true for this component
+  
   const navigate = useNavigate();
 
-  // Avatar images array - replace these URLs with your actual avatar image links
+  // Avatar images array
   const avatarImages = [
     "/avatar1.png",
     "/avatar2.png", 
@@ -63,7 +68,7 @@ const AltNavbar = () => {
     let storedUserData = null;
     
     try {
-      // First, try to get user data from localStorage - check ALL possible keys
+      // First, try to get user data from localStorage
       const possibleKeys = ['user_data', 'userData', 'user', 'currentUser', 'authUser'];
       
       for (const key of possibleKeys) {
@@ -73,7 +78,6 @@ const AltNavbar = () => {
             const parsed = JSON.parse(data);
             console.log(`Found data in localStorage[${key}]:`, parsed);
             
-            // Check if this data has an email
             if (parsed.email || parsed.username || parsed.emailAddress) {
               storedUserData = parsed;
               userEmail = parsed.email || parsed.username || parsed.emailAddress;
@@ -86,17 +90,14 @@ const AltNavbar = () => {
         }
       }
 
-      // Debug: Print all localStorage keys to see what's available
       console.log('All localStorage keys:', Object.keys(localStorage));
       
-      // Try to get email from the AuthContext user object
       if (!userEmail && user && typeof user === 'object') {
         console.log('Checking AuthContext user object:', user);
         userEmail = user.email || user.username || user.emailAddress;
         console.log('Email from AuthContext:', userEmail);
       }
       
-      // Try to get email from token if still no email
       if (!userEmail) {
         try {
           const token = localStorage.getItem('token');
@@ -115,42 +116,8 @@ const AltNavbar = () => {
         }
       }
 
-      // Last resort: try to extract from any object in localStorage that might contain email
-      if (!userEmail) {
-        console.log('Last resort: checking all localStorage values for email...');
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          try {
-            const value = localStorage.getItem(key);
-            if (value && value.includes('@')) {
-              console.log(`Found potential email in localStorage[${key}]:`, value);
-              // Try to parse as JSON
-              try {
-                const parsed = JSON.parse(value);
-                if (parsed.email) {
-                  userEmail = parsed.email;
-                  console.log('Extracted email:', userEmail);
-                  break;
-                }
-              } catch {
-                // If not JSON, check if the value itself is an email
-                if (value.includes('@') && value.includes('.')) {
-                  userEmail = value;
-                  console.log('Direct email value:', userEmail);
-                  break;
-                }
-              }
-            }
-          } catch (err) {
-            console.log(`Error checking localStorage[${key}]:`, err);
-          }
-        }
-      }
-      
       if (!userEmail) {
         console.error('No email found in user object, localStorage, or token');
-        console.log('Final debug - User object:', user);
-        console.log('Final debug - localStorage contents:', localStorage);
         toast.error('No user email found. Please log in again.');
         return;
       }
@@ -171,7 +138,6 @@ const AltNavbar = () => {
     } catch (error) {
       console.error('Error in fetchUserDetails:', error);
       
-      // More specific error messages
       if (error.message.includes('404')) {
         toast.error('User not found. Please contact support.');
       } else if (error.message.includes('401')) {
@@ -190,13 +156,11 @@ const AltNavbar = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
     }
 
-    // Validate file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('File size must be less than 5MB');
       return;
@@ -208,7 +172,6 @@ const AltNavbar = () => {
       
       if (response.success) {
         toast.success('Profile image updated successfully!');
-        // Update userDetails state to reflect the new image
         if (userDetails) {
           setUserDetails(prev => ({
             ...prev,
@@ -224,7 +187,6 @@ const AltNavbar = () => {
       toast.error('Failed to upload image: ' + error.message);
     } finally {
       setUploadingImage(false);
-      // Clear file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -244,7 +206,6 @@ const AltNavbar = () => {
       
       if (response.success) {
         toast.success('Profile image deleted successfully!');
-        // Update userDetails state to reflect the deletion
         setUserDetails(prev => ({
           ...prev,
           profileImageUrl: null
@@ -331,7 +292,6 @@ const AltNavbar = () => {
                   alt="Avatar" 
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback to User icon if avatar fails to load
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'block';
                   }}
@@ -381,7 +341,6 @@ const AltNavbar = () => {
                   alt="Avatar" 
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback to User icon if avatar fails to load
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'block';
                   }}
