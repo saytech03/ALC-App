@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 
-const MembersPage_ = () => {
+const MembersPage = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [imgLoading, setImgLoading] = useState(true);
 
@@ -19,8 +19,8 @@ const MembersPage_ = () => {
       id: 2,
       name: "Aritro Banerjee",
       position: "Founding Member",
-      info: "Fifth-year law student at St. Xavier’s University, Kolkata",
-      detailedInfo: "Aritro Banerjee is a fifth-year law student at St. Xavier’s University, Kolkata, and member of the Art Law Communion. His passion for art and history drives his commitment to protecting artistic expression through legal advocacy. He believes law serves as a collective guardian of creativity and cultural heritage. Through the Art Law Communion, Aritro champions the principle that legal frameworks must shield and advocate for artistic freedom.",
+      info: "Fifth-year law student at St. Xavier's University, Kolkata",
+      detailedInfo: "Aritro Banerjee is a fifth-year law student at St. Xavier's University, Kolkata, and member of the Art Law Communion. His passion for art and history drives his commitment to protecting artistic expression through legal advocacy. He believes law serves as a collective guardian of creativity and cultural heritage. Through the Art Law Communion, Aritro champions the principle that legal frameworks must shield and advocate for artistic freedom.",
       image: "./member2.png"
     },
     {
@@ -28,7 +28,7 @@ const MembersPage_ = () => {
       name: "Budhaditya Ghosh",
       position: "Founding Member",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he’s interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
+      detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he's interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
       image: "./member3.png"
     },
     {
@@ -36,7 +36,7 @@ const MembersPage_ = () => {
       name: "Swaprabha Chattopadhyay",
       position: "Founding Member",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Swaprabha Chattopadhyay is a writer, poet, and artist pursuing law at West Bengal National University of Juridical Sciences, Kolkata. His poetry appears in reputed anthologies, he explores Cubism through geometric abstraction, practices traditional music, and advocates for traditional artists’ and folk singers’ rights.",
+      detailedInfo: "Swaprabha Chattopadhyay is a writer, poet, and artist pursuing law at West Bengal National University of Juridical Sciences, Kolkata. His poetry appears in reputed anthologies, he explores Cubism through geometric abstraction, practices traditional music, and advocates for traditional artists' and folk singers' rights.",
       image: "./member4.png"
     },
     {
@@ -59,8 +59,8 @@ const MembersPage_ = () => {
       id: 7,
       name: "Mehak Losalka",
       position: "Founding Member",
-      info: "Law student at St. Xavier’s University, Kolkata",
-      detailedInfo: "Mehak Losalka is a law student at St. Xavier’s University, Kolkata, with a deep interest in art, fashion, and the law. Passionate about protecting creative expression, she explores how legal frameworks influence contemporary visual culture. Besides enjoying painting, fashion and visual storytelling, she finds academic interest in intellectual property and cultural heritage.",
+      info: "Law student at St. Xavier's University, Kolkata",
+      detailedInfo: "Mehak Losalka is a law student at St. Xavier's University, Kolkata, with a deep interest in art, fashion, and the law. Passionate about protecting creative expression, she explores how legal frameworks influence contemporary visual culture. Besides enjoying painting, fashion and visual storytelling, she finds academic interest in intellectual property and cultural heritage.",
       image: "./member7.png"
     },
     {
@@ -125,9 +125,19 @@ const MembersPage_ = () => {
           onClick={() => setSelectedMember(null)}
         >
           <div 
-            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto transform transition-all duration-300 scale-100"
+            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto transform transition-all duration-300 scale-100 relative"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedMember(null)}
+              className="absolute top-4 right-4 z-10 w-8 h-8 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center transition-all duration-200 text-white hover:scale-110"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
               {/* Left Side - Image */}
               <div className="relative">
@@ -207,4 +217,4 @@ const MembersPage_ = () => {
   );
 };
 
-export default MembersPage_;
+export default MembersPage;

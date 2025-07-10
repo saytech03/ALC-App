@@ -14,10 +14,24 @@ const AltNavbar = () => {
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [deletingImage, setDeletingImage] = useState(false);
+  const [randomAvatar, setRandomAvatar] = useState(null);
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
   const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = useAuth();
   const navigate = useNavigate();
+
+  // Avatar images array - replace these URLs with your actual avatar image links
+  const avatarImages = [
+    "/avatar1.png",
+    "/avatar2.png", 
+    "/avatar3.png"
+  ];
+
+  // Set random avatar on component mount
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * avatarImages.length);
+    setRandomAvatar(avatarImages[randomIndex]);
+  }, []);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -259,28 +273,32 @@ const AltNavbar = () => {
     setIsDropdownOpen(false);
   };
 
+  const handleNavClick = (path) => {
+    setIsMobileMenuOpen(false);
+    navigate(path);
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-black' : 'bg-transparent'
     }`}>
       <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
         {/* Logo and Text - Far Left */}
-        <div className="flex items-center gap-4 ml-2">
+        <div className="flex items-center gap-2 md:gap-4 ml-2">
           <img
             src="/alc_logo.png"
             alt="Art Law Communion Logo"
-            className="w-23 h-22 rounded-lg shadow-lg"
+            className="w-16 h-16 md:w-23 md:h-22 rounded-lg shadow-lg"
           />
           <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
-            <div className="text-xl font-bold leading-tight">ART</div>
-            <div className="text-xl font-bold leading-tight">LAW</div>
-            <div className="text-xl font-bold leading-tight">COMMUNION</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">ART</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">LAW</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">COMMUNION</div>
           </div>
         </div>
                                           
-        {/* Icons - Far Right */}
-        <div className="flex items-center gap-3 mr-1">
-          {/* Navigation Links */}
+        {/* Desktop Navigation - Hidden on mobile */}
+        <div className="hidden md:flex items-center gap-3 mr-1">
           <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Home
           </Link>
@@ -294,20 +312,35 @@ const AltNavbar = () => {
           </Link>
                                                 
           <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-            Blog
+            ALC Fenestra
           </Link>
           
           <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Contact Us
           </Link>
 
-          {/* User Icon with Dropdown */}
+          {/* User Avatar/Icon with Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button 
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white hover:text-blue-400 transition-colors hover:bg-gray-700"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              <User size={20} />
+              {randomAvatar ? (
+                <img 
+                  src={randomAvatar} 
+                  alt="Avatar" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to User icon if avatar fails to load
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'block';
+                  }}
+                />
+              ) : null}
+              <User 
+                size={20} 
+                style={{ display: randomAvatar ? 'none' : 'block' }} 
+              />
             </button>
             
             {/* Dropdown Menu */}
@@ -333,14 +366,119 @@ const AltNavbar = () => {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Button - Visible only on mobile */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* Mobile User Avatar */}
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              {randomAvatar ? (
+                <img 
+                  src={randomAvatar} 
+                  alt="Avatar" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to User icon if avatar fails to load
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'block';
+                  }}
+                />
+              ) : null}
+              <User 
+                size={18} 
+                style={{ display: randomAvatar ? 'none' : 'block' }} 
+              />
+            </button>
+            
+            {/* Mobile Dropdown Menu */}
+            {isDropdownOpen && (
+              <div 
+                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+              >
+                <button 
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                  onClick={fetchUserDetails}
+                  disabled={loadingUserDetails}
+                >
+                  {loadingUserDetails ? 'Loading...' : 'User Details'}
+                </button>
+                <button  
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="text-white hover:text-blue-400 p-2 hover:bg-gray-900 rounded-full transition-colors"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-md">
+          <div className="flex flex-col py-4 px-6 space-y-4">
+            <Link 
+              to="/h" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            
+            <Link 
+              to="/auh" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+
+            <Link 
+              to="/memberh" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Team
+            </Link>
+
+            <Link 
+              to="/blog" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              ALC Fenestra
+            </Link>
+
+            <Link 
+              to="/contacth" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* User Details Modal */}
       {showUserDetails && userDetails && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">User Details</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">User Details</h2>
               <button 
                 onClick={() => setShowUserDetails(false)}
                 className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -394,12 +532,12 @@ const AltNavbar = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Email</label>
-                  <p className="text-lg text-gray-800">{userDetails.email || 'N/A'}</p>
+                  <p className="text-lg text-gray-800 break-all">{userDetails.email || 'N/A'}</p>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-600">Membership ID</label>
-                  <p className="text-lg text-gray-800 font-mono">{userDetails.membershipId || 'N/A'}</p>
+                  <p className="text-lg text-gray-800 font-mono break-all">{userDetails.membershipId || 'N/A'}</p>
                 </div>
                 
                 <div>
