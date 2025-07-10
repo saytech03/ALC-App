@@ -1,25 +1,35 @@
 import { useAuth } from "../store/AuthContext";
 import NotFoundPage from "../pages/404";
+import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children }) => {
-	const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  const [initialCheckDone, setInitialCheckDone] = useState(false);
 
-	// Show loading while checking authentication
-	if (loading) {
-		return (
-			<div className='h-screen flex justify-center items-center bg-black'>
-				<div className='text-white text-lg'>Loading...</div>
-			</div>
-		);
-	}
+  useEffect(() => {
+    // Small delay to allow auth state to update
+    const timer = setTimeout(() => {
+      setInitialCheckDone(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
-	// If user is not authenticated, show 404 page
-	if (!isAuthenticated) {
-		return <NotFoundPage />;
-	}
+  // Show loading while checking authentication
+  if (loading || !initialCheckDone) {
+    return (
+      <div className='h-screen flex justify-center items-center bg-black'>
+        <div className='text-white text-lg'>Loading...</div>
+      </div>
+    );
+  }
 
-	// If user is authenticated, render the protected component
-	return children;
+  // If user is not authenticated, show 404 page
+  if (!isAuthenticated) {
+    return <NotFoundPage />;
+  }
+
+  // If user is authenticated, render the protected component
+  return children;
 };
 
 export default ProtectedRoute;

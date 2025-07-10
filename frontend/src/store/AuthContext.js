@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // This function will update auth state from localStorage
+  // Centralized function to update auth state
   const updateAuthState = () => {
     const token = authService.getAuthToken();
     const userData = authService.getCurrentUser();
@@ -31,11 +31,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  // Check authentication status on app start and when auth changes
+  // Check auth status on mount and storage changes
   useEffect(() => {
     updateAuthState();
     
-    // Optional: Listen for storage changes from other tabs
     const handleStorageChange = () => {
       updateAuthState();
     };
@@ -58,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.verifyOTP(otpData);
       if (response.success && response.token) {
-        updateAuthState(); // Update state after successful verification
+        updateAuthState();
       }
       return response;
     } catch (error) {
@@ -71,9 +70,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.login(credentials);
       if (response.success && response.token) {
-        updateAuthState(); // Update state after successful login
+        updateAuthState();
+        return true;
       }
-      return response;
+      return false;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -84,9 +84,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.loginWithPatron(credentials);
       if (response.success && response.token) {
-        updateAuthState(); // Update state after successful login
+        updateAuthState();
+        return true;
       }
-      return response;
+      return false;
     } catch (error) {
       console.error('Patron login error:', error);
       throw error;
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     authService.logout();
-    updateAuthState(); // Update state after logout
+    updateAuthState();
   };
 
   const value = {
@@ -107,7 +108,7 @@ export const AuthProvider = ({ children }) => {
     register,
     verifyOTP,
     logout,
-    updateAuthState // Expose this if needed elsewhere
+    updateAuthState
   };
 
   return (
