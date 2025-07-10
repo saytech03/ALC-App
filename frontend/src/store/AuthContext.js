@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import authService from '../store/authService'; // Import your existing auth service
 
 const AuthContext = createContext();
 
@@ -19,14 +20,15 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
-				// Check if user has a valid token stored
-				const token = localStorage.getItem('authToken');
-				if (token) {
-					// Verify token with your backend
-					// If valid, set user and isAuthenticated to true
-					// For now, we'll just check if token exists
+				// Use your existing authService methods
+				const token = authService.getAuthToken();
+				const userData = authService.getCurrentUser();
+				
+				if (token && userData) {
+					setUser(userData);
 					setIsAuthenticated(true);
-					// You might want to fetch user data here
+				} else {
+					setIsAuthenticated(false);
 				}
 			} catch (error) {
 				console.error('Auth check failed:', error);
@@ -39,27 +41,44 @@ export const AuthProvider = ({ children }) => {
 		checkAuth();
 	}, []);
 
-	const login = async (credentials) => {
+	const register = async (userData) => {
 		try {
-			// Your login logic here
-			const response = await fetch('/api/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(credentials),
-			});
+			const response = await authService.register(userData);
+			return response;
+		} catch (error) {
+			console.error('Registration error:', error);
+			throw error;
+		}
+	};
 
-			const data = await response.json();
+	const verifyOTP = async (otpData) => {
+		try {
+			const response = await authService.verifyOTP(otpData);
 			
-			if (data.success || data.token) {
-				localStorage.setItem('authToken', data.token);
-				setUser(data.user);
+			// Update context state if verification successful
+			if (response.success && response.token) {
+				setUser(response.user);
 				setIsAuthenticated(true);
-				return data;
 			}
 			
-			return data;
+			return response;
+		} catch (error) {
+			console.error('OTP verification error:', error);
+			throw error;
+		}
+	};
+
+	const login = async (credentials) => {
+		try {
+			const response = await authService.login(credentials);
+			
+			// Update context state if login successful
+			if (response.success && response.token) {
+				setUser(response.user);
+				setIsAuthenticated(true);
+			}
+			
+			return response;
 		} catch (error) {
 			console.error('Login error:', error);
 			throw error;
@@ -68,25 +87,15 @@ export const AuthProvider = ({ children }) => {
 
 	const loginWithPatron = async (credentials) => {
 		try {
-			// Your patron login logic here
-			const response = await fetch('/api/patron-login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(credentials),
-			});
-
-			const data = await response.json();
+			const response = await authService.loginWithPatron(credentials);
 			
-			if (data.success || data.token) {
-				localStorage.setItem('authToken', data.token);
-				setUser(data.user);
+			// Update context state if login successful
+			if (response.success && response.token) {
+				setUser(response.user);
 				setIsAuthenticated(true);
-				return data;
 			}
 			
-			return data;
+			return response;
 		} catch (error) {
 			console.error('Patron login error:', error);
 			throw error;
@@ -94,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const logout = () => {
-		localStorage.removeItem('authToken');
+		authService.logout();
 		setUser(null);
 		setIsAuthenticated(false);
 	};
@@ -103,6 +112,8 @@ export const AuthProvider = ({ children }) => {
 		user,
 		login,
 		loginWithPatron,
+		register,
+		verifyOTP,
 		logout,
 		isAuthenticated,
 		loading

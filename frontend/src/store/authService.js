@@ -21,8 +21,27 @@ class AuthService {
     try {
       console.log('Making auth request to:', url);
       const response = await fetch(url, config);
-            
-      const responseData = await response.json();
+      
+      // Check if response has content
+      const contentType = response.headers.get('content-type');
+      let responseData;
+      
+      if (contentType && contentType.includes('application/json')) {
+        const text = await response.text();
+        if (text.trim() === '') {
+          responseData = {};
+        } else {
+          try {
+            responseData = JSON.parse(text);
+          } catch (parseError) {
+            console.error('JSON parse error:', parseError);
+            throw new Error('Invalid JSON response from server');
+          }
+        }
+      } else {
+        // Handle non-JSON responses
+        responseData = { message: 'Server returned non-JSON response' };
+      }
             
       if (!response.ok) {
         throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
@@ -51,8 +70,26 @@ class AuthService {
     try {
       console.log('Making file upload request to:', url);
       const response = await fetch(url, config);
-            
-      const responseData = await response.json();
+      
+      // Check if response has content
+      const contentType = response.headers.get('content-type');
+      let responseData;
+      
+      if (contentType && contentType.includes('application/json')) {
+        const text = await response.text();
+        if (text.trim() === '') {
+          responseData = {};
+        } else {
+          try {
+            responseData = JSON.parse(text);
+          } catch (parseError) {
+            console.error('JSON parse error:', parseError);
+            throw new Error('Invalid JSON response from server');
+          }
+        }
+      } else {
+        responseData = { message: 'Server returned non-JSON response' };
+      }
             
       if (!response.ok) {
         throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
