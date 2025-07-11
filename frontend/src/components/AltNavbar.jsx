@@ -32,10 +32,18 @@ const AltNavbar = () => {
     "/avatar3.png"
   ];
 
-  // Set random avatar on component mount
+  // Set random avatar on component mount (persists across navigation)
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * avatarImages.length);
-    setRandomAvatar(avatarImages[randomIndex]);
+    const storedAvatar = localStorage.getItem('userAvatar');
+    
+    if (storedAvatar) {
+      setRandomAvatar(storedAvatar);
+    } else {
+      const randomIndex = Math.floor(Math.random() * avatarImages.length);
+      const selectedAvatar = avatarImages[randomIndex];
+      setRandomAvatar(selectedAvatar);
+      localStorage.setItem('userAvatar', selectedAvatar);
+    }
   }, []);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -225,6 +233,7 @@ const AltNavbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      localStorage.removeItem('userAvatar'); // Clear the stored avatar
       toast.success('Logged out successfully!');
       navigate('/login', { replace: true });
     } catch (error) {
@@ -283,14 +292,14 @@ const AltNavbar = () => {
           {/* User Avatar/Icon with Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button 
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
+              className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               {randomAvatar ? (
                 <img 
                   src={randomAvatar} 
                   alt="Avatar" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'block';
@@ -332,14 +341,14 @@ const AltNavbar = () => {
           {/* Mobile User Avatar */}
           <div className="relative" ref={dropdownRef}>
             <button 
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
+              className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               {randomAvatar ? (
                 <img 
                   src={randomAvatar} 
                   alt="Avatar" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'block';

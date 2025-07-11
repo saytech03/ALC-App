@@ -1,55 +1,43 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import authService from '../store/authService';
+import { createContext, useContext, useState, useEffect } from 'react';
+import authService from './authService.js';
 
 const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRegistrationPending, setIsRegistrationPending] = useState(false);
 
-  // This function will update auth state from localStorage
-  const updateAuthState = () => {
-    const token = authService.getAuthToken();
-    const userData = authService.getCurrentUser();
-    
-    if (token && userData) {
-      setUser(userData);
-      setIsAuthenticated(true);
-    } else {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
-    setLoading(false);
-  };
-
-  // Check authentication status on app start and when auth changes
   useEffect(() => {
-    updateAuthState();
-    
-    // Optional: Listen for storage changes from other tabs
-    const handleStorageChange = () => {
-      updateAuthState();
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    // Check authentication status on app start
+    checkAuthStatus();
   }, []);
+
+  const checkAuthStatus = () => {
+    try {
+      if (authService.isAuthenticated()) {
+        const userData = authService.getCurrentUser();
+        setUser(userData);
+      }
+
+      // Check if registration is pending OTP verification
+      setIsRegistrationPending(authService.isRegistrationPending());
+    } catch (error) {
+      console.error('Error checking auth status:', error);
+      authService.logout();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
+      if (response.success) {
+        setIsRegistrationPending(true);
+      }
       return response;
     } catch (error) {
-      console.error('Registration error:', error);
       throw error;
     }
   };
@@ -57,12 +45,12 @@ export const AuthProvider = ({ children }) => {
   const verifyOTP = async (otpData) => {
     try {
       const response = await authService.verifyOTP(otpData);
-      if (response.success && response.token) {
-        updateAuthState(); // Update state after successful verification
+      if (response.success) {
+        setUser(response.user);
+        setIsRegistrationPending(false);
       }
       return response;
     } catch (error) {
-      console.error('OTP verification error:', error);
       throw error;
     }
   };
@@ -70,49 +58,63 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await authService.login(credentials);
-      if (response.success && response.token) {
-        updateAuthState(); // Update state after successful login
+      if (response.success) {
+        setUser(response.user);
       }
       return response;
     } catch (error) {
-      console.error('Login error:', error);
       throw error;
     }
   };
 
-  const loginWithPatron = async (credentials) => {
+  const loginWithPatron = async (patronCredentials) => {
     try {
-      const response = await authService.loginWithPatron(credentials);
-      if (response.success && response.token) {
-        updateAuthState(); // Update state after successful login
+      const response = await authService.loginWithPatron(patronCredentials);
+      if (response.success) {
+        setUser(response.user);
       }
       return response;
     } catch (error) {
-      console.error('Patron login error:', error);
+      throw error;
+    }
+  };
+
+  const getUserDetails = async (email) => {
+    try {
+      const response = await authService.getUserDetails(email);
+      return response;
+    } catch (error) {
       throw error;
     }
   };
 
   const logout = () => {
     authService.logout();
-    updateAuthState(); // Update state after logout
+    setUser(null);
+    setIsRegistrationPending(false);
   };
 
   const value = {
     user,
-    isAuthenticated,
     loading,
-    login,
-    loginWithPatron,
+    isRegistrationPending,
+    isAuthenticated: !!user,
     register,
     verifyOTP,
+    login,
+    loginWithPatron,
+    getUserDetails,
     logout,
-    updateAuthState // Expose this if needed elsewhere
+    getTempEmail: () => authService.getTempEmail()
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
