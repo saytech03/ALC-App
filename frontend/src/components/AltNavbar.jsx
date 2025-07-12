@@ -4,25 +4,16 @@ import { LogOut, Menu, Search, User, X, Camera, Upload, Trash2 } from "lucide-re
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
 
-const AltNavbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+const UserAvatarDropdown = ({ size = 20 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const [loadingUserDetails, setLoadingUserDetails] = useState(false);
-  const [showImageUpload, setShowImageUpload] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [deletingImage, setDeletingImage] = useState(false);
   const [randomAvatar, setRandomAvatar] = useState(null);
   const dropdownRef = useRef(null);
-  const fileInputRef = useRef(null);
-   
-  // Get auth context and override isAuthenticated to true
-  const authContext = useAuth();
-  const { logout, user, getUserDetails, uploadProfileImage, deleteProfileImage } = authContext;
-  const isAuthenticated = true; // Force true for this component
   
+  const authContext = useAuth();
+  const { logout, user, getUserDetails } = authContext;
   const navigate = useNavigate();
 
   // Avatar images array
@@ -46,32 +37,20 @@ const AltNavbar = () => {
     }
   }, []);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 50);
-    };
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
     document.addEventListener('mousedown', handleClickOutside);
-    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   const fetchUserDetails = async () => {
-    console.log('Current user object:', user);
-    
     let userEmail = null;
     let storedUserData = null;
     
@@ -84,12 +63,9 @@ const AltNavbar = () => {
           const data = localStorage.getItem(key);
           if (data) {
             const parsed = JSON.parse(data);
-            console.log(`Found data in localStorage[${key}]:`, parsed);
-            
             if (parsed.email || parsed.username || parsed.emailAddress) {
               storedUserData = parsed;
               userEmail = parsed.email || parsed.username || parsed.emailAddress;
-              console.log(`Email found in localStorage[${key}]:`, userEmail);
               break;
             }
           }
@@ -97,26 +73,19 @@ const AltNavbar = () => {
           console.log(`Error parsing localStorage[${key}]:`, err);
         }
       }
-
-      console.log('All localStorage keys:', Object.keys(localStorage));
       
       if (!userEmail && user && typeof user === 'object') {
-        console.log('Checking AuthContext user object:', user);
         userEmail = user.email || user.username || user.emailAddress;
-        console.log('Email from AuthContext:', userEmail);
       }
       
       if (!userEmail) {
         try {
           const token = localStorage.getItem('token');
           if (token) {
-            console.log('Found token:', token.substring(0, 50) + '...');
             const tokenParts = token.split('.');
             if (tokenParts.length === 3) {
               const payload = JSON.parse(atob(tokenParts[1]));
-              console.log('Token payload:', payload);
               userEmail = payload.email || payload.username || payload.sub;
-              console.log('Email from token:', userEmail);
             }
           }
         } catch (tokenError) {
@@ -130,9 +99,7 @@ const AltNavbar = () => {
         return;
       }
 
-      console.log('Using email for API call:', userEmail);
       setLoadingUserDetails(true);
-      
       const userData = await getUserDetails(userEmail);
       
       if (userData) {
@@ -142,23 +109,100 @@ const AltNavbar = () => {
       } else {
         throw new Error('No user data returned from API');
       }
-      
     } catch (error) {
       console.error('Error in fetchUserDetails:', error);
-      
-      if (error.message.includes('404')) {
-        toast.error('User not found. Please contact support.');
-      } else if (error.message.includes('401')) {
-        toast.error('Authentication failed. Please log in again.');
-      } else if (error.message.includes('network')) {
-        toast.error('Network error. Please check your connection.');
-      } else {
-        toast.error('Failed to fetch user details. Please try again.');
-      }
+      toast.error('Failed to fetch user details. Please try again.');
     } finally {
       setLoadingUserDetails(false);
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('userAvatar');
+      toast.success('Logged out successfully!');
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Failed to logout. Please try again.');
+    }
+    setIsDropdownOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button 
+        className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
+        {randomAvatar ? (
+          <img 
+            src={randomAvatar} 
+            alt="Avatar" 
+            className="w-full h-full object-contain"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextElementSibling.style.display = 'block';
+            }}
+          />
+        ) : null}
+        <User 
+          size={size} 
+          style={{ display: randomAvatar ? 'none' : 'block' }} 
+        />
+      </button>
+      
+      {/* Dropdown Menu */}
+      {isDropdownOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+          <button 
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            onClick={fetchUserDetails}
+            disabled={loadingUserDetails}
+          >
+            {loadingUserDetails ? 'Loading...' : 'User Details'}
+          </button>
+          <button  
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+            onClick={handleLogout}
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AltNavbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [deletingImage, setDeletingImage] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+  const fileInputRef = useRef(null);
+   
+  const authContext = useAuth();
+  const { uploadProfileImage, deleteProfileImage } = authContext;
+  const isAuthenticated = true;
+  const navigate = useNavigate();
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -230,19 +274,6 @@ const AltNavbar = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      localStorage.removeItem('userAvatar'); // Clear the stored avatar
-      toast.success('Logged out successfully!');
-      navigate('/login', { replace: true });
-    } catch (error) {
-      console.error('Logout error:', error);
-      toast.error('Failed to logout. Please try again.');
-    }
-    setIsDropdownOpen(false);
-  };
-
   const handleNavClick = (path) => {
     setIsMobileMenuOpen(false);
     navigate(path);
@@ -289,100 +320,14 @@ const AltNavbar = () => {
             Contact Us
           </Link>
 
-          {/* User Avatar/Icon with Dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button 
-              className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              {randomAvatar ? (
-                <img 
-                  src={randomAvatar} 
-                  alt="Avatar" 
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'block';
-                  }}
-                />
-              ) : null}
-              <User 
-                size={20} 
-                style={{ display: randomAvatar ? 'none' : 'block' }} 
-              />
-            </button>
-            
-            {/* Dropdown Menu */}
-            {isDropdownOpen && (
-              <div 
-                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
-              >
-                <button 
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                  onClick={fetchUserDetails}
-                  disabled={loadingUserDetails}
-                >
-                  {loadingUserDetails ? 'Loading...' : 'User Details'}
-                </button>
-                <button  
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
-                  onClick={handleLogout}
-                >
-                  <LogOut size={16} />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+          {/* Common User Avatar Dropdown for Desktop */}
+          <UserAvatarDropdown size={20} />
         </div>
 
         {/* Mobile Menu Button - Visible only on mobile */}
         <div className="md:hidden flex items-center gap-2">
-          {/* Mobile User Avatar */}
-          <div className="relative" ref={dropdownRef}>
-            <button 
-              className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 transition-colors hover:bg-gray-700 overflow-hidden"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              {randomAvatar ? (
-                <img 
-                  src={randomAvatar} 
-                  alt="Avatar" 
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'block';
-                  }}
-                />
-              ) : null}
-              <User 
-                size={18} 
-                style={{ display: randomAvatar ? 'none' : 'block' }} 
-              />
-            </button>
-            
-            {/* Mobile Dropdown Menu */}
-            {isDropdownOpen && (
-              <div 
-                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
-              >
-                <button 
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                  onClick={fetchUserDetails}
-                  disabled={loadingUserDetails}
-                >
-                  {loadingUserDetails ? 'Loading...' : 'User Details'}
-                </button>
-                <button  
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
-                  onClick={handleLogout}
-                >
-                  <LogOut size={16} />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+          {/* Common User Avatar Dropdown for Mobile */}
+          <UserAvatarDropdown size={18} />
 
           {/* Mobile Menu Toggle */}
           <button
@@ -442,7 +387,7 @@ const AltNavbar = () => {
       )}
 
       {/* User Details Modal */}
-      {showUserDetails && userDetails && (
+      {userDetails && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">

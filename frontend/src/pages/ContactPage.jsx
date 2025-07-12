@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 const ContactPage = () => {
   const [email, setEmail] = useState('');
   const [attachedFile, setAttachedFile] = useState(null);
+   const [imgLoading, setImgLoading] = useState(true);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -52,6 +53,9 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-teal-50 contact-bg">
+       {imgLoading && (
+					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+				)}
         <Navbar/>
         <div className="pt-24 pb-16"> {/* Added more top padding */}
           <div className="max-w-2xl mx-auto px-4"> {/* Reduced max-width and centered */}

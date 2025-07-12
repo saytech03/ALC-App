@@ -7,7 +7,8 @@ const API_CONFIG = {
       LOGIN: '/api/auth/login',
       LOGIN_PATRON: '/api/auth/login-with-patron-id',
       VERIFY_OTP: '/api/auth/verify-otp',
-      LOGOUT: '/api/auth/logout'
+      LOGOUT: '/api/auth/logout',
+      FORGOT_PASSWORD:'api/auth/request-password-reset'
     },
     USER: {
       GET_USER: '/api/users',

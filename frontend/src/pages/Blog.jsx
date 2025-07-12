@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { useState } from 'react';
 
 const Blog = () => {
+   const [imgLoading, setImgLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -14,7 +16,9 @@ const Blog = () => {
 			className='min-h-screen bg-cover bg-center flex flex-col justify-center items-center text-white'
 			style={{ backgroundImage: `url('/404.png')` }}
 		>
-      
+      {imgLoading && (
+					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+				)}
       {/* Navigation Header */}
       <div className="relative z-10">
         <Navbar />

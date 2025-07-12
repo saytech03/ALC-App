@@ -44,6 +44,10 @@ const HomePage = () => {
     {
       text: "Art should comfort the disturbed and disturb the comfortable.",
       author: "Cesar A. Cruz"
+    },
+    {
+      text:"In Art, man reveals himself and not his object",
+      author:"Rabindranath Tagore"
     }
   ];
 
@@ -69,6 +73,9 @@ const HomePage = () => {
   return (
     <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
       {/* Navbar */}
+      {imgLoading && (
+					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+				)}
       <Navbar/>
       
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
