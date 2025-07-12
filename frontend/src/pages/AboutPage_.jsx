@@ -1,6 +1,6 @@
 import AltNavbar from '../components/AltNavbar';
 
-function AboutPage() {
+function AboutPage_() {
   return (
     <div 
       className="min-h-screen bg-cover bg-center bg-no-repeat relative"
@@ -15,11 +15,16 @@ function AboutPage() {
       <div className="pt-20 min-h-screen flex items-center">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-start"> {/* Changed to items-start */}
           {/* Left Column - Space for Image */}
-          <div className="w-full md:w-1/2 mb-8 md:mb-0 flex items-start"> {/* Added flex items-start */}
-            <div className="bg-gray-200 bg-opacity-30 h-64 md:h-96 rounded-lg flex items-center justify-center w-full">
-              <span className="text-white">Image will be placed here</span>
-            </div>
+          <div className="w-full md:w-1/2 mb-8 md:mb-0 flex items-start">
+          <div className="bg-opacity-30 rounded-lg flex items-center justify-center w-full h-64 md:h-96 relative overflow-hidden"
+            style={{
+              backgroundImage: "url('./warli_law.png')",
+              backgroundSize: "contain",  // Changed from default 'cover' to 'contain'
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
+            }}>
           </div>
+        </div>
 
           {/* Right Column - Vision Content */}
           <div className="w-full md:w-1/2 md:pl-12 text-white">
@@ -55,8 +60,13 @@ function AboutPage() {
 
           {/* Right Column - Space for Image */}
           <div className="w-full md:w-1/2 flex items-start"> {/* Added flex items-start */}
-            <div className="bg-gray-200 bg-opacity-30 h-64 md:h-96 rounded-lg flex items-center justify-center w-full">
-              <span className="text-white">Section 2 Image will be placed here</span>
+          <div className="bg-opacity-30 rounded-lg flex items-center justify-center w-full h-64 md:h-96 relative overflow-hidden"
+            style={{
+              backgroundImage: "url('./warli_law.png')",
+              backgroundSize: "contain",  // Changed from default 'cover' to 'contain'
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
+            }}>
             </div>
           </div>
         </div>
@@ -90,4 +100,4 @@ function AboutPage() {
   );
 }
 
-export default AboutPage;
+export default AboutPage_;

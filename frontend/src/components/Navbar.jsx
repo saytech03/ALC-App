@@ -1,12 +1,63 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogOut, Menu, Search, User, ChevronDown, X } from "lucide-react";
+
+const UserDropdown = ({ size = 20 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+          isDropdownOpen 
+            ? 'bg-gray-700 text-blue-400' 
+            : 'bg-gray-800 text-white hover:text-blue-400 hover:bg-gray-700'
+        }`}
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      >
+        <User size={size} />
+      </button>
+      
+      {isDropdownOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+          <Link 
+            to="/login" 
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setIsDropdownOpen(false)}
+          >
+            Login
+          </Link>
+          <Link  
+            to="/register"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setIsDropdownOpen(false)}
+          >
+            Become a Member
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
   
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
     
@@ -16,18 +67,9 @@ const Navbar = () => {
       setIsScrolled(scrollTop > 50);
     };
 
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
     window.addEventListener('scroll', handleScroll);
-    document.addEventListener('mousedown', handleClickOutside);
-    
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -72,74 +114,14 @@ const Navbar = () => {
             Contact Us
           </Link>
 
-          {/* User Icon with Dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-                className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                  isDropdownOpen 
-                    ? 'bg-gray-700 text-blue-400' 
-                    : 'bg-gray-800 text-white hover:text-blue-400 hover:bg-gray-700'
-                }`}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-              <User size={20} />
-            </button>
-            
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <Link 
-                  to="/login" 
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link  
-                  to="/register"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  Become a Member
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Common User Dropdown for Desktop */}
+          <UserDropdown size={20} />
         </div>
 
         {/* Mobile Menu Button - Visible only on mobile */}
         <div className="md:hidden flex items-center gap-2">
-          {/* Mobile User Icon */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-                className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                  isDropdownOpen 
-                    ? 'bg-gray-700 text-blue-400' 
-                    : 'bg-gray-800 text-white hover:text-blue-400 hover:bg-gray-700'
-                }`}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-              <User size={18} />
-            </button>
-            
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <Link 
-                  to="/login" 
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link  
-                  to="/register"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsDropdownOpen(false)}
-                >
-                  Become a Member
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Common User Dropdown for Mobile */}
+          <UserDropdown size={18} />
 
           {/* Mobile Menu Toggle */}
           <button
