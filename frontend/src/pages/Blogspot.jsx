@@ -6,66 +6,22 @@ const Blogspot = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
+   const [imgLoading, setImgLoading] = useState(true);
 
   // Reduced blog data to 7 posts
   const blogPosts = [
-   {
+    {
       id: 1,
-      title: "NFT Legal Issues: SEC Enforcement and the Future of Digital Art",
-      author: "Law of The Ledger",
-      introduction: "The SEC has ramped up enforcement efforts against digital asset marketplaces for selling NFTs that are allegedly securities. Recent developments include Wells notices to OpenSea and class action lawsuits, creating uncertainty for the NFT art market.",
-      category: "NFT LAW",
-      date: "December 31, 2024",
-      readTime: "15 min read",
-      views: "24.7K",
-      comments: 156,
-      reactions: 542,
-      likes: 398,
-      popularity: 98,
-      featured: false,
-      realUrl: "https://www.lawoftheledger.com/2024/12/articles/nfts/nft-legal-issues/",
-      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2232&q=80",
-      subheadings: [
-        "Recent SEC NFT Enforcements",
-        "Civil Class Action Lawsuits",
-        "NFT Artists Fight Back",
-        "What to Expect in 2025"
-      ]
-    },
-    {
-      id: 2,
-      title: "The Intellectual Property Challenges of Artworks Turned into NFTs",
-      author: "Schoenherr Legal",
-      introduction: "When an artist sells an NFT depicting their work, they retain the copyright unless there is a specific agreement for the transfer of those rights. Understanding IP rights in NFT transactions is crucial for both artists and collectors.",
-      category: "COPYRIGHT",
-      date: "March 20, 2024",
-      readTime: "12 min read",
-      views: "18.3K",
-      comments: 89,
-      reactions: 367,
-      likes: 278,
-      popularity: 94,
-      realUrl: "https://schoenherr.eu/content/the-intellectual-property-challenges-of-artworks-turned-into-nfts",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      subheadings: [
-        "Copyright Retention in NFT Sales",
-        "Commercial Exploitation Rights",
-        "WIPO Copyright Treaty Implications",
-        "Best Practices for Artists"
-      ]
-    },
-    {
-      id: 3,
       title: "How A Bird Transformed Art Law Forever: The Brâncuși vs. United States Case",
       author: "Priyanshu Kar",
       introduction: "In 1926, Constantin Brâncuși's abstract sculpture 'Bird in Space' was seized by U.S. customs officials who refused to recognize it as art, leading to a landmark legal battle that would forever change how courts define artistic expression and reshape the boundaries of modern art.",
       category: "ART LAW",
       date: "June 3, 2025",
       readTime: "12 min read",
-      views: "100",
+      views: "361",
       comments: 0,
-      reactions: 3,
-      likes: 3,
+      reactions: 82,
+      likes: 82,
       popularity: 99,
       featured: true,
       realUrl: "https://substack.com/@artlawcommunion/note/p-165113912?r=5s5n5l",
@@ -78,6 +34,30 @@ const Blogspot = () => {
         "Legacy and Impact on Modern Art Law"
       ]
     },
+    {
+        id: 2,
+        title: "Suppression of Vice: The Tussle Between Artistic Freedom and Moral Policing",
+        author: "Aritro Banerjee",
+        introduction: "From colonial courtrooms to today's digital platforms, the battle between artistic freedom and moral policing rages on. This examination of censorship's evolution reveals how laws designed to protect 'public morality' have consistently been weaponized against creative expression, from the trials of Ismat Chughtai and Saadat Hasan Manto to modern content moderation policies.",
+        category: "ART LAW",
+        date: "July 9, 2025",
+        readTime: "18 min read",
+        views: "27",
+        comments: 0,
+        reactions: 0,
+        likes: 2,
+        popularity: 98,
+        featured: false,
+        realUrl: "https://open.substack.com/pub/artlawcommunion/p/suppression-of-vice?utm_source=share&utm_medium=android&r=5s5n5l",
+        image: "./tree_blog.png",
+        subheadings: [
+            "The Myth of Virtuosity: Chughtai and Manto on Trial",
+            "The Mark of Obscenity: 300 Years of Legal Battles",
+            "From Hicklin to Miller: The Evolution of Obscenity Tests",
+            "India's Colonial Legacy in Censorship",
+            "Landmark Cases: Udeshi, Bandit Queen, and Beyond"
+        ]
+    }
   ];
 
   const categories = ['All', 'ART LAW', 'COPYRIGHT', 'NFT LAW', 'CONTRACTS', 'AUTHENTICATION'];
@@ -137,6 +117,9 @@ const Blogspot = () => {
 
   return (
     <div className='min-h-screen w-full ai-bg'>
+      {imgLoading && (
+					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+				)}
       {/* Navigation Header */}
       <AltNavbar />
       

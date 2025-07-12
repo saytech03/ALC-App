@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 
 function AboutPage() {
+   const [imgLoading, setImgLoading] = useState(true);
   return (
     <div 
       className="min-h-screen bg-cover bg-center bg-no-repeat relative"
@@ -8,6 +10,9 @@ function AboutPage() {
         backgroundImage: "url('./desert_.jpg')"
       }}
     >
+      {imgLoading && (
+					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+				)}
       {/* Navbar */}
       <Navbar />
       

@@ -43,8 +43,8 @@ const SignUpPage = () => {
             return;
         }
 
-        // Password format validation (at least 6 characters, can add more rules if needed)
-        if (!password || password.length < 6) {
+        // Password format validation (at least 8 characters, can add more rules if needed)
+        if (!password || password.length < 8) {
             toast.error('Invalid user content');
             return;
         }
@@ -267,7 +267,7 @@ const SignUpPage = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                     disabled={loading}
-                                    minLength="6"
+                                    minLength="8"
                                 />
                                 <button
                                     type='button'
@@ -278,6 +278,19 @@ const SignUpPage = () => {
                                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
+                            {password.length > 0 && (
+                                <div className="mt-2 text-xs text-gray-400 space-y-1">
+                                    <p className={password.length >= 8 ? 'text-green-400' : ''}>
+                                        {password.length >= 8 ? '✓' : '•'} At least 8 characters
+                                    </p>
+                                    <p className={/[A-Z]/.test(password) ? 'text-green-400' : ''}>
+                                        {/[A-Z]/.test(password) ? '✓' : '•'} At least one uppercase letter
+                                    </p>
+                                    <p className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-400' : ''}>
+                                        {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? '✓' : '•'} At least one special character
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <div>

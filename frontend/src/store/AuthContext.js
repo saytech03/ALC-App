@@ -88,6 +88,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await authService.forgotPassword(email);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -105,7 +114,8 @@ export const AuthProvider = ({ children }) => {
     loginWithPatron,
     getUserDetails,
     logout,
-    getTempEmail: () => authService.getTempEmail()
+    getTempEmail: () => authService.getTempEmail(),
+    forgotPassword
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
