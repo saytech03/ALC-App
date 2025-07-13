@@ -30,7 +30,10 @@ class AuthService {
       return responseData;
     } catch (error) {
       console.error('Auth API request failed:', error);
-      throw error;
+        if (error instanceof TypeError && error.message === "Failed to fetch") {
+            throw new Error("Network error. Please check your internet connection.");
+        }
+        throw error;
     }
   }
 
@@ -125,9 +128,7 @@ class AuthService {
       body: JSON.stringify({ email }),
     });
   }
-
-
-  // Check if user has pending OTP verification
+    // Check if user has pending OTP verification
   isRegistrationPending() {
     return localStorage.getItem('registration_pending') === 'true';
   }
