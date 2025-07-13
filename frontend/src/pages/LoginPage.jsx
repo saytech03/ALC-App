@@ -70,6 +70,15 @@ const LoginPage = () => {
                 // Login successful
                 console.log('Login successful');
                 toast.success('Login successful! Welcome back!');
+
+                localStorage.setItem('currentUser', JSON.stringify({
+                email: response.email,
+                id: response.id,
+                name: response.name,
+                alc_patronid: response.membershipId,
+                profileImageUrl: response.profileImageUrl,
+                token: response.token
+            }));
                 
                 // Redirect to home page after successful login
                 setTimeout(() => {

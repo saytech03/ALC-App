@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 
 const SignUpPage = () => {
     const [email, setEmail] = useState("");
@@ -14,11 +14,11 @@ const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     
     // OTP related state
-    const [showOtpModal, setShowOtpModal] = useState(false);
+    const [showOtpPopup, setShowOtpPopup] = useState(false);
     const [otp, setOtp] = useState('');
     const [otpLoading, setOtpLoading] = useState(false);
     const [otpError, setOtpError] = useState('');
-    const [otpSuccess, setOtpSuccess] = useState(''); // New state for OTP success messages
+    const [otpSuccess, setOtpSuccess] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     const { register, verifyOTP } = useAuth();
@@ -43,7 +43,7 @@ const SignUpPage = () => {
             return;
         }
 
-        // Password format validation (at least 8 characters, can add more rules if needed)
+        // Password format validation
         if (!password || password.length < 8) {
             toast.error('Invalid user content');
             return;
@@ -55,7 +55,7 @@ const SignUpPage = () => {
             return;
         }
 
-        // More permissive email validation - accepts all valid email formats including institutional emails
+        // Email validation
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         if (!emailRegex.test(email.trim())) {
             toast.error('Please enter a valid email address');
@@ -65,7 +65,7 @@ const SignUpPage = () => {
         try {
             setLoading(true);
             
-            // Map occupation to match API expected format (uppercase)
+            // Map occupation to match API expected format
             const occupationMapping = {
                 'Student': 'STUDENT',
                 'Legal Professional': 'LEGAL_PROFESSIONAL',
@@ -84,10 +84,8 @@ const SignUpPage = () => {
             const response = await register(registrationData);
             
             if (response && (response.success || response.id)) {
-                setSuccessMessage('You have successfully registered! OTP sent to your email!');
-                setShowOtpModal(true);
+                setShowOtpPopup(true);
                 setError('');
-                // Clear any previous OTP states
                 setOtpError('');
                 setOtpSuccess('');
                 setOtp('');
@@ -143,8 +141,8 @@ const SignUpPage = () => {
         setOtpError('');
         setOtpSuccess('');
        
-        if (!otp || otp.length < 4) {
-            setOtpError('Please enter a valid OTP');
+        if (!otp || otp.length < 6) {
+            setOtpError('Please enter a valid 6-digit code');
             return;
         }
 
@@ -157,21 +155,18 @@ const SignUpPage = () => {
             
             if (response && (response.success || response.token)) {
                 setOtpSuccess('Email verified successfully! Redirecting to login...');
-                setOtpError(''); // Clear any previous errors
                 toast.success('Email verified successfully!');
                 
-                // Auto redirect after 3 seconds
+                // Redirect after 3 seconds
                 setTimeout(() => {
                     navigate('/login', { replace: true });
                 }, 3000);
             } else {
                 setOtpError(response?.message || 'OTP verification failed');
-                setOtpSuccess(''); // Clear any previous success messages
             }
         } catch (error) {
             console.error('OTP verification error:', error);
             setOtpError(error.response?.data?.message || 'OTP verification failed');
-            setOtpSuccess(''); // Clear any previous success messages
         } finally {
             setOtpLoading(false);
         }
@@ -180,7 +175,6 @@ const SignUpPage = () => {
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, '');
         setOtp(value);
-        // Clear messages when user starts typing
         if (otpError) setOtpError('');
         if (otpSuccess) setOtpSuccess('');
     };
@@ -196,22 +190,29 @@ const SignUpPage = () => {
         } catch (error) {
             console.error('Resend OTP error:', error);
             setOtpError('Failed to resend OTP. Please try again.');
-            setOtpSuccess('');
         } finally {
             setOtpLoading(false);
         }
     };
 
     return (
-        <div className='h-screen w-full login-bg'>
+        <div className='h-screen w-full-stretch bg-no-repeat login-bg'>
+            {/* Original Header */}
             <header className='max-w-6xl mx-auto flex items-center justify-between p-4'>
-                <Link to={"/"}>
-                    <img src='/alc_logo.png' alt='logo' className='w-24' />
-                </Link>
+                <div className="flex items-center gap-4 ml-2">
+                    <Link to={"/"}>
+                        <img src='/alc_logo.png' alt='logo' className='w-24' />
+                    </Link>
+                    <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
+                        <div className="text-xl font-bold leading-tight">ART</div>
+                        <div className="text-xl font-bold leading-tight">LAW</div>
+                        <div className="text-xl font-bold leading-tight">COMMUNION</div>
+                    </div>
+                </div>
             </header>
 
-            <div className='flex justify-center items-center mt-1 mx-3'>
-                 <div className={`w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md ${showOtpModal ? 'blur-sm' : ''}`}>
+            <div className='flex-1 flex justify-center items-center mx-3 py-8'>
+                <div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md mb-8">
                     <h1 className='text-center text-white text-2xl font-bold mb-4'>Sign Up</h1>
 
                     {successMessage && (
@@ -350,77 +351,80 @@ const SignUpPage = () => {
                 </div>
             </div>
 
-            {/* OTP Verification Modal */}
-            {showOtpModal && (
-                <div className='fixed inset-0 flex justify-center items-center z-50'>
-                    <div className='absolute inset-0 bg-black/70' onClick={() => setShowOtpModal(false)}></div>
-                    <div className='relative w-full max-w-md p-8 space-y-6 bg-gray-900 rounded-lg shadow-lg border border-gray-700 mx-3'>
-                        <button 
-                            onClick={() => setShowOtpModal(false)}
-                            className='absolute top-4 right-4 text-gray-400 hover:text-white'
+            {/* OTP Verification Popup */}
+            {showOtpPopup && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/70">
+                    <div className="bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-md relative border border-gray-700">
+                        <button
+                            onClick={() => {
+                                setShowOtpPopup(false);
+                                setOtp("");
+                                setOtpError("");
+                                setOtpSuccess("");
+                            }}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-white"
                         >
-                            ✕
+                            <X size={24} />
                         </button>
+
+                        <h2 className="text-2xl font-bold text-white mb-4">Verify Your Email</h2>
                         
-                        <h2 className='text-center text-white text-2xl font-bold'>Verify Your Email</h2>
-                        <p className='text-gray-300 text-center'>
-                            We've sent a 6-digit code to:
-                        </p>
-                        <p className='text-white text-center font-medium text-lg'>{email}</p>
-                        
-                        <form onSubmit={handleOtpSubmit} className='space-y-6'>
-                            <div className='space-y-2'>
-                                <label htmlFor='otp' className='text-sm font-medium text-gray-300 block'>
-                                    Verification Code
-                                </label>
-                                <input
-                                    type='text'
-                                    id='otp'
-                                    className='w-full px-4 py-3 text-xl border border-gray-600 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest'
-                                    placeholder='_ _ _ _ _ _'
-                                    value={otp}
-                                    onChange={handleOtpChange}
-                                    maxLength="6"
-                                    required
-                                    disabled={otpLoading}
-                                />
+                        {otpSuccess ? (
+                            <div className="text-green-400 text-center p-4 bg-green-900/20 rounded-md border border-green-700">
+                                {otpSuccess}
                             </div>
+                        ) : (
+                            <>
+                                <p className="text-gray-300 mb-4">
+                                    We've sent a 6-digit code to: <span className="font-medium text-white">{email}</span>
+                                </p>
+                                
+                                <form onSubmit={handleOtpSubmit} className="space-y-4">
+                                    <div>
+                                        <label htmlFor="otp" className="block text-sm font-medium text-gray-300 mb-1">
+                                            Verification Code
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="otp"
+                                            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring text-center tracking-widest"
+                                            placeholder="______"
+                                            value={otp}
+                                            onChange={handleOtpChange}
+                                            maxLength="6"
+                                            required
+                                            disabled={otpLoading}
+                                        />
+                                    </div>
+                                    
+                                    {otpError && (
+                                        <div className="text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700">
+                                            {otpError}
+                                        </div>
+                                    )}
+                                    
+                                    <button
+                                        type="submit"
+                                        className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={otpLoading || !otp}
+                                    >
+                                        {otpLoading ? "Verifying..." : "Verify Code"}
+                                    </button>
+                                </form>
 
-                            {/* Success Message - Green */}
-                            {otpSuccess && (
-                                <div className='text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700'>
-                                    {otpSuccess}
+                                <div className="text-center pt-2">
+                                    <p className="text-gray-400 text-sm">Didn't receive the code?</p>
+                                    <button 
+                                        type="button" 
+                                        className="text-blue-400 hover:text-blue-300 underline text-sm disabled:opacity-50"
+                                        disabled={otpLoading}
+                                        onClick={handleResendOTP}
+                                    >
+                                        Resend Code
+                                    </button>
                                 </div>
-                            )}
-
-                            {/* Error Message - Red */}
-                            {otpError && (
-                                <div className='text-green-400 text-sm text-center bg-green-900/20 p-3 rounded-md border border-green-700'>
-                                    {otpError}
-                                </div>
-                            )}
-
-                            <button
-                                type='submit'
-                                className='w-full py-3 bg-blue-600 text-white font-semibold rounded-md 
-                                hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-                                disabled={otpLoading || !otp}
-                            >
-                                {otpLoading ? 'Verifying...' : 'Verify Code'}
-                            </button>
-                        </form>
-
-                        <div className='text-center pt-2'>
-                            <p className='text-gray-400 text-sm'>Didn't receive the code?</p>
-                            <button 
-                                type='button' 
-                                className='text-blue-400 hover:text-blue-300 underline text-sm disabled:opacity-50'
-                                disabled={otpLoading}
-                                onClick={handleResendOTP}
-                            >
-                                Resend Code
-                            </button>
-                        </div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

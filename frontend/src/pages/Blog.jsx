@@ -453,7 +453,7 @@ const Blog = () => {
             
             <div className="text-center mb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Please login to access blogs
+                We are glad you are interested to read on, please login for free to read the full article!
               </h2>
               <p className="text-gray-600">
                 You need to be logged in to read full blog articles.
