@@ -161,12 +161,12 @@ const LoginPage = () => {
         }
     };
 
-    const handleResetPassword = async (e) => {
+    // In your LoginPage component
+        const handleResetPassword = async (e) => {
         e.preventDefault();
         setResetError("");
         setResetSuccess("");
 
-        // Validate email format
         if (!resetEmail || !emailRegex.test(resetEmail.trim())) {
             setResetError("Please enter a valid email address");
             return;
@@ -174,47 +174,36 @@ const LoginPage = () => {
 
         try {
             setResetLoading(true);
+            console.log("Sending reset request for:", resetEmail); // Debug log
+            
             const response = await forgotPassword(resetEmail.trim().toLowerCase());
-        
-             if (response && response.message === "Password reset email sent") {
-            setResetSuccess("Password reset email sent! Please check your inbox.");
+            console.log("Reset response:", response); // Debug log
+            
+            if (response && response.message) {
+            setResetSuccess(response.message);
             toast.success("Password reset email sent!");
-            // Close popup after 3 seconds
             setTimeout(() => {
                 setShowResetPopup(false);
                 setResetEmail("");
             }, 3000);
-				} else {
-					setResetError(response?.message || "Failed to send reset email");
-				}
-			} catch (error) {
-				console.error("Password reset error:", error);
-
-                 if (error instanceof TypeError && error.message === "Failed to fetch") {
-                        setResetError("Network error. Please check your internet connection.");
-                    } 
-				
-				else if (error.response) {
-					const status = error.response.status;
-					const data = error.response.data;
-					
-					switch (status) {
-						case 404:
-							setResetError("Email not registered. Please sign up first.");
-							break;
-						case 429:
-							setResetError("Too many requests. Please try again later.");
-							break;
-						default:
-							setResetError(data?.message || "Failed to send reset email");
-					}
-				} else {
-					setResetError(error.message || "Failed to send reset email");
-				}
-			} finally {
-				setResetLoading(false);
-			}
-		};
+            } else {
+            setResetError("Unexpected response from server");
+            }
+        } catch (error) {
+            console.error("Password reset error:", error);
+            
+            // Enhanced error messages
+            if (error.message.includes("Failed to fetch")) {
+            setResetError("Connection failed. Please check your network and try again.");
+            } else if (error.message.includes("Network Error")) {
+            setResetError("Cannot connect to server. Please try again later.");
+            } else {
+            setResetError(error.message || "Failed to send reset request");
+            }
+        } finally {
+            setResetLoading(false);
+        }
+        };
 
     return (
         <div className='h-screen w-full-stretch bg-no-repeat login-bg'>
