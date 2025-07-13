@@ -68,7 +68,6 @@ function App() {
 		<>
 			<AuthProvider>
 				<Routes>
-					{/* Public routes */}
 					<Route path='/' element={<HomePage />} />
 					<Route path='/login' element={<LoginPage />} />
 					<Route path='/signup' element={<SignUpPage />} />
@@ -76,23 +75,11 @@ function App() {
 					<Route path='/member' element={<MembersPage />} />
 					<Route path='/contact' element={<ContactPage />} />
 					<Route path='/au' element={<AboutPage/>} />
-					
-					{/* Protected routes - only accessible when logged in */}
 					<Route path='/h' element={<HomePage_ />} />
-					<Route path='/memberh' element={
-							<MembersPage_ />
-					} />
-					<Route path='/blog' element={
-							<Blogspot />
-					} />
-					<Route path='/contacth' element={
-							<ContactPage_ />
-					} />
-					<Route path='/auh' element={
-							<AboutPage_ />
-					} />
-					
-					{/* 404 route */}
+					<Route path='/memberh' element={<MembersPage_ />} />
+					<Route path='/blog' element={<Blogspot />} />
+					<Route path='/contacth' element={<ContactPage_ />} />
+					<Route path='/auh' element={<AboutPage_ />} />
 					<Route path='/*' element={<NotFoundPage />} />
 				</Routes>
 				<Footer/>
