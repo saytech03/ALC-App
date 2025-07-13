@@ -233,7 +233,7 @@ const Blogspot = () => {
           {/* Popular Articles Horizontal Slider */}
           <div className="mb-16">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
+              <h2 className="text-3xl font-bold text-white flex items-center space-x-3">
                 <TrendingUp className="w-8 h-8 text-orange-600" />
                 <span>Most Popular This Week</span>
               </h2>

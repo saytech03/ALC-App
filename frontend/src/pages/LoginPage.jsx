@@ -189,8 +189,12 @@ const LoginPage = () => {
 				}
 			} catch (error) {
 				console.error("Password reset error:", error);
+
+                 if (error instanceof TypeError && error.message === "Failed to fetch") {
+                        setResetError("Network error. Please check your internet connection.");
+                    } 
 				
-				if (error.response) {
+				else if (error.response) {
 					const status = error.response.status;
 					const data = error.response.data;
 					
