@@ -122,12 +122,18 @@ class AuthService {
     return response;
   }
 
-    async forgotPassword(email) {
-    return await this.request(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    });
-  }
+   // src/services/authService.js
+async forgotPassword(email) {
+  return await this.request(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, {
+    method: 'POST',
+    headers: {  // Add headers here
+      'Content-Type': 'application/json',
+      'Accept': 'application/json', 
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({ email })
+  });
+}
     // Check if user has pending OTP verification
   isRegistrationPending() {
     return localStorage.getItem('registration_pending') === 'true';
