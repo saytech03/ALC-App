@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut, Menu, User, X } from "lucide-react";
+import { LogOut, Menu, User, X, Edit } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
 
@@ -9,6 +9,8 @@ const UserAvatarDropdown = ({ size = 20 }) => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [userData, setUserData] = useState(null);
   const [randomAvatar, setRandomAvatar] = useState(null);
+  const [loadingUserDetails, setLoadingUserDetails] = useState(false);
+  const [editingField, setEditingField] = useState(null);
   const dropdownRef = useRef(null);
   
   const authContext = useAuth();
@@ -22,9 +24,8 @@ const UserAvatarDropdown = ({ size = 20 }) => {
     "/avatar3.png"
   ];
 
-  // Load user data and set avatar on component mount
+  // Set random avatar on component mount
   useEffect(() => {
-    // Set random avatar
     const storedAvatar = localStorage.getItem('userAvatar');
     if (storedAvatar) {
       setRandomAvatar(storedAvatar);
@@ -34,37 +35,56 @@ const UserAvatarDropdown = ({ size = 20 }) => {
       setRandomAvatar(selectedAvatar);
       localStorage.setItem('userAvatar', selectedAvatar);
     }
+  }, []);
 
-    // Load user data
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUserData({
-          email: parsedUser.email,
-          id: parsedUser.id,
-          name: parsedUser.name,
-          alc_patronid: parsedUser.membershipId || parsedUser.alc_patronid,
-          profileImageUrl: parsedUser.profileImageUrl
-        });
-      } catch (error) {
-        console.error("Error parsing user data:", error);
+  const fetchUserDetails = async () => {
+    try {
+      setLoadingUserDetails(true);
+      setIsDropdownOpen(false);
+      
+      // Get the logged-in user's email from localStorage
+      const storedUser = localStorage.getItem('currentUser');
+      if (!storedUser) {
+        throw new Error('No user data found');
       }
+      
+      const { email, token } = JSON.parse(storedUser);
+      
+      // Fetch user details from API
+      const response = await fetch(
+        `https://alc-backend.onrender.com/api/users?email=${encodeURIComponent(email)}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch user details');
+      }
+      
+      const userData = await response.json();
+      
+      // Update state with the fetched data
+      setUserData({
+        email: userData.email,
+        id: userData.id,
+        name: userData.name,
+        alc_patronid: userData.membershipId,
+        profileImageUrl: userData.profileImageUrl,
+        work: userData.occupation
+      });
+      
+      setShowUserDetails(true);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      toast.error(error.message);
+    } finally {
+      setLoadingUserDetails(false);
     }
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  };
 
   const handleLogout = async () => {
     try {
@@ -79,6 +99,25 @@ const UserAvatarDropdown = ({ size = 20 }) => {
     }
     setIsDropdownOpen(false);
   };
+
+  const handleEditClick = (field) => {
+    setEditingField(field);
+    // You'll implement the actual edit functionality later when you integrate the API
+    toast('Edit functionality will be implemented soon', { icon: '🛠️' });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -103,21 +142,22 @@ const UserAvatarDropdown = ({ size = 20 }) => {
         />
       </button>
       
-      {/* Dropdown Menu - Now fully functional */}
+      {/* Dropdown Menu */}
       {isDropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
           <button 
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => {
-              setIsDropdownOpen(false);
-              if (userData) {
-                setShowUserDetails(true);
-              } else {
-                toast.error('User data not available');
-              }
-            }}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+            onClick={fetchUserDetails}
+            disabled={loadingUserDetails}
           >
-            User Details
+            {loadingUserDetails ? (
+              <span>Loading...</span>
+            ) : (
+              <>
+                <User size={16} />
+                <span>User Details</span>
+              </>
+            )}
           </button>
           <button  
             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
@@ -129,7 +169,7 @@ const UserAvatarDropdown = ({ size = 20 }) => {
         </div>
       )}
 
-      {/* User Details Modal - Now properly connected */}
+      {/* User Details Modal */}
       {showUserDetails && userData && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
@@ -144,24 +184,44 @@ const UserAvatarDropdown = ({ size = 20 }) => {
             </div>
             
             <div className="space-y-4">
-              <div className="flex justify-center">
+              {/* Profile Image with Cloudinary URL */}
+              <div className="flex justify-center relative">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 bg-gray-200 flex items-center justify-center">
                   {userData.profileImageUrl ? (
                     <img 
                       src={userData.profileImageUrl} 
                       alt="Profile" 
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'block';
+                      }}
                     />
-                  ) : (
-                    <User size={40} className="text-gray-400" />
-                  )}
+                  ) : null}
+                  <User 
+                    size={40} 
+                    className="text-gray-400" 
+                    style={{ display: userData.profileImageUrl ? 'none' : 'block' }}
+                  />
                 </div>
+                <button 
+                  onClick={() => handleEditClick('profileImage')}
+                  className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+                >
+                  <Edit size={16} className="text-gray-600" />
+                </button>
               </div>
               
               <div className="space-y-3">
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-600">Name</label>
                   <p className="text-lg text-gray-800">{userData.name || 'Not available'}</p>
+                  <button 
+                    onClick={() => handleEditClick('name')}
+                    className="absolute top-0 right-0 p-1 hover:bg-gray-100 rounded-full"
+                  >
+                    <Edit size={16} className="text-gray-600" />
+                  </button>
                 </div>
                 
                 <div>
@@ -174,8 +234,17 @@ const UserAvatarDropdown = ({ size = 20 }) => {
                   <p className="text-lg text-gray-800 font-mono">{userData.alc_patronid}</p>
                 </div>
                 
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-600">Occupation</label>
+                  <p className="text-lg text-gray-800 font-mono">{userData.work}</p>
+                  <button 
+                    onClick={() => handleEditClick('work')}
+                    className="absolute top-0 right-0 p-1 hover:bg-gray-100 rounded-full"
+                  >
+                    <Edit size={16} className="text-gray-600" />
+                  </button>
+                </div>
               </div>
-             
             </div>
           </div>
         </div>
@@ -184,17 +253,10 @@ const UserAvatarDropdown = ({ size = 20 }) => {
   );
 };
 
+// ... rest of the AltNavbar component remains the same ...
 const AltNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showImageUpload, setShowImageUpload] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [deletingImage, setDeletingImage] = useState(false);
-  const fileInputRef = useRef(null);
-   
-  const authContext = useAuth();
-  const { uploadProfileImage, deleteProfileImage } = authContext;
-  const isAuthenticated = true;
   const navigate = useNavigate();
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -210,64 +272,6 @@ const AltNavbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size must be less than 5MB');
-      return;
-    }
-
-    setUploadingImage(true);
-    try {
-      const response = await uploadProfileImage(file);
-      
-      if (response.success) {
-        toast.success('Profile image updated successfully!');
-        setShowImageUpload(false);
-      } else {
-        toast.error('Failed to upload image: ' + response.message);
-      }
-    } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload image: ' + error.message);
-    } finally {
-      setUploadingImage(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  const handleImageDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete your profile image?')) {
-      return;
-    }
-
-    setDeletingImage(true);
-    try {
-      const response = await deleteProfileImage();
-      
-      if (response.success) {
-        toast.success('Profile image deleted successfully!');
-        setShowImageUpload(false);
-      } else {
-        toast.error('Failed to delete image: ' + response.message);
-      }
-    } catch (error) {
-      console.error('Delete error:', error);
-      toast.error('Failed to delete image: ' + error.message);
-    } finally {
-      setDeletingImage(false);
-    }
-  };
 
   const handleNavClick = (path) => {
     setIsMobileMenuOpen(false);
@@ -380,52 +384,6 @@ const AltNavbar = () => {
           </div>
         </div>
       )}
-
-      {/* Image Upload Modal - Keep this if you want to maintain image upload functionality */}
-      {showImageUpload && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Profile Image</h3>
-              <button 
-                onClick={() => setShowImageUpload(false)}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              {/* Upload Guidelines */}
-              <div className="text-sm text-gray-500 text-center">
-                <p>Upload a profile image (JPG, PNG, GIF)</p>
-                <p>Maximum file size: 5MB</p>
-              </div>
-              
-              {/* Action Buttons */}
-              <div className="flex flex-col space-y-2">
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploadingImage}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                >
-                  <Upload size={16} />
-                  {uploadingImage ? 'Uploading...' : 'Upload New Image'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Hidden File Input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="hidden"
-      />
     </header>
   );
 };
