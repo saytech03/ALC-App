@@ -14,21 +14,31 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = () => {
-    try {
-      if (authService.isAuthenticated()) {
-        const userData = authService.getCurrentUser();
-        setUser(userData);
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser?.token) {
+      setUser(currentUser);
+    } else if (authService.isAuthenticated()) { // fallback for old format
+      const userData = authService.getCurrentUser();
+      if (userData) {
+        // Migrate to new format
+        const currentUser = {
+          ...userData,
+          token: authService.getAuthToken()
+        };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        setUser(currentUser);
       }
-
-      // Check if registration is pending OTP verification
-      setIsRegistrationPending(authService.isRegistrationPending());
-    } catch (error) {
-      console.error('Error checking auth status:', error);
-      authService.logout();
-    } finally {
-      setLoading(false);
     }
-  };
+
+    setIsRegistrationPending(authService.isRegistrationPending());
+  } catch (error) {
+    console.error('Error checking auth status:', error);
+    authService.logout();
+  } finally {
+    setLoading(false);
+  }
+};
 
   const register = async (userData) => {
     try {
@@ -97,6 +107,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // ✅ ADDED: Update user profile function
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await authService.updateProfile(profileData);
+      if (response.id) {
+        // Update the user state with new profile data
+        const updatedUser = {
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          occupation: response.occupation,
+          profileImageUrl: response.profileImageUrl
+        };
+        setUser(updatedUser);
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -113,6 +144,7 @@ export const AuthProvider = ({ children }) => {
     login,
     loginWithPatron,
     getUserDetails,
+    updateProfile, // ✅ ADDED: Expose updateProfile function
     logout,
     getTempEmail: () => authService.getTempEmail(),
     forgotPassword
