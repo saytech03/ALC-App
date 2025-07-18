@@ -72,20 +72,26 @@ class AuthService {
   }
 
   // Login existing user (no OTP needed)
-  async login(credentials) {
-    const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN, {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    });
-        
-    // Store auth token and user data
-    if (response.success && response.token) {
-      localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
-    }
-        
-    return response;
+  // In login method:
+async login(credentials) {
+  const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN, {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+  
+  if (response.success && response.token) {
+    const currentUser = {
+      email: response.user.email,
+      token: response.token,
+      ...response.user // include all user data
+    };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('auth_token', response.token); // keep for backward compatibility
+    localStorage.setItem('user_data', JSON.stringify(response.user)); // keep for backward compatibility
   }
+  
+  return response;
+}
 
   // Login with patron ID
   async loginWithPatron(patronCredentials) {
@@ -95,13 +101,19 @@ class AuthService {
     });
         
     // Store auth token and user data
-    if (response.success && response.token) {
-      localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
-    }
-        
-    return response;
+     if (response.success && response.token) {
+    const currentUser = {
+      email: response.user.email,
+      token: response.token,
+      ...response.user // include all user data
+    };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('auth_token', response.token); // keep for backward compatibility
+    localStorage.setItem('user_data', JSON.stringify(response.user)); // keep for backward compatibility
   }
+  
+  return response;
+}
 
   // Get detailed user information by email
   async getUserDetails(email) {
@@ -134,6 +146,57 @@ async forgotPassword(email) {
     body: JSON.stringify({ email })
   });
 }
+
+  // ✅ ADDED: Update user profile with image support
+ async updateProfile(formData) {
+  // 1. Get auth token from currentUser
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser?.token) {
+    throw new Error('No authentication token found - please login again');
+  }
+
+  try {
+    // 2. Make the API request
+    const response = await fetch(`${this.baseURL}/api/users/update-profile`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${currentUser.token}`,
+        // Let browser set Content-Type with boundary automatically
+      },
+      body: formData
+    });
+
+    // 3. Handle response
+    const responseData = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(responseData.message || `Profile update failed with status ${response.status}`);
+    }
+
+    // 4. Update local storage if successful
+    if (responseData.id) {
+      const updatedUser = {
+        ...currentUser,
+        name: responseData.name,
+        occupation: responseData.occupation,
+        profileImageUrl: responseData.profileImageUrl
+      };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+    }
+
+    return responseData;
+  } catch (error) {
+    console.error('Profile update API error:', error);
+    
+    // Special handling for network errors
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw new Error("Network error. Please check your internet connection.");
+    }
+    
+    throw error;
+  }
+}
+
     // Check if user has pending OTP verification
   isRegistrationPending() {
     return localStorage.getItem('registration_pending') === 'true';
@@ -162,10 +225,11 @@ async forgotPassword(email) {
 
   // Logout user
   logout() {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
-    localStorage.removeItem('temp_user_email');
-    localStorage.removeItem('registration_pending');
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('user_data');
+  localStorage.removeItem('currentUser'); // Add this
+  localStorage.removeItem('temp_user_email');
+  localStorage.removeItem('registration_pending');
   }
 }
 

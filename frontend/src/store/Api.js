@@ -13,7 +13,7 @@ const API_CONFIG = {
     USER: {
       GET_USER: '/api/users',
       GET_USER_DETAILS: '/api/users', // Same endpoint but with email parameter
-      UPDATE_PROFILE: '/api/users/profile'
+      UPDATE_PROFILE: '/api/users/update-profile'
     }
   },
   HEADERS: {
