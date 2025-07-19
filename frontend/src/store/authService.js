@@ -55,22 +55,39 @@ class AuthService {
 
   // Verify OTP after registration
   async verifyOTP(otpData) {
-    const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.VERIFY_OTP, {
-      method: 'POST',
-      body: JSON.stringify(otpData),
-    });
-        
-    // Clear temporary registration data and store auth token
-    if (response.success && response.token) {
-      localStorage.removeItem('temp_user_email');
-      localStorage.removeItem('registration_pending');
+  const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.VERIFY_OTP, {
+    method: 'POST',
+    body: JSON.stringify(otpData),
+  });
+  
+  // Modified success condition to check for message or id
+  if (response.message?.includes('successfully') || response.id) {
+    localStorage.removeItem('temp_user_email');
+    localStorage.removeItem('registration_pending');
+    
+    // Store the token if present, otherwise store basic user data
+    if (response.token) {
       localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
     }
-        
-    return response;
+    
+    const userData = {
+      id: response.id,
+      name: response.name,
+      email: response.email,
+      occupation: response.occupation
+    };
+    localStorage.setItem('user_data', JSON.stringify(userData));
+    
+    // Return formatted success response
+    return {
+      success: true,
+      user: userData,
+      token: response.token
+    };
   }
-
+  
+  return response;
+}
   // Login existing user (no OTP needed)
   // In login method:
 async login(credentials) {
