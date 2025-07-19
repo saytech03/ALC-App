@@ -46,7 +46,7 @@ const OtpVerify = () => {
             });
             
             if (response?.success || response?.token) {
-                toast.success('Email verified successfully! Redirecting to login...', {
+                toast.success('Email verified successfully! Please check your mail to access login credentials. Redirecting to login...', {
                     style: {
                         background: '#10b981', // Green background
                         color: '#fff', // White text
