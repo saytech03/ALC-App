@@ -17,26 +17,21 @@ export const AuthProvider = ({ children }) => {
   try {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser?.token) {
-      setUser(currentUser);
-    } else if (authService.isAuthenticated()) { // fallback for old format
-      const userData = authService.getCurrentUser();
-      if (userData) {
-        // Migrate to new format
-        const currentUser = {
-          ...userData,
-          token: authService.getAuthToken()
-        };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        setUser(currentUser);
-      }
+      // 🔥 Critical: Fetch fresh user data on app load
+      authService.getUserDetails(currentUser.email)
+        .then(freshUserData => {
+          const updatedUser = {
+            ...currentUser,
+            profileImageUrl: freshUserData.profileImageUrl, // Force sync with DB
+            name: freshUserData.name,
+            occupation: freshUserData.occupation
+          };
+          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+          setUser(updatedUser); // Update global state
+        });
     }
-
-    setIsRegistrationPending(authService.isRegistrationPending());
   } catch (error) {
-    console.error('Error checking auth status:', error);
-    authService.logout();
-  } finally {
-    setLoading(false);
+    console.error('Auth check failed:', error);
   }
 };
 
@@ -114,24 +109,35 @@ export const AuthProvider = ({ children }) => {
 
   // ✅ ADDED: Update user profile function
   const updateProfile = async (profileData) => {
-    try {
-      const response = await authService.updateProfile(profileData);
-      if (response.id) {
-        // Update the user state with new profile data
-        const updatedUser = {
-          id: response.id,
-          name: response.name,
-          email: response.email,
-          occupation: response.occupation,
-          profileImageUrl: response.profileImageUrl
-        };
-        setUser(updatedUser);
-      }
+  try {
+    const response = await authService.updateProfile(profileData);
+    if (response.id) {
+      // Get current stored user to preserve other fields
+      const currentStoredUser = JSON.parse(localStorage.getItem('currentUser'));
+      
+      // Update the user state with ALL returned profile data
+      const updatedUser = {
+        ...currentStoredUser,
+        id: response.id,
+        name: response.name,
+        email: response.email,
+        occupation: response.occupation,
+        profileImageUrl: response.profileImageUrl,
+        // Include any other fields that might be returned
+      };
+      
+      // Update both state and localStorage
+      setUser(updatedUser);
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      
       return response;
-    } catch (error) {
-      throw error;
     }
-  };
+    throw new Error('Failed to update profile');
+  } catch (error) {
+    console.error('Update profile error:', error);
+    throw error;
+  }
+};
 
   const logout = () => {
     authService.logout();

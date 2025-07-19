@@ -7,9 +7,7 @@ import { toast } from "react-hot-toast";
 const UserAvatarDropdown = ({ size = 27 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [randomAvatar, setRandomAvatar] = useState(null);
-  const [avatarSrc, setAvatarSrc] = useState(null);
   const [loadingUserDetails, setLoadingUserDetails] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const [editValues, setEditValues] = useState({});
@@ -19,8 +17,7 @@ const UserAvatarDropdown = ({ size = 27 }) => {
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
   
-  const authContext = useAuth();
-  const { logout, updateProfile } = authContext;
+  const { user: authUser, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
 
   // Avatar images array
@@ -30,29 +27,205 @@ const UserAvatarDropdown = ({ size = 27 }) => {
     "/avatar3.png"
   ];
 
-  // Set random avatar on component mount
-  useEffect(() => {
-    const storedAvatar = localStorage.getItem('userAvatar');
-    if (storedAvatar) {
-      setRandomAvatar(storedAvatar);
-    } else {
-      const randomIndex = Math.floor(Math.random() * avatarImages.length);
-      const selectedAvatar = avatarImages[randomIndex];
-      setRandomAvatar(selectedAvatar);
-      localStorage.setItem('userAvatar', selectedAvatar);
+  // Initialize with auth context user data or localStorage
+  const [userData, setUserData] = useState(() => {
+    // First try auth context
+    if (authUser) {
+      return {
+        email: authUser.email,
+        id: authUser.id,
+        name: authUser.name,
+        alc_patronid: authUser.alc_patronid,
+        profileImageUrl: authUser.profileImageUrl,
+        work: authUser.occupation
+      };
     }
-  }, []);
+    
+    // Fallback to localStorage if auth context is not ready
+    try {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        return {
+          email: user.email,
+          id: user.id,
+          name: user.name,
+          alc_patronid: user.alc_patronid || user.membershipId,
+          profileImageUrl: user.profileImageUrl,
+          work: user.occupation
+        };
+      }
+    } catch (error) {
+      console.error('Error parsing stored user data:', error);
+    }
+    
+    return null;
+  });
 
-  // Update avatar source when userData or randomAvatar changes
+  // Sync with auth context changes and localStorage - this is crucial for persistence
   useEffect(() => {
-    if (userData?.profileImageUrl) {
-      setAvatarSrc(userData.profileImageUrl);
-    } else if (randomAvatar) {
-      setAvatarSrc(randomAvatar);
+    let updatedUserData = null;
+    
+    // Priority 1: Use auth context if available
+    if (authUser) {
+      updatedUserData = {
+        email: authUser.email,
+        id: authUser.id,
+        name: authUser.name,
+        alc_patronid: authUser.alc_patronid,
+        profileImageUrl: authUser.profileImageUrl,
+        work: authUser.occupation
+      };
     } else {
-      setAvatarSrc(null);
+      // Priority 2: Fallback to localStorage
+      try {
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          updatedUserData = {
+            email: user.email,
+            id: user.id,
+            name: user.name,
+            alc_patronid: user.alc_patronid || user.membershipId,
+            profileImageUrl: user.profileImageUrl,
+            work: user.occupation
+          };
+        }
+      } catch (error) {
+        console.error('Error parsing stored user data:', error);
+      }
     }
-  }, [userData, randomAvatar]);
+    
+    if (updatedUserData) {
+      setUserData(updatedUserData);
+      
+      // Sync localStorage with auth context if auth is available
+      if (authUser) {
+        try {
+          const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+          if (storedUser.email) {
+            localStorage.setItem('currentUser', JSON.stringify({
+              ...storedUser,
+              name: authUser.name,
+              profileImageUrl: authUser.profileImageUrl,
+              occupation: authUser.occupation,
+              alc_patronid: authUser.alc_patronid
+            }));
+          }
+        } catch (error) {
+          console.error('Error updating localStorage:', error);
+        }
+      }
+    }
+  }, [authUser]);
+
+  // Set random avatar on component mount - only if no profile image exists
+  useEffect(() => {
+    // Check for profile image from multiple sources
+    let hasProfileImage = false;
+    
+    // Check auth context
+    if (authUser?.profileImageUrl) {
+      hasProfileImage = true;
+    }
+    
+    // Check localStorage if auth context doesn't have it
+    if (!hasProfileImage) {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (storedUser?.profileImageUrl) {
+          hasProfileImage = true;
+        }
+      } catch (error) {
+        console.error('Error checking localStorage for profile image:', error);
+      }
+    }
+    
+    // Check current userData state
+    if (!hasProfileImage && userData?.profileImageUrl) {
+      hasProfileImage = true;
+    }
+    
+    if (!hasProfileImage) {
+      // Only set random avatar if no profile image exists anywhere
+      const storedAvatar = localStorage.getItem('userAvatar');
+      if (storedAvatar) {
+        setRandomAvatar(storedAvatar);
+      } else {
+        const randomIndex = Math.floor(Math.random() * avatarImages.length);
+        const selectedAvatar = avatarImages[randomIndex];
+        setRandomAvatar(selectedAvatar);
+        localStorage.setItem('userAvatar', selectedAvatar);
+      }
+    } else {
+      // Clear random avatar if profile image exists
+      setRandomAvatar(null);
+    }
+  }, [authUser?.profileImageUrl, userData?.profileImageUrl]);
+
+  const renderAvatar = () => {
+    // Get the most up-to-date profile image URL from multiple sources
+    let currentProfileImageUrl = null;
+    
+    // Priority 1: userData state
+    if (userData?.profileImageUrl) {
+      currentProfileImageUrl = userData.profileImageUrl;
+    }
+    
+    // Priority 2: Auth context
+    if (!currentProfileImageUrl && authUser?.profileImageUrl) {
+      currentProfileImageUrl = authUser.profileImageUrl;
+    }
+    
+    // Priority 3: Check localStorage directly
+    if (!currentProfileImageUrl) {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (storedUser?.profileImageUrl) {
+          currentProfileImageUrl = storedUser.profileImageUrl;
+        }
+      } catch (error) {
+        console.error('Error reading profile image from localStorage:', error);
+      }
+    }
+    
+    // Render profile image if available
+    if (currentProfileImageUrl) {
+      return (
+        <img 
+          src={`${currentProfileImageUrl}?t=${Date.now()}`} // Cache busting
+          alt="Profile" 
+          className="w-full h-full object-cover rounded-full"
+          onError={(e) => {
+            console.error('Profile image failed to load:', currentProfileImageUrl);
+            // Fallback to random avatar if profile image fails to load
+            e.target.style.display = 'none';
+            setUserData(prev => prev ? { ...prev, profileImageUrl: null } : null);
+          }}
+        />
+      );
+    }
+    
+    // Priority 4: Random avatar (only if no profile image)
+    if (randomAvatar) {
+      return (
+        <img 
+          src={randomAvatar} 
+          alt="Profile" 
+          className="w-full h-full object-cover rounded-full"
+          onError={(e) => {
+            console.error('Random avatar failed to load:', randomAvatar);
+            // Remove failed random avatar
+            setRandomAvatar(null);
+            localStorage.removeItem('userAvatar');
+          }}
+        />
+      );
+    }
+    
+    // Priority 5: Default icon
+    return <User size={size} />;
+  };
 
   const fetchUserDetails = async () => {
     try {
@@ -64,17 +237,17 @@ const UserAvatarDropdown = ({ size = 27 }) => {
         throw new Error('No user data found - please login again');
       }
       
-      const userData = JSON.parse(storedUser);
+      const user = JSON.parse(storedUser);
       
-      if (!userData?.token) {
+      if (!user?.token) {
         throw new Error('Authentication token missing - please login again');
       }
       
       const response = await fetch(
-        `https://alc-backend.onrender.com/api/users?email=${encodeURIComponent(userData.email)}`,
+        `https://alc-backend.onrender.com/api/users?email=${encodeURIComponent(user.email)}`,
         {
           headers: {
-            'Authorization': `Bearer ${userData.token}`,
+            'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
           }
         }
@@ -100,6 +273,15 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       };
       
       setUserData(updatedUserData);
+      
+      // Update localStorage with fresh data
+      localStorage.setItem('currentUser', JSON.stringify({
+        ...user,
+        name: userDetails.name,
+        profileImageUrl: userDetails.profileImageUrl,
+        occupation: userDetails.occupation,
+        membershipId: userDetails.membershipId
+      }));
       
       setEditValues({
         name: userDetails.name || '',
@@ -134,6 +316,14 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           profileImageUrl: null
         };
         setUserData(updatedUserData);
+        
+        // Update localStorage
+        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        localStorage.setItem('currentUser', JSON.stringify({
+          ...storedUser,
+          profileImageUrl: null
+        }));
+        
         toast.success('Profile image removed successfully!');
       }
     } catch (error) {
@@ -209,21 +399,8 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       formData.append('name', editValues.name || userData.name);
       formData.append('occupation', editValues.work || userData.work);
 
-      if (field === 'profileImage') {
-        if (!selectedImage) {
-          throw new Error('Please select a profile image');
-        }
+      if (field === 'profileImage' && selectedImage) {
         formData.append('image', selectedImage);
-      } else if (userData.profileImageUrl) {
-        try {
-          const response = await fetch(userData.profileImageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], 'profile-image.jpg', { type: blob.type });
-          formData.append('image', file);
-        } catch (error) {
-          console.error('Error processing existing image:', error);
-          throw new Error('Failed to process existing profile image');
-        }
       }
 
       const response = await updateProfile(formData);
@@ -233,11 +410,26 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           ...userData,
           name: response.name,
           work: response.occupation,
-          profileImageUrl: field === 'profileImage' ? response.profileImageUrl : userData.profileImageUrl
+          profileImageUrl: response.profileImageUrl
         };
         
         setUserData(updatedUserData);
         
+        // Update localStorage with the new profile image URL
+        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        localStorage.setItem('currentUser', JSON.stringify({
+          ...storedUser,
+          name: response.name,
+          occupation: response.occupation,
+          profileImageUrl: response.profileImageUrl
+        }));
+
+        // Clear random avatar if profile image is uploaded
+        if (response.profileImageUrl) {
+          localStorage.removeItem('userAvatar');
+          setRandomAvatar(null);
+        }
+
         setEditingField(null);
         setSelectedImage(null);
         setImagePreview(null);
@@ -278,23 +470,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  const renderAvatar = () => {
-    if (avatarSrc) {
-      return (
-        <img 
-          src={avatarSrc} 
-          alt="Profile" 
-          className="w-full h-full object-cover rounded-full"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            setAvatarSrc(null);
-          }}
-        />
-      );
-    }
-    return <User size={size} />;
-  };
 
   return (
     <div className="relative" ref={dropdownRef}>

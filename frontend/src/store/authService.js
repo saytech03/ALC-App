@@ -134,23 +134,23 @@ async login(credentials) {
 
   // Get detailed user information by email
   async getUserDetails(email) {
-    const token = this.getAuthToken();
-    if (!token) {
-      throw new Error('No authentication token found');
-    }
-
-    const endpoint = `${API_CONFIG.ENDPOINTS.USER.GET_USER_DETAILS}?email=${encodeURIComponent(email)}`;
-    
-    const response = await this.request(endpoint, {
+  const response = await this.request(
+    `${API_CONFIG.ENDPOINTS.USER.GET_USER_DETAILS}?email=${encodeURIComponent(email)}`, 
+    {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    return response;
-  }
-
+      headers: { 'Authorization': `Bearer ${this.getAuthToken()}` }
+    }
+  );
+  
+  // ⚠️ Verify backend response structure matches this
+  return {
+    id: response.id,
+    name: response.name,
+    email: response.email,
+    occupation: response.occupation,
+    profileImageUrl: response.profileImageUrl // MUST exist
+  };
+}
    // src/services/authService.js
 async forgotPassword(email) {
   return await this.request(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, {
@@ -165,32 +165,29 @@ async forgotPassword(email) {
 }
 
   // ✅ ADDED: Update user profile with image support
- async updateProfile(formData) {
-  // 1. Get auth token from currentUser
+async updateProfile(formData) {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   if (!currentUser?.token) {
     throw new Error('No authentication token found - please login again');
   }
 
   try {
-    // 2. Make the API request
     const response = await fetch(`${this.baseURL}/api/users/update-profile`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${currentUser.token}`,
-        // Let browser set Content-Type with boundary automatically
+        // Note: Don't set Content-Type header for FormData - let browser set it automatically
       },
       body: formData
     });
 
-    // 3. Handle response
     const responseData = await response.json();
     
     if (!response.ok) {
       throw new Error(responseData.message || `Profile update failed with status ${response.status}`);
     }
 
-    // 4. Update local storage if successful
+    // Update all storage locations consistently
     if (responseData.id) {
       const updatedUser = {
         ...currentUser,
@@ -198,18 +195,25 @@ async forgotPassword(email) {
         occupation: responseData.occupation,
         profileImageUrl: responseData.profileImageUrl
       };
+
       localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      localStorage.setItem('user_data', JSON.stringify({
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        occupation: updatedUser.occupation,
+        profileImageUrl: updatedUser.profileImageUrl
+      }));
+
+      return responseData;
     }
 
     return responseData;
   } catch (error) {
     console.error('Profile update API error:', error);
-    
-    // Special handling for network errors
     if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw new Error("Network error. Please check your internet connection.");
     }
-    
     throw error;
   }
 }
