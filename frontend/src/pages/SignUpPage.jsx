@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
-import { Eye, EyeOff, X } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUpPage = () => {
     const [email, setEmail] = useState("");
@@ -12,16 +12,8 @@ const SignUpPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    
-    // OTP related state
-    const [showOtpPopup, setShowOtpPopup] = useState(false);
-    const [otp, setOtp] = useState('');
-    const [otpLoading, setOtpLoading] = useState(false);
-    const [otpError, setOtpError] = useState('');
-    const [otpSuccess, setOtpSuccess] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
 
-    const { register, verifyOTP } = useAuth();
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     // Get email from URL params on component mount
@@ -84,11 +76,9 @@ const SignUpPage = () => {
             const response = await register(registrationData);
             
             if (response && (response.success || response.id)) {
-                setShowOtpPopup(true);
-                setError('');
-                setOtpError('');
-                setOtpSuccess('');
-                setOtp('');
+                navigate('/otp', { 
+                    state: { email: email.trim().toLowerCase() } 
+                });
                 toast.success('Registration successful! Please verify your email.');
             } else {
                 setError(response?.message || 'Registration failed');
@@ -136,65 +126,6 @@ const SignUpPage = () => {
         }
     };
 
-    const handleOtpSubmit = async (e) => {
-        e.preventDefault();
-        setOtpError('');
-        setOtpSuccess('');
-       
-        if (!otp || otp.length < 6) {
-            setOtpError('Please enter a valid 6-digit code');
-            return;
-        }
-
-        try {
-            setOtpLoading(true);
-            const response = await verifyOTP({
-                email: email.trim().toLowerCase(),
-                otp: otp
-            });
-            
-            if (response && (response.success || response.token)) {
-                setOtpSuccess('Email verified successfully! Redirecting to login...');
-                toast.success('Email verified successfully!');
-                
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    navigate('/login', { replace: true });
-                }, 3000);
-            } else {
-                setOtpError(response?.message || 'OTP verification failed');
-            }
-        } catch (error) {
-            console.error('OTP verification error:', error);
-            setOtpError(error.response?.data?.message || 'OTP verification failed');
-        } finally {
-            setOtpLoading(false);
-        }
-    };
-
-    const handleOtpChange = (e) => {
-        const value = e.target.value.replace(/\D/g, '');
-        setOtp(value);
-        if (otpError) setOtpError('');
-        if (otpSuccess) setOtpSuccess('');
-    };
-
-    const handleResendOTP = async () => {
-        try {
-            setOtpLoading(true);
-            setOtpError('');
-            setOtpSuccess('');
-            // You might need to implement a resend OTP API call here
-            setOtpSuccess('OTP resent successfully! Please check your email.');
-            toast.success('OTP resent successfully! Please check your email.');
-        } catch (error) {
-            console.error('Resend OTP error:', error);
-            setOtpError('Failed to resend OTP. Please try again.');
-        } finally {
-            setOtpLoading(false);
-        }
-    };
-
     return (
         <div className='h-screen w-full-stretch bg-no-repeat login-bg'>
             {/* Original Header */}
@@ -214,12 +145,6 @@ const SignUpPage = () => {
             <div className='flex-1 flex justify-center items-center mx-3 py-8'>
                 <div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md mb-8">
                     <h1 className='text-center text-white text-2xl font-bold mb-4'>Sign Up</h1>
-
-                    {successMessage && (
-                        <div className='text-green-400 text-sm text-center bg-green-900/20 p-3 rounded-md border border-green-700'>
-                            {successMessage}
-                        </div>
-                    )}
 
                     <form className='space-y-4' onSubmit={handleSignUp}>
                         <div>
@@ -350,84 +275,6 @@ const SignUpPage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* OTP Verification Popup */}
-            {showOtpPopup && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/70">
-                    <div className="bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-md relative border border-gray-700">
-                        <button
-                            onClick={() => {
-                                setShowOtpPopup(false);
-                                setOtp("");
-                                setOtpError("");
-                                setOtpSuccess("");
-                            }}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                        >
-                            <X size={24} />
-                        </button>
-
-                        <h2 className="text-2xl font-bold text-white mb-4">Verify Your Email</h2>
-                        
-                        {otpSuccess ? (
-                            <div className="text-green-400 text-center p-4 bg-green-900/20 rounded-md border border-green-700">
-                                {otpSuccess}
-                            </div>
-                        ) : (
-                            <>
-                                <p className="text-gray-300 mb-4">
-                                    We've sent a 6-digit code to: <span className="font-medium text-white">{email}</span>
-                                </p>
-                                
-                                <form onSubmit={handleOtpSubmit} className="space-y-4">
-                                    <div>
-                                        <label htmlFor="otp" className="block text-sm font-medium text-gray-300 mb-1">
-                                            Verification Code
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="otp"
-                                            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring text-center tracking-widest"
-                                            placeholder="______"
-                                            value={otp}
-                                            onChange={handleOtpChange}
-                                            maxLength="6"
-                                            required
-                                            disabled={otpLoading}
-                                        />
-                                    </div>
-                                    
-                                    {otpError && (
-                                        <div className="text-red-400 text-sm text-center bg-red-900/20 p-3 rounded-md border border-red-700">
-                                            {otpError}
-                                        </div>
-                                    )}
-                                    
-                                    <button
-                                        type="submit"
-                                        className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        disabled={otpLoading || !otp}
-                                    >
-                                        {otpLoading ? "Verifying..." : "Verify Code"}
-                                    </button>
-                                </form>
-
-                                <div className="text-center pt-2">
-                                    <p className="text-gray-400 text-sm">Didn't receive the code?</p>
-                                    <button 
-                                        type="button" 
-                                        className="text-blue-400 hover:text-blue-300 underline text-sm disabled:opacity-50"
-                                        disabled={otpLoading}
-                                        onClick={handleResendOTP}
-                                    >
-                                        Resend Code
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

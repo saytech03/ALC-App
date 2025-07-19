@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import AboutPage from "./pages/AboutPage";
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
+import OtpVerify from "./pages/OtpVerify";
 
 // Auth protection component
 const RequireAuth = ({ children }) => {
@@ -34,7 +35,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -77,6 +78,7 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignUpPage />} />
+          <Route path="/otp" element={<OtpVerify />} />
           <Route path='/bl' element={ <Blog />} />
           <Route path='/member' element={<MembersPage />} />
           <Route path='/contact' element={<ContactPage />} />

@@ -9,6 +9,7 @@ const UserAvatarDropdown = ({ size = 27 }) => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [userData, setUserData] = useState(null);
   const [randomAvatar, setRandomAvatar] = useState(null);
+  const [avatarSrc, setAvatarSrc] = useState(null);
   const [loadingUserDetails, setLoadingUserDetails] = useState(false);
   const [editingField, setEditingField] = useState(null);
   const [editValues, setEditValues] = useState({});
@@ -41,6 +42,17 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       localStorage.setItem('userAvatar', selectedAvatar);
     }
   }, []);
+
+  // Update avatar source when userData or randomAvatar changes
+  useEffect(() => {
+    if (userData?.profileImageUrl) {
+      setAvatarSrc(userData.profileImageUrl);
+    } else if (randomAvatar) {
+      setAvatarSrc(randomAvatar);
+    } else {
+      setAvatarSrc(null);
+    }
+  }, [userData, randomAvatar]);
 
   const fetchUserDetails = async () => {
     try {
@@ -78,14 +90,16 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       
       const userDetails = await response.json();
       
-      setUserData({
+      const updatedUserData = {
         email: userDetails.email,
         id: userDetails.id,
         name: userDetails.name,
         alc_patronid: userDetails.membershipId,
         profileImageUrl: userDetails.profileImageUrl,
         work: userDetails.occupation
-      });
+      };
+      
+      setUserData(updatedUserData);
       
       setEditValues({
         name: userDetails.name || '',
@@ -115,10 +129,11 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       const response = await updateProfile(formData);
       
       if (response?.id) {
-        setUserData(prev => ({
-          ...prev,
+        const updatedUserData = {
+          ...userData,
           profileImageUrl: null
-        }));
+        };
+        setUserData(updatedUserData);
         toast.success('Profile image removed successfully!');
       }
     } catch (error) {
@@ -214,12 +229,14 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       const response = await updateProfile(formData);
       
       if (response?.id) {
-        setUserData(prev => ({
-          ...prev,
+        const updatedUserData = {
+          ...userData,
           name: response.name,
           work: response.occupation,
-          profileImageUrl: field === 'profileImage' ? response.profileImageUrl : prev.profileImageUrl
-        }));
+          profileImageUrl: field === 'profileImage' ? response.profileImageUrl : userData.profileImageUrl
+        };
+        
+        setUserData(updatedUserData);
         
         setEditingField(null);
         setSelectedImage(null);
@@ -263,32 +280,19 @@ const UserAvatarDropdown = ({ size = 27 }) => {
   }, []);
 
   const renderAvatar = () => {
-    if (userData?.profileImageUrl) {
+    if (avatarSrc) {
       return (
         <img 
-          src={userData.profileImageUrl} 
+          src={avatarSrc} 
           alt="Profile" 
           className="w-full h-full object-cover rounded-full"
           onError={(e) => {
             e.target.style.display = 'none';
+            setAvatarSrc(null);
           }}
         />
       );
     }
-    
-    if (randomAvatar) {
-      return (
-        <img 
-          src={randomAvatar} 
-          alt="Avatar" 
-          className="w-full h-full object-contain"
-          onError={(e) => {
-            e.target.style.display = 'none';
-          }}
-        />
-      );
-    }
-    
     return <User size={size} />;
   };
 

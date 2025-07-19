@@ -52,18 +52,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const verifyOTP = async (otpData) => {
-    try {
-      const response = await authService.verifyOTP(otpData);
-      if (response.success) {
-        setUser(response.user);
-        setIsRegistrationPending(false);
-      }
-      return response;
-    } catch (error) {
-      throw error;
+ const verifyOTP = async (otpData) => {
+  try {
+    const response = await authService.verifyOTP(otpData);
+    
+    // Check both success flag and presence of user data
+    if (response.success || response.user) {
+      setUser(response.user || {
+        email: otpData.email,
+        // other minimal user data
+      });
+      setIsRegistrationPending(false);
     }
-  };
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
   const login = async (credentials) => {
     try {
