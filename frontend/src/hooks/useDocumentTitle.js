@@ -5,6 +5,7 @@ const useDocumentTitle = () => {
   const location = useLocation();
 
   useEffect(() => {
+     const hashPath = location.hash.replace('#', '') || '/';
     const pathToTitle = {
       '/': 'ALC - Home',
       '/login': 'ALC - Login',
@@ -22,8 +23,8 @@ const useDocumentTitle = () => {
     };
 
     const defaultTitle = 'ALC - Loading...';
-    document.title = pathToTitle[location.pathname] || defaultTitle;
-  }, [location.pathname]);
+    document.title = pathToTitle[hashPath] || 'ALC-Website';
+  }, [location.hash]); // Watch location.hash instead of location.pathname
 };
 
 export default useDocumentTitle;
