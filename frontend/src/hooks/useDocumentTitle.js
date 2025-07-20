@@ -5,17 +5,10 @@ const useDocumentTitle = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Handle both HashRouter and BrowserRouter cases
-    const getPath = () => {
-      // If using HashRouter, location.pathname will be '/' and the actual path is in location.hash
-      if (location.pathname === '/' && location.hash) {
-        return location.hash.replace('#', '') || '/';
-      }
-      // For BrowserRouter, use location.pathname directly
-      return location.pathname;
-    };
-
-    const currentPath = getPath();
+    // Always use window.location.hash for consistency
+    const currentPath = window.location.hash 
+      ? window.location.hash.replace('#', '') || '/' 
+      : location.pathname;
 
     const pathToTitle = {
       '/': 'ALC - Home',
@@ -33,9 +26,8 @@ const useDocumentTitle = () => {
       '/auh': 'ALC - About Dashboard',
     };
 
-    document.title = pathToTitle[currentPath] || 'ALC-Website';
-    
-  }, [location.pathname, location.hash]); // Watch both pathname and hash
+    document.title = pathToTitle[currentPath] || 'ALC-App';
+  }, [location.pathname, location.hash]); // Track both to ensure updates
 };
 
 export default useDocumentTitle;
