@@ -18,6 +18,7 @@ import AboutPage from "./pages/AboutPage";
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
 import OtpVerify from "./pages/OtpVerify";
+import useDocumentTitle from './hooks/useDocumentTitle';
 
 // Auth protection component
 const RequireAuth = ({ children }) => {
@@ -31,6 +32,8 @@ const RequireAuth = ({ children }) => {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  useDocumentTitle();
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
