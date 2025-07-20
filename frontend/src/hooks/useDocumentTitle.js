@@ -17,13 +17,13 @@ const useDocumentTitle = () => {
       '/otp': 'ALC - OTP Verification',
       '/bl': 'ALC - Blog',
       '/member': 'ALC - Members',
-      '/contact': 'ALC - Contact',
+      '/contact': 'ALC - Contact Us',
       '/au': 'ALC - About Us',
-      '/h': 'ALC - Dashboard',
-      '/memberh': 'ALC - Members Dashboard',
-      '/blog': 'ALC - Blog Dashboard',
-      '/contacth': 'ALC - Contact Dashboard',
-      '/auh': 'ALC - About Dashboard',
+      '/h': 'ALC - Home',
+      '/memberh': 'ALC - Members',
+      '/blog': 'ALC - Blog',
+      '/contacth': 'ALC - Contact Us',
+      '/auh': 'ALC - About Us',
     };
 
     document.title = pathToTitle[currentPath] || 'ALC-App';
