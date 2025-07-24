@@ -1,47 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Paperclip, X, Check } from 'lucide-react';
+import { useState } from 'react';
+import { Paperclip, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
-
-// Sample CAPTCHA data
-const captchaImages = {
-  motorcycles: [
-    'https://images.unsplash.com/photo-1558981806-ec527fa84c39',
-    'https://images.unsplash.com/photo-1580310614697-35c8a05a78ff',
-    'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87'
-  ],
-  trafficLights: [
-    'https://images.unsplash.com/photo-1614854262340-1e7e335f5a24',
-    'https://images.unsplash.com/photo-1614854262632-1c0bcd94aa8e',
-    'https://images.unsplash.com/photo-1614854262633-1c0bcd94aa8f'
-  ],
-  bicycles: [
-    'https://images.unsplash.com/photo-1485965120184-e220f721d03e',
-    'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8',
-    'https://images.unsplash.com/photo-1532298229144-0ec0c57515c7'
-  ]
-};
-
-const captchaChallenges = [
-  { question: "Select all images with motorcycles", key: "motorcycles" },
-  { question: "Select all images with traffic lights", key: "trafficLights" },
-  { question: "Select all images with bicycles", key: "bicycles" }
-];
+import axios from 'axios';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactPage = () => {
   const [email, setEmail] = useState('');
   const [attachedFile, setAttachedFile] = useState(null);
-  const [imgLoading, setImgLoading] = useState(true);
-  const [showCaptcha, setShowCaptcha] = useState(false);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [currentChallenge, setCurrentChallenge] = useState(null);
-  const [selectedImages, setSelectedImages] = useState([]);
-  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const subjectOptions = [
     'Remarks',
@@ -50,60 +24,52 @@ const ContactPage = () => {
     'Others'
   ];
 
-  // Initialize CAPTCHA
-  useEffect(() => {
-    generateNewCaptcha();
-  }, []);
-
-  const generateNewCaptcha = () => {
-    const randomChallenge = captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)];
-    setCurrentChallenge(randomChallenge);
-    setSelectedImages([]);
-  };
-
-  const handleCaptchaClick = () => {
-    if (!captchaVerified) {
-      setShowCaptcha(true);
-    }
-  };
-
-  const handleImageSelect = (imgUrl) => {
-    if (selectedImages.includes(imgUrl)) {
-      setSelectedImages(selectedImages.filter(img => img !== imgUrl));
-    } else {
-      setSelectedImages([...selectedImages, imgUrl]);
-    }
-  };
-
-  const verifyCaptcha = () => {
-    // Check if all correct images are selected
-    const allCorrectSelected = captchaImages[currentChallenge.key].every(img => 
-      selectedImages.includes(img)
-    );
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
     
-    if (allCorrectSelected && selectedImages.length === captchaImages[currentChallenge.key].length) {
-      setCaptchaVerified(true);
-      setShowCaptcha(false);
-    } else {
-      alert('Please select all correct images');
-      generateNewCaptcha();
-    }
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log('Email submitted:', email);
-  };
-
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    if (!captchaVerified) {
+    if (!captchaValue) {
       alert('Please complete the CAPTCHA verification');
       return;
     }
-    console.log('Contact form submitted:', formData);
-    console.log('Attached file:', attachedFile);
-    // Handle form submission here
+    
+    setIsSubmitting(true);
+    setSubmitMessage('');
+    
+    try {
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('subject', formData.subject);
+      formDataToSend.append('message', formData.message);
+      formDataToSend.append('captchaToken', captchaValue);
+      
+      if (attachedFile) {
+        formDataToSend.append('blogFile', attachedFile);
+      }
+
+      // Send to backend
+      const response = await axios.post(
+        'https://your-backend-url/api/contact',
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      setSubmitMessage(response.data.message || 'Thank you for your submission!');
+      // Reset form
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setAttachedFile(null);
+      setCaptchaValue(null);
+      document.getElementById('file-input').value = '';
+    } catch (error) {
+      setSubmitMessage(error.response?.data?.message || 'Submission failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -133,9 +99,6 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-teal-50 contact-bg">
-      {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-      )}
       <Navbar/>
       <div className="pt-24 pb-16">
         <div className="max-w-2xl mx-auto px-4">
@@ -180,6 +143,7 @@ const ContactPage = () => {
                       value={formData.subject}
                       onChange={handleInputChange}
                       className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
+                      required
                     >
                       <option value="" disabled>Select a subject</option>
                       {subjectOptions.map((option) => (
@@ -234,78 +198,35 @@ const ContactPage = () => {
                     </div>
                   </div>
 
-                  {/* CAPTCHA Section */}
-                  <div 
-                    className={`flex items-center gap-3 p-4 ${captchaVerified ? 'bg-green-50' : 'bg-gray-50'} rounded-lg cursor-pointer`}
-                    onClick={handleCaptchaClick}
-                  >
-                    <div className={`w-6 h-6 border-2 rounded flex items-center justify-center ${
-                      captchaVerified 
-                        ? 'border-green-500 bg-green-500 text-white' 
-                        : 'border-gray-400'
-                    }`}>
-                      {captchaVerified && <Check className="w-4 h-4" />}
-                    </div>
-                    <span className={captchaVerified ? 'text-green-700' : 'text-gray-700'}>
-                      {captchaVerified ? 'Verified' : "I'm not a robot"}
-                    </span>
-                    <div className="ml-auto">
-                      <div className="text-xs text-gray-500">
-                        reCAPTCHA<br />
-                        Privacy - Terms
-                      </div>
-                    </div>
+                  {/* ReCAPTCHA Component */}
+                  <div className="my-4">
+                    <ReCAPTCHA
+                      sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG" // Replace with your actual key
+                      onChange={(value) => setCaptchaValue(value)}
+                    />
                   </div>
 
-                  {/* CAPTCHA Modal */}
-                  {showCaptcha && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                      <div className="bg-white p-6 rounded-lg max-w-md w-full">
-                        <h3 className="text-lg font-semibold mb-4">{currentChallenge.question}</h3>
-                        <div className="grid grid-cols-3 gap-2 mb-4">
-                          {Object.values(captchaImages).flat().map((imgUrl, index) => (
-                            <div 
-                              key={index}
-                              className={`border-2 rounded overflow-hidden cursor-pointer ${
-                                selectedImages.includes(imgUrl) 
-                                  ? 'border-blue-500' 
-                                  : 'border-gray-200'
-                              }`}
-                              onClick={() => handleImageSelect(imgUrl)}
-                            >
-                              <img 
-                                src={imgUrl} 
-                                alt="CAPTCHA" 
-                                className="w-full h-24 object-cover"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex justify-between">
-                          <button
-                            type="button"
-                            onClick={generateNewCaptcha}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            Refresh
-                          </button>
-                          <button
-                            type="button"
-                            onClick={verifyCaptcha}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                          >
-                            Verify
-                          </button>
-                        </div>
-                      </div>
+                  {/* Submit message display */}
+                  {submitMessage && (
+                    <div className={`mt-2 p-3 rounded-lg text-center ${
+                      submitMessage.includes('Thank you') || submitMessage.includes('success')
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                      {submitMessage}
                     </div>
                   )}
 
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg"
+                    disabled={isSubmitting}
+                    className={`w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg ${
+                      isSubmitting 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
                   >
-                    SUBMIT
+                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
                   </button>
                 </div>
               </form>
