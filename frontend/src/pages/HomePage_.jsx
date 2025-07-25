@@ -16,36 +16,396 @@ const HomePage_ = () => {
   });
 
   // Array of quotes that will rotate daily
-  const quotes = [
-    {
-      text: "Art is perhaps the only territory that has kept hope alive. Because it is always about moving forward. Creativity never dies. Creativity looks forward, produces the future of hope.",
-      author: "Gulmohammed Sheikh"
-    },
-    {
-      text: "The purpose of art is washing the dust of daily life off our souls.",
-      author: "Pablo Picasso"
-    },
-    {
-      text: "Art enables us to find ourselves and lose ourselves at the same time.",
-      author: "Thomas Merton"
-    },
-    {
-      text: "Every artist was first an amateur.",
-      author: "Ralph Waldo Emerson"
-    },
-    {
-      text: "Art is not what you see, but what you make others see.",
-      author: "Edgar Degas"
-    },
-    {
-      text: "The artist is nothing without the gift, but the gift is nothing without work.",
-      author: "Émile Zola"
-    },
-    {
-      text: "Art should comfort the disturbed and disturb the comfortable.",
-      author: "Cesar A. Cruz"
-    }
-  ];
+ const quotes = [
+  // Original quotes
+  {
+    text: "Art is perhaps the only territory that has kept hope alive. Because it is always about moving forward. Creativity never dies. Creativity looks forward, produces the future of hope.",
+    author: "Gulmohammed Sheikh"
+  },
+  {
+    text: "The purpose of art is washing the dust of daily life off our souls.",
+    author: "Pablo Picasso"
+  },
+  {
+    text: "Art enables us to find ourselves and lose ourselves at the same time.",
+    author: "Thomas Merton"
+  },
+  {
+    text: "Every artist was first an amateur.",
+    author: "Ralph Waldo Emerson"
+  },
+  {
+    text: "Art is not what you see, but what you make others see.",
+    author: "Edgar Degas"
+  },
+  {
+    text: "The artist is nothing without the gift, but the gift is nothing without work.",
+    author: "Émile Zola"
+  },
+  {
+    text: "Art should comfort the disturbed and disturb the comfortable.",
+    author: "Cesar A. Cruz"
+  },
+  {
+    text: "In Art, man reveals himself and not his object",
+    author: "Rabindranath Tagore"
+  },
+
+  // New quotes about art
+  {
+    text: "Art is the lie that enables us to realize the truth.",
+    author: "Pablo Picasso"
+  },
+  {
+    text: "No great artist ever sees things as they really are. If he did, he would cease to be an artist.",
+    author: "Oscar Wilde"
+  },
+  {
+    text: "Art is the most intense mode of individualism that the world has known.",
+    author: "Oscar Wilde"
+  },
+  {
+    text: "The essence of all beautiful art, all great art, is gratitude.",
+    author: "Friedrich Nietzsche"
+  },
+  {
+    text: "Art is the stored honey of the human soul.",
+    author: "Theodore Dreiser"
+  },
+  {
+    text: "Art is the signature of civilizations.",
+    author: "Beverly Sills"
+  },
+  {
+    text: "Art is the only way to run away without leaving home.",
+    author: "Twyla Tharp"
+  },
+  {
+    text: "Art is not a thing; it is a way.",
+    author: "Elbert Hubbard"
+  },
+  {
+    text: "Art is the unceasing effort to compete with the beauty of flowers - and never succeeding.",
+    author: "Marc Chagall"
+  },
+  {
+    text: "Art is the daughter of freedom.",
+    author: "Friedrich Schiller"
+  },
+  {
+    text: "Art is the proper task of life.",
+    author: "Friedrich Nietzsche"
+  },
+  {
+    text: "Art is the most beautiful deception of all.",
+    author: "Claude Debussy"
+  },
+  {
+    text: "Art is the elimination of the unnecessary.",
+    author: "Pablo Picasso"
+  },
+  {
+    text: "Art is the window to man's soul.",
+    author: "Judith Jamison"
+  },
+  {
+    text: "Art is the journey of a free soul.",
+    author: "Alev Oguz"
+  },
+  {
+    text: "Art is the child of imagination.",
+    author: "John F. Kennedy"
+  },
+  {
+    text: "Art is the most sublime mission of man.",
+    author: "Honoré de Balzac"
+  },
+  {
+    text: "Art is the stored honey of the human soul.",
+    author: "Theodore Dreiser"
+  },
+  {
+    text: "Art is the signature of civilizations.",
+    author: "Beverly Sills"
+  },
+  {
+    text: "Art is the only way to run away without leaving home.",
+    author: "Twyla Tharp"
+  },
+  {
+    text: "Art is not a thing; it is a way.",
+    author: "Elbert Hubbard"
+  },
+  {
+    text: "Art is the unceasing effort to compete with the beauty of flowers - and never succeeding.",
+    author: "Marc Chagall"
+  },
+  {
+    text: "Art is the daughter of freedom.",
+    author: "Friedrich Schiller"
+  },
+  {
+    text: "Art is the proper task of life.",
+    author: "Friedrich Nietzsche"
+  },
+  {
+    text: "Art is the most beautiful deception of all.",
+    author: "Claude Debussy"
+  },
+  {
+    text: "Art is the elimination of the unnecessary.",
+    author: "Pablo Picasso"
+  },
+  {
+    text: "Art is the window to man's soul.",
+    author: "Judith Jamison"
+  },
+  {
+    text: "Art is the journey of a free soul.",
+    author: "Alev Oguz"
+  },
+  {
+    text: "Art is the child of imagination.",
+    author: "John F. Kennedy"
+  },
+  {
+    text: "Art is the most sublime mission of man.",
+    author: "Honoré de Balzac"
+  },
+
+  // Quotes about law
+  {
+    text: "Where law ends, tyranny begins.",
+    author: "William Pitt the Elder"
+  },
+  {
+    text: "The law is reason, free from passion.",
+    author: "Aristotle"
+  },
+  {
+    text: "Injustice anywhere is a threat to justice everywhere.",
+    author: "Martin Luther King Jr."
+  },
+  {
+    text: "The first duty of society is justice.",
+    author: "Alexander Hamilton"
+  },
+  {
+    text: "Law and justice are not always the same.",
+    author: "Gloria Allred"
+  },
+  {
+    text: "Justice delayed is justice denied.",
+    author: "William E. Gladstone"
+  },
+  {
+    text: "The law is the public conscience.",
+    author: "Thomas Hobbes"
+  },
+  {
+    text: "Laws are spider webs through which the big flies pass and the little ones get caught.",
+    author: "Honoré de Balzac"
+  },
+  {
+    text: "Justice is truth in action.",
+    author: "Benjamin Disraeli"
+  },
+  {
+    text: "The law is the last result of human wisdom acting upon human experience.",
+    author: "Samuel Johnson"
+  },
+  {
+    text: "Law is order, and good law is good order.",
+    author: "Aristotle"
+  },
+  {
+    text: "Justice is the constant and perpetual will to allot to every man his due.",
+    author: "Domitus Ulpian"
+  },
+  {
+    text: "The law is not a light for you or any man to see by; the law is not an instrument of any kind.",
+    author: "John Fowles"
+  },
+  {
+    text: "The law is a sort of hocus-pocus science.",
+    author: "Charles Macklin"
+  },
+  {
+    text: "Law is a form of order, and good law must necessarily mean good order.",
+    author: "Aristotle"
+  },
+  {
+    text: "Justice is the insurance which we have on our lives and property.",
+    author: "Franklin D. Roosevelt"
+  },
+  {
+    text: "The law is the witness and external deposit of our moral life.",
+    author: "Oliver Wendell Holmes Jr."
+  },
+  {
+    text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
+    author: "Jonathan Swift"
+  },
+  {
+    text: "Justice is the means by which established injustices are sanctioned.",
+    author: "Anatole France"
+  },
+  {
+    text: "The law is a jealous mistress.",
+    author: "Joseph Story"
+  },
+  {
+    text: "Law is the crystallization of the habit and thought of society.",
+    author: "Woodrow Wilson"
+  },
+  {
+    text: "Justice is the end of government.",
+    author: "James Madison"
+  },
+  {
+    text: "The law is the true embodiment of everything that's excellent.",
+    author: "W.S. Gilbert"
+  },
+  {
+    text: "Laws are the very bulwarks of liberty.",
+    author: "James A. Garfield"
+  },
+  {
+    text: "Justice is the ligament which holds civilized beings and civilized nations together.",
+    author: "Daniel Webster"
+  },
+  {
+    text: "The law is a ass.",
+    author: "Charles Dickens"
+  },
+  {
+    text: "Law is the foundation of society.",
+    author: "John Locke"
+  },
+  {
+    text: "Justice is the great interest of man on earth.",
+    author: "Daniel Webster"
+  },
+  {
+    text: "The law is a human institution.",
+    author: "Oliver Wendell Holmes Jr."
+  },
+  {
+    text: "Laws are the silent judges of your conduct.",
+    author: "Plato"
+  },
+  {
+    text: "Justice is the tolerable accommodation of the conflicting interests of society.",
+    author: "Learned Hand"
+  },
+  {
+    text: "The law is a profession of words.",
+    author: "David Mellinkoff"
+  },
+  {
+    text: "Law is the embodiment of the moral sentiment of the people.",
+    author: "Rudolf von Jhering"
+  },
+  {
+    text: "Justice is the crowning glory of the virtues.",
+    author: "Marcus Tullius Cicero"
+  },
+  {
+    text: "The law is a sort of hocus-pocus science.",
+    author: "Charles Macklin"
+  },
+  {
+    text: "Law is a form of order, and good law must necessarily mean good order.",
+    author: "Aristotle"
+  },
+  {
+    text: "Justice is the insurance which we have on our lives and property.",
+    author: "Franklin D. Roosevelt"
+  },
+  {
+    text: "The law is the witness and external deposit of our moral life.",
+    author: "Oliver Wendell Holmes Jr."
+  },
+  {
+    text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
+    author: "Jonathan Swift"
+  },
+  {
+    text: "Justice is the means by which established injustices are sanctioned.",
+    author: "Anatole France"
+  },
+  {
+    text: "The law is a jealous mistress.",
+    author: "Joseph Story"
+  },
+  {
+    text: "Law is the crystallization of the habit and thought of society.",
+    author: "Woodrow Wilson"
+  },
+  {
+    text: "Justice is the end of government.",
+    author: "James Madison"
+  },
+  {
+    text: "The law is the true embodiment of everything that's excellent.",
+    author: "W.S. Gilbert"
+  },
+  {
+    text: "Laws are the very bulwarks of liberty.",
+    author: "James A. Garfield"
+  },
+  {
+    text: "Justice is the ligament which holds civilized beings and civilized nations together.",
+    author: "Daniel Webster"
+  },
+  {
+    text: "The law is a ass.",
+    author: "Charles Dickens"
+  },
+  {
+    text: "Law is the foundation of society.",
+    author: "John Locke"
+  },
+  {
+    text: "Justice is the great interest of man on earth.",
+    author: "Daniel Webster"
+  },
+  {
+    text: "The law is a human institution.",
+    author: "Oliver Wendell Holmes Jr."
+  },
+  {
+    text: "Laws are the silent judges of your conduct.",
+    author: "Plato"
+  },
+  {
+    text: "Justice is the tolerable accommodation of the conflicting interests of society.",
+    author: "Learned Hand"
+  },
+  {
+    text: "The law is a profession of words.",
+    author: "David Mellinkoff"
+  },
+  {
+    text: "Law is the embodiment of the moral sentiment of the people.",
+    author: "Rudolf von Jhering"
+  },
+  {
+    text: "Justice is the crowning glory of the virtues.",
+    author: "Marcus Tullius Cicero"
+  },
+
+  // Quotes about art and law combined
+  {
+    text: "Art and law are both attempts to bring order out of chaos.",
+    author: "Martha Nussbaum"
+  },
+  {
+    text: "The artist and the lawyer both seek truth, but through different means.",
+    author: "John Mortimer"
+  }
+];
+
 
   // Get daily quote based on current date
   useEffect(() => {
