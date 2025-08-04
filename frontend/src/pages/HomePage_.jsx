@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react'; 
+import { useState, useEffect, useRef } from 'react'; 
 import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search } from 'lucide-react'; 
 import AltNavbar from '../components/AltNavbar';
 import { Link } from "react-router-dom";
@@ -7,7 +7,8 @@ const HomePage_ = () => {
   const [email, setEmail] = useState('');
   const [imgLoading, setImgLoading] = useState(true);
   const [dailyQuote, setDailyQuote] = useState({ text: '', author: '' });
-   const [showChatbot, setShowChatbot] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const chatSidebarRef = useRef(null);
      
   const [formData, setFormData] = useState({
     name: '',
@@ -16,7 +17,21 @@ const HomePage_ = () => {
     message: ''
   });
 
-  // Array of quotes that will rotate daily
+  // Handle click outside to close sidebar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showChatbot && chatSidebarRef.current && !chatSidebarRef.current.contains(event.target)) {
+        setShowChatbot(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showChatbot]);
+
+   // Array of quotes that will rotate daily
  const quotes = [
   // Original quotes
   {
@@ -400,9 +415,12 @@ const HomePage_ = () => {
   {
     text: "The artist and the lawyer both seek truth, but through different means.",
     author: "John Mortimer"
+  },
+  {
+     text: "The secret of getting ahead is getting started.",
+     author: "Mark Twain"
   }
 ];
-
 
   // Get daily quote based on current date
   useEffect(() => {
@@ -420,15 +438,14 @@ const HomePage_ = () => {
   const handleContactSubmit = (e) => {
     e.preventDefault();
     console.log('Contact form submitted:', formData);
-    // Handle form submission here
   };
     
   return (
     <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
       {/* Navbar */}
       {imgLoading && (
-          <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-        )}
+        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+      )}
       <AltNavbar/>
       
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
@@ -440,7 +457,7 @@ const HomePage_ = () => {
       <div 
         className="relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('./gallery_.jpeg')` // Replace YOUR_IMAGE_URL_HERE with your actual image URL
+          backgroundImage: `url('./gallery_.jpeg')`
         }}
       >
         {/* pink Overlay */}
@@ -540,66 +557,82 @@ const HomePage_ = () => {
           </div>
         </div>
       </div>
-{/* Magnifying Glass Icon - Only shown when chatbot is closed */}
+
+      {/* Enhanced Magnifying Glass Icon */}
+      {/* Custom PNG Magnifying Glass Icon */}
       {!showChatbot && (
-        <div className="fixed bottom-10 right-10 z-40">
+        <div className="fixed bottom-8 right-8 z-40">
           <button 
             onClick={() => setShowChatbot(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none"
             aria-label="Open chatbot"
           >
-            <Search size={24} />
+            {/* Custom PNG Image - will maintain original colors and shape */}
+            <img 
+              src="/transparency.png" 
+              alt="Open Chatbot" 
+              className="w-14 h-14 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all"
+              style={{
+                filter: 'brightness(0) invert(1)',
+                transition: 'filter 0.3s ease'
+              }}
+            />
           </button>
         </div>
       )}
 
-      {/* Chatbot Sidebar */}
-      <div className={`fixed inset-y-0 right-0 w-96 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'}`}>
+      {/* Chatbot Sidebar with click-outside detection */}
+      <div 
+        ref={chatSidebarRef}
+        className={`fixed inset-y-0 right-0 w-80 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
+      >
         <div className="h-full flex flex-col">
           {/* Chatbot Header */}
-          <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
-            <h3 className="text-xl font-bold">Art Law Assistant</h3>
+          <div className="bg-black text-white p-4 flex justify-between items-center border-b border-gray-700">
+            <h3 className="text-lg font-medium tracking-tight">Art Law Assistant</h3>
             <button 
               onClick={() => setShowChatbot(false)}
-              className="text-white hover:text-gray-200 text-2xl"
+              className="text-white/70 hover:text-white transition-colors duration-200"
             >
-              &times;
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </div>
           
           {/* Chatbot Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <div className="bg-gray-100 rounded-lg p-3 mb-3 max-w-xs">
-              <p>Hello! How can I help you with art law today?</p>
+          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            <div className="bg-gray-100 rounded-xl p-3 max-w-xs">
+              <p className="text-gray-800">Hello! How can I help you with art law today?</p>
             </div>
           </div>
           
           {/* Chatbot Input Area */}
-          <div className="border-t p-4">
-            <div className="flex">
+          <div className="border-t border-gray-200 p-4 bg-white/50">
+            <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
               <input
                 type="text"
                 placeholder="Type your question..."
-                className="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2 focus:outline-none bg-transparent"
               />
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">
-                Send
+              <button className="bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors duration-200">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 mt-2 text-center">
               Ask me anything about art law, copyright, or legal issues for artists.
             </p>
           </div>
         </div>
       </div>
 
-      
-
       {/* CSS for 3D Cube Animation */}
-       <style jsx>{`
+      <style jsx>{`
         .cube-container {
-          width: 250px; /* Changed from 300px */
-          height: 250px; /* Changed from 300px */
+          width: 250px;
+          height: 250px;
           perspective: 1000px;
         }
 
@@ -613,8 +646,8 @@ const HomePage_ = () => {
 
         .face {
           position: absolute;
-          width: 250px; /* Changed from 300px */
-          height: 250px; /* Changed from 300px */
+          width: 250px;
+          height: 250px;
           background: linear-gradient(45deg, #3b82f6, #1e40af, #1d4ed8);
           border: 2px solid #1e40af;
           display: flex;
@@ -625,27 +658,27 @@ const HomePage_ = () => {
         }
 
         .face.front {
-          transform: translateZ(125px); /* Changed from 150px */
+          transform: translateZ(125px);
         }
 
         .face.back {
-          transform: rotateY(180deg) translateZ(125px); /* Changed from 150px */
+          transform: rotateY(180deg) translateZ(125px);
         }
 
         .face.right {
-          transform: rotateY(90deg) translateZ(125px); /* Changed from 150px */
+          transform: rotateY(90deg) translateZ(125px);
         }
 
         .face.left {
-          transform: rotateY(-90deg) translateZ(125px); /* Changed from 150px */
+          transform: rotateY(-90deg) translateZ(125px);
         }
 
         .face.top {
-          transform: rotateX(90deg) translateZ(125px); /* Changed from 150px */
+          transform: rotateX(90deg) translateZ(125px);
         }
 
         .face.bottom {
-          transform: rotateX(-90deg) translateZ(125px); /* Changed from 150px */
+          transform: rotateX(-90deg) translateZ(125px);
         }
 
         @keyframes rotateCube {
@@ -667,3 +700,4 @@ const HomePage_ = () => {
 };
 
 export default HomePage_;
+ 
