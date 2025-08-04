@@ -29,63 +29,78 @@ const ContactPage = () => {
 const handleContactSubmit = async (e) => {
   e.preventDefault();
   
-  // 1. Validate required fields
+  // Clear previous messages
+  setSubmitMessage('');
+  setErrors({});
+
+  // Validate required fields
   const requiredFields = {
     name: 'Name is required',
-    email: 'Valid email is required',
+    email: 'Email is required',
     subject: 'Subject is required',
     message: 'Message is required'
   };
 
-  const errors = {};
+  const newErrors = {};
   Object.entries(requiredFields).forEach(([field, message]) => {
-    if (!formData[field]?.trim()) errors[field] = message;
+    if (!formData[field]?.trim()) newErrors[field] = message;
   });
 
-  if (Object.keys(errors).length > 0) {
-    setErrors(errors);
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
     return;
   }
 
-  // 2. Prepare form data
-  const formDataToSend = new FormData();
-  
-  // Add required fields
-  Object.keys(requiredFields).forEach(field => {
-    formDataToSend.append(field, formData[field]);
-  });
-
-  // Add optional file
-  if (attachedFile) {
-    if (attachedFile.size > 5 * 1024 * 1024) { // 5MB limit
-      setSubmitMessage('File size exceeds 5MB limit');
-      return;
-    }
-    formDataToSend.append('blogFile', attachedFile);
-  }
-
-  // 3. Submit with loading state
   setIsSubmitting(true);
-  setSubmitMessage('');
-  setErrors({});
 
   try {
-    const result = await sendContactForm(formDataToSend);
-    setSubmitMessage(result.message || 'Thank you for your submission!');
+    const formDataToSend = new FormData();
+    // Add required fields
+    Object.keys(requiredFields).forEach(field => {
+      formDataToSend.append(field, formData[field]);
+    });
+
+    // Add optional file if exists
+    if (attachedFile) {
+      // Client-side validation (matches API requirements)
+      const allowedTypes = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png'
+      ];
+      
+      if (!allowedTypes.includes(attachedFile.type)) {
+        throw new Error('Only PDF, DOCX, JPEG or PNG files allowed');
+      }
+
+      if (attachedFile.size > 5 * 1024 * 1024) { // 5MB
+        throw new Error('File size exceeds 5MB limit');
+      }
+
+      formDataToSend.append('blogFile', attachedFile);
+    }
+
+    const response = await sendContactForm(formDataToSend);
     
-    // Reset form on success
+    // Handle success response
+    setSubmitMessage('Thank you for your submission!');
+    console.log('Submission successful:', response);
+    
+    // Reset form
     setFormData({ name: '', email: '', subject: '', message: '' });
     setAttachedFile(null);
+
   } catch (error) {
-    // Handle field-specific errors
-    if (error.message.includes(':')) {
-      const fieldErrors = {};
-      error.message.split(';').forEach(part => {
-        const [field, err] = part.split(':').map(s => s.trim());
-        if (field && err) fieldErrors[field] = err;
-      });
-      setErrors(fieldErrors);
+    console.error('Submission error:', error);
+    
+    // Handle different error cases
+    if (error.details) {
+      // Field-specific errors (400 validation)
+      setErrors(error.details);
+      setSubmitMessage('Please correct the errors below');
     } else {
+      // General errors (413, 415, etc)
       setSubmitMessage(error.message);
     }
   } finally {

@@ -38,52 +38,62 @@ class AuthService {
 // src/services/authService.js
 async sendContactForm(formData) {
   try {
-    // 1. Verify configuration exists
-    if (!this.baseURL || !API_CONFIG?.ENDPOINTS?.CONTACT) {
-      throw new Error('API configuration is incomplete');
+    // Debug: Log form data contents
+    console.log('[DEBUG] FormData contents:');
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value instanceof File ? `${value.name} (${value.type}, ${value.size} bytes)` : value);
     }
 
-    // 2. Construct URL safely
-    const endpointUrl = new URL(API_CONFIG.ENDPOINTS.CONTACT, this.baseURL).toString();
-    console.log('Attempting to contact:', endpointUrl);  // Debug log
-
-    // 3. Prepare headers
-    const headers = {};
-    const token = this.getAuthToken();
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    // 4. Make the request
-    const response = await fetch(endpointUrl, {
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
       method: 'POST',
-      headers: headers,
       body: formData,
-      credentials: 'include'  // Important for cookies/CORS
-    });
-
-    // 5. Handle response
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        errorData.message || 
-        errorData.error || 
-        `Request failed with status ${response.status}`
-      );
-    }
-
-    return await response.json();
-    
-  } catch (error) {
-    console.error('Contact submission error:', {
-      message: error.message,
-      stack: error.stack,
-      config: {  // Log the problematic configuration
-        baseURL: this.baseURL,
-        endpoint: API_CONFIG?.ENDPOINTS?.CONTACT
+      headers: {
+        'Accept': 'application/json' // Ensure we get JSON responses
       }
     });
-    throw error;
+
+    const data = await response.json().catch(async () => {
+      // Fallback to text if JSON parsing fails
+      return { message: await response.text() };
+    });
+
+    if (!response.ok) {
+      // Handle specific error cases based on status code
+      const error = new Error(data.message || `Request failed with status ${response.status}`);
+      error.status = response.status;
+      
+      // Structure error response according to API spec
+      switch(response.status) {
+        case 400:
+          error.details = data.details || {
+            general: data.message || 'Validation failed'
+          };
+          break;
+        case 413:
+          error.details = { file: 'File size exceeds maximum limit (5MB)' };
+          break;
+        default:
+          error.details = data.details || { general: data.message };
+      }
+      
+      throw error;
+    }
+
+    return data;
+
+  } catch (error) {
+    console.error('[Contact API Error]', error);
+    
+    // Enhance error message based on API spec
+    let userMessage = error.message;
+    if (error.details) {
+      userMessage = Object.values(error.details).join(', ');
+    }
+    
+    const enhancedError = new Error(userMessage);
+    enhancedError.status = error.status;
+    enhancedError.details = error.details;
+    throw enhancedError;
   }
 }
 
