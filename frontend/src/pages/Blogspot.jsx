@@ -57,10 +57,59 @@ const Blogspot = () => {
             "India's Colonial Legacy in Censorship",
             "Landmark Cases: Udeshi, Bandit Queen, and Beyond"
         ]
-    }
+    },
+     {
+        id: 3,
+        title: "The House That Clive Did Not Build",
+        author: "Priyanshu Kar",
+        introduction: "The Clive House in London stands as a testament to colonial wealth, but its true origins reveal a more complex story of appropriation and legal maneuvering that challenges traditional notions of ownership and cultural heritage in art and architecture.",
+        category: "ART LAW",
+        date: "August 3, 2025",
+        readTime: "15 min read",
+        views: "421",
+        comments: 7,
+        reactions: 95,
+        likes: 95,
+        popularity: 96,
+        featured: false,
+        realUrl: "https://open.substack.com/pub/artlawcommunion/p/the-house-that-clive-did-not-build?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
+        image: "./clivehouse.png",
+        subheadings: [
+          "The Illusion of Creation: Clive's 'Architectural Vision'",
+          "Deconstructing the Provenance: Tracing the True Builders",
+          "Legal Alchemy: How Plunder Became Property",
+          "The Silent Witnesses: Artifacts That Tell Another Story",
+          "Contemporary Reckonings: The House in Modern Legal Context"
+        ]
+    },
+    {
+      id: 4,
+      title: "Anklets of Oppression: The Fight against Sexual Harassment in India's Classical Dance Community",
+      author: "Ishika Hazra and Auronisha Roy",
+      introduction: "Existing jurisprudence has long neglected the plight of female dancers in the Indian classical dance community who face sexual harassment. This must stop giving way to deliberation and understanding.",
+      category: "ART LAW",
+      date: "August 3, 2025",
+      readTime: "15 min read",
+      views: "421",
+      comments: 7,
+      reactions: 95,
+      likes: 95,
+      popularity: 97,
+      featured: false,
+      realUrl: "https://open.substack.com/pub/artlawcommunion/p/anklets-of-oppression-the-fight-against?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
+      image: "./dance.png",
+      subheadings: [
+        "International Instances of Sexual Abuse in the Dance Community",
+        "History of Female Indian Dancers: From Purity to Prostitution",
+        "Can Legal Remedies Effectively Combat Sexual Harassment?",
+        "The #MeToo Movement and Its Impact",
+        "Navigating Consent in Traditional Dance Settings",
+        "Way Forward: Beyond Mechanical Legislation"
+      ]
+  }
   ];
 
-  const categories = ['All', 'ART LAW', 'COPYRIGHT', 'NFT LAW', 'CONTRACTS', 'AUTHENTICATION'];
+  const categories = ['All', 'ART LAW' ];
   
   // Get featured article (highest popularity)
   const featuredArticle = blogPosts.find(post => post.featured) || blogPosts[0];

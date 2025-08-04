@@ -8,18 +8,19 @@ const API_CONFIG = {
       LOGIN_PATRON: '/api/auth/login-with-patron-id',
       VERIFY_OTP: '/api/auth/verify-otp',
       LOGOUT: '/api/auth/logout',
-      FORGOT_PASSWORD:'/api/auth/request-password-reset'
+      FORGOT_PASSWORD: '/api/auth/request-password-reset'
     },
     USER: {
       GET_USER: '/api/users',
       GET_USER_DETAILS: '/api/users', // Same endpoint but with email parameter
       UPDATE_PROFILE: '/api/users/update-profile'
-    }
+    },
+    CONTACT: '/api/contact' // New contact endpoint
   },
   HEADERS: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-  }
-};
+  },
+  };
 
 export default API_CONFIG;
