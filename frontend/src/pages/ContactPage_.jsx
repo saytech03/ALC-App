@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Paperclip, X } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
-import axios from 'axios';
+import { useAuth } from '../store/AuthContext';
 import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactPage_ = () => {
-  const [email, setEmail] = useState('');
+  const { sendContactForm } = useAuth();
   const [attachedFile, setAttachedFile] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -16,6 +16,7 @@ const ContactPage_ = () => {
   const [captchaValue, setCaptchaValue] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [errors, setErrors] = useState({});
 
   const subjectOptions = [
     'Remarks',
@@ -27,46 +28,59 @@ const ContactPage_ = () => {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     
-    if (!captchaValue) {
-      alert('Please complete the CAPTCHA verification');
+    // Validate required fields
+    const newErrors = {};
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.subject) newErrors.subject = 'Subject is required';
+    if (!formData.message) newErrors.message = 'Message is required';
+    if (!captchaValue) newErrors.captcha = 'Please complete the CAPTCHA verification';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-    
+
     setIsSubmitting(true);
     setSubmitMessage('');
+    setErrors({});
     
     try {
-      // Create FormData for file upload
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('email', formData.email);
       formDataToSend.append('subject', formData.subject);
       formDataToSend.append('message', formData.message);
-      formDataToSend.append('captchaToken', captchaValue);
       
       if (attachedFile) {
         formDataToSend.append('blogFile', attachedFile);
       }
 
-      // Send to backend
-      const response = await axios.post(
-        'https://your-backend-url/api/contact',
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      );
+      // Use the sendContactForm from AuthContext
+      const response = await sendContactForm(formDataToSend);
 
-      setSubmitMessage(response.data.message || 'Thank you for your submission!');
+      setSubmitMessage('Thank you for your submission! We will get back to you soon.');
+      
       // Reset form
       setFormData({ name: '', email: '', subject: '', message: '' });
       setAttachedFile(null);
       setCaptchaValue(null);
       document.getElementById('file-input').value = '';
     } catch (error) {
-      setSubmitMessage(error.response?.data?.message || 'Submission failed. Please try again.');
+      if (error.message.includes('Maximum upload size exceeded')) {
+        setSubmitMessage('File size exceeds the maximum limit (5MB)');
+      } else if (error.message.includes('Only PDF, DOCX, or image files are allowed')) {
+        setSubmitMessage('Only PDF, DOCX, or image files are allowed');
+      } else if (error.message.includes('Validation failed')) {
+        // Handle backend validation errors
+        if (error.details) {
+          setErrors(error.details);
+        } else {
+          setSubmitMessage('Please fill all required fields correctly');
+        }
+      } else {
+        setSubmitMessage(error.message || 'Submission failed. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -77,18 +91,37 @@ const ContactPage_ = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user types
+    if (errors[e.target.name]) {
+      setErrors(prev => ({ ...prev, [e.target.name]: '' }));
+    }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      if (allowedTypes.includes(file.type)) {
-        setAttachedFile(file);
-      } else {
-        alert('Please select only PDF or DOCX files');
+      // Client-side validation (also validated by backend)
+      const allowedTypes = [
+        'application/pdf', 
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png'
+      ];
+      
+      if (file.size > 5 * 1024 * 1024) { // 5MB
+        setSubmitMessage('File size exceeds the maximum limit (5MB)');
         e.target.value = '';
+        return;
       }
+
+      if (!allowedTypes.includes(file.type)) {
+        setSubmitMessage('Only PDF, DOCX, JPEG, or PNG files are allowed');
+        e.target.value = '';
+        return;
+      }
+
+      setAttachedFile(file);
+      setSubmitMessage('');
     }
   };
 
@@ -120,9 +153,12 @@ const ContactPage_ = () => {
                       placeholder="Name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className={`w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.name ? 'focus:ring-red-500' : 'focus:ring-teal-500'
+                      }`}
                       required
                     />
+                    {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
                   </div>
 
                   <div>
@@ -132,9 +168,12 @@ const ContactPage_ = () => {
                       placeholder="Email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className={`w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 ${
+                        errors.email ? 'focus:ring-red-500' : 'focus:ring-teal-500'
+                      }`}
                       required
                     />
+                    {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                   </div>
 
                   <div>
@@ -142,7 +181,9 @@ const ContactPage_ = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                      className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 appearance-none"
+                      className={`w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 focus:outline-none focus:ring-2 appearance-none ${
+                        errors.subject ? 'focus:ring-red-500' : 'focus:ring-teal-500'
+                      }`}
                       required
                     >
                       <option value="" disabled>Select a subject</option>
@@ -150,6 +191,7 @@ const ContactPage_ = () => {
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
+                    {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
                   </div>
 
                   <div>
@@ -159,15 +201,18 @@ const ContactPage_ = () => {
                       rows="6"
                       value={formData.message}
                       onChange={handleInputChange}
-                      className="w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className={`w-full p-4 bg-gray-100 border-0 rounded-lg text-gray-900 placeholder-gray-500 resize-none focus:outline-none focus:ring-2 ${
+                        errors.message ? 'focus:ring-red-500' : 'focus:ring-teal-500'
+                      }`}
                       required
                     ></textarea>
+                    {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
                   </div>
 
                   {/* File Attachment */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Attach File (PDF or DOCX only)
+                      Attach File (PDF, DOCX, JPEG, or PNG - max 5MB)
                     </label>
                     <div className="flex items-center gap-3">
                       <label className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg cursor-pointer transition-colors">
@@ -176,7 +221,7 @@ const ContactPage_ = () => {
                         <input
                           id="file-input"
                           type="file"
-                          accept=".pdf,.docx"
+                          accept=".pdf,.docx,.jpg,.jpeg,.png"
                           onChange={handleFileChange}
                           className="hidden"
                         />
@@ -196,20 +241,25 @@ const ContactPage_ = () => {
                         </div>
                       )}
                     </div>
+                    {errors.blogFile && <p className="mt-1 text-sm text-red-600">{errors.blogFile}</p>}
                   </div>
 
                   {/* ReCAPTCHA Component */}
                   <div className="my-4">
                     <ReCAPTCHA
                       sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG" // Replace with your actual key
-                      onChange={(value) => setCaptchaValue(value)}
+                      onChange={(value) => {
+                        setCaptchaValue(value);
+                        if (errors.captcha) setErrors(prev => ({ ...prev, captcha: '' }));
+                      }}
                     />
+                    {errors.captcha && <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>}
                   </div>
 
                   {/* Submit message display */}
                   {submitMessage && (
                     <div className={`mt-2 p-3 rounded-lg text-center ${
-                      submitMessage.includes('Thank you') || submitMessage.includes('success')
+                      submitMessage.includes('Thank you') 
                         ? 'bg-green-100 text-green-700' 
                         : 'bg-red-100 text-red-700'
                     }`}>

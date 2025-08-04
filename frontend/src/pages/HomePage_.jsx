@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react'; 
-import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe } from 'lucide-react'; 
+import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search } from 'lucide-react'; 
 import AltNavbar from '../components/AltNavbar';
 import { Link } from "react-router-dom";
 
@@ -7,6 +7,7 @@ const HomePage_ = () => {
   const [email, setEmail] = useState('');
   const [imgLoading, setImgLoading] = useState(true);
   const [dailyQuote, setDailyQuote] = useState({ text: '', author: '' });
+   const [showChatbot, setShowChatbot] = useState(false);
      
   const [formData, setFormData] = useState({
     name: '',
@@ -50,8 +51,6 @@ const HomePage_ = () => {
     text: "In Art, man reveals himself and not his object",
     author: "Rabindranath Tagore"
   },
-
-  // New quotes about art
   {
     text: "Art is the lie that enables us to realize the truth.",
     author: "Pablo Picasso"
@@ -172,8 +171,6 @@ const HomePage_ = () => {
     text: "Art is the most sublime mission of man.",
     author: "Honoré de Balzac"
   },
-
-  // Quotes about law
   {
     text: "Where law ends, tyranny begins.",
     author: "William Pitt the Elder"
@@ -430,8 +427,8 @@ const HomePage_ = () => {
     <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
       {/* Navbar */}
       {imgLoading && (
-					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-				)}
+          <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+        )}
       <AltNavbar/>
       
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
@@ -543,12 +540,66 @@ const HomePage_ = () => {
           </div>
         </div>
       </div>
+{/* Magnifying Glass Icon - Only shown when chatbot is closed */}
+      {!showChatbot && (
+        <div className="fixed bottom-10 right-10 z-40">
+          <button 
+            onClick={() => setShowChatbot(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+            aria-label="Open chatbot"
+          >
+            <Search size={24} />
+          </button>
+        </div>
+      )}
+
+      {/* Chatbot Sidebar */}
+      <div className={`fixed inset-y-0 right-0 w-96 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="h-full flex flex-col">
+          {/* Chatbot Header */}
+          <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+            <h3 className="text-xl font-bold">Art Law Assistant</h3>
+            <button 
+              onClick={() => setShowChatbot(false)}
+              className="text-white hover:text-gray-200 text-2xl"
+            >
+              &times;
+            </button>
+          </div>
+          
+          {/* Chatbot Messages Area */}
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="bg-gray-100 rounded-lg p-3 mb-3 max-w-xs">
+              <p>Hello! How can I help you with art law today?</p>
+            </div>
+          </div>
+          
+          {/* Chatbot Input Area */}
+          <div className="border-t p-4">
+            <div className="flex">
+              <input
+                type="text"
+                placeholder="Type your question..."
+                className="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700">
+                Send
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Ask me anything about art law, copyright, or legal issues for artists.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      
 
       {/* CSS for 3D Cube Animation */}
-      <style jsx>{`
+       <style jsx>{`
         .cube-container {
-          width: 300px;
-          height: 300px;
+          width: 250px; /* Changed from 300px */
+          height: 250px; /* Changed from 300px */
           perspective: 1000px;
         }
 
@@ -562,39 +613,39 @@ const HomePage_ = () => {
 
         .face {
           position: absolute;
-          width: 300px;
-          height: 300px;
+          width: 250px; /* Changed from 300px */
+          height: 250px; /* Changed from 300px */
           background: linear-gradient(45deg, #3b82f6, #1e40af, #1d4ed8);
           border: 2px solid #1e40af;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-family: Arial, sans-serif;
+          font-family: Arima, sans-serif;
           box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
 
         .face.front {
-          transform: translateZ(150px);
+          transform: translateZ(125px); /* Changed from 150px */
         }
 
         .face.back {
-          transform: rotateY(180deg) translateZ(150px);
+          transform: rotateY(180deg) translateZ(125px); /* Changed from 150px */
         }
 
         .face.right {
-          transform: rotateY(90deg) translateZ(150px);
+          transform: rotateY(90deg) translateZ(125px); /* Changed from 150px */
         }
 
         .face.left {
-          transform: rotateY(-90deg) translateZ(150px);
+          transform: rotateY(-90deg) translateZ(125px); /* Changed from 150px */
         }
 
         .face.top {
-          transform: rotateX(90deg) translateZ(150px);
+          transform: rotateX(90deg) translateZ(125px); /* Changed from 150px */
         }
 
         .face.bottom {
-          transform: rotateX(-90deg) translateZ(150px);
+          transform: rotateX(-90deg) translateZ(125px); /* Changed from 150px */
         }
 
         @keyframes rotateCube {
