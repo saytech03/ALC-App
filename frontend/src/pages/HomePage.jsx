@@ -571,7 +571,7 @@ const HomePage = () => {
             <img 
               src="/transparency.png" 
               alt="Open Chatbot" 
-              className="w-14 h-14 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all"
+              className="w-18 h-18 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
               style={{
                 filter: 'brightness(0) invert(1)',
                 transition: 'filter 0.3s ease'
@@ -690,6 +690,11 @@ const HomePage = () => {
           83.33% { transform: rotateX(180deg) rotateY(270deg); }
           100% { transform: rotateX(360deg) rotateY(360deg); }
         }
+
+        @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; transform: scale(1.15); }
+      }
 
         .cube:hover {
           animation-play-state: paused;
