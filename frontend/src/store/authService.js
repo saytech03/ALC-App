@@ -36,6 +36,7 @@ class AuthService {
   }
 
 // src/services/authService.js
+// Updated sendContactForm method for authService.js
 async sendContactForm(formData) {
   try {
     // Debug: Log form data contents
@@ -48,52 +49,107 @@ async sendContactForm(formData) {
       method: 'POST',
       body: formData,
       headers: {
-        'Accept': 'application/json' // Ensure we get JSON responses
+        'Accept': 'application/json'
       }
     });
 
-    const data = await response.json().catch(async () => {
-      // Fallback to text if JSON parsing fails
-      return { message: await response.text() };
-    });
+    // Always try to parse as JSON first
+    let data;
+    const contentType = response.headers.get('content-type');
+    
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      // If not JSON, get text and try to parse it
+      const textResponse = await response.text();
+      try {
+        data = JSON.parse(textResponse);
+      } catch {
+        data = { message: textResponse || 'Unknown error occurred' };
+      }
+    }
 
     if (!response.ok) {
-      // Handle specific error cases based on status code
+      console.error('[Contact API] Error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: data
+      });
+
+      // Create structured error based on status code and API response
       const error = new Error(data.message || `Request failed with status ${response.status}`);
       error.status = response.status;
       
-      // Structure error response according to API spec
+      // Handle specific error cases based on status code
       switch(response.status) {
         case 400:
-          error.details = data.details || {
-            general: data.message || 'Validation failed'
-          };
+          // Validation errors - check if data has field-specific errors
+          if (data.details && typeof data.details === 'object') {
+            error.details = data.details;
+          } else if (data.errors && typeof data.errors === 'object') {
+            error.details = data.errors;
+          } else {
+            // Generic validation error
+            error.details = { general: data.message || 'Validation failed' };
+          }
           break;
+          
         case 413:
-          error.details = { file: 'File size exceeds maximum limit (5MB)' };
+          error.message = 'File size exceeds maximum limit (5MB)';
+          error.details = { file: error.message };
           break;
+          
+        case 415:
+          error.message = 'File type not supported. Only PDF, DOCX, JPEG, and PNG files are allowed';
+          error.details = { file: error.message };
+          break;
+          
+        case 422:
+          // Unprocessable entity - often validation errors
+          error.details = data.details || data.errors || { general: data.message || 'Invalid data provided' };
+          break;
+          
+        case 500:
+          error.message = 'Server error. Please try again later.';
+          error.details = { general: error.message };
+          break;
+          
         default:
-          error.details = data.details || { general: data.message };
+          error.details = data.details || { general: data.message || `Request failed with status ${response.status}` };
       }
       
       throw error;
     }
 
+    // Success response
+    console.log('[Contact API] Success response:', data);
     return data;
 
   } catch (error) {
-    console.error('[Contact API Error]', error);
+    console.error('[Contact API Error]', {
+      message: error.message,
+      status: error.status,
+      details: error.details,
+      stack: error.stack
+    });
     
-    // Enhance error message based on API spec
-    let userMessage = error.message;
-    if (error.details) {
-      userMessage = Object.values(error.details).join(', ');
+    // Re-throw the error with proper structure
+    if (error.status && error.details) {
+      // Already a structured error from above
+      throw error;
+    } else {
+      // Network or other errors
+      const enhancedError = new Error(
+        error.message || 'Network error. Please check your internet connection and try again.'
+      );
+      
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        enhancedError.message = 'Network error. Please check your internet connection and try again.';
+      }
+      
+      enhancedError.details = { general: enhancedError.message };
+      throw enhancedError;
     }
-    
-    const enhancedError = new Error(userMessage);
-    enhancedError.status = error.status;
-    enhancedError.details = error.details;
-    throw enhancedError;
   }
 }
 
