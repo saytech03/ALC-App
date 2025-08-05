@@ -24,6 +24,10 @@ function AboutPage_() {
           <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-8 rounded-lg">
             <h1 className="text-white text-4xl md:text-5xl font-light tracking-wide mb-8">OUR VISION</h1>
             <div className="space-y-6 text-lg text-white">
+               <p>
+                The secret of getting ahead is getting started.
+                <br/>- Mark Twain
+              </p>
               <p>
                 The Art Law Communion is a leading platform for promoting interdisciplinary learning and discourse on the intersection of arts and the law in India and the Global South.
                 We aim to promote deeper understanding of art law through academic exploration, advocacy and collaboration, while empowering the public to engage with critical legal issues impacting artists, collectors, cultural institutions and the global art market. This is a space for deliberation and knowledge sharing to equip the next generation of legal professionals with the expertise and insight to navigate and shape the evolving landscape of art law in India, where context-specific legal challenges to the same remain underrepresented in mainstream discourse. 

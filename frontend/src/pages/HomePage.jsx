@@ -558,13 +558,12 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Enhanced Magnifying Glass Icon */}
-      {/* Custom PNG Magnifying Glass Icon */}
+      {/* Enhanced Magnifying Glass Icon with Keywords */}
       {!showChatbot && (
-        <div className="fixed bottom-8 right-8 z-40">
+        <div className="fixed bottom-8 right-8 z-40 flex flex-col items-center">
           <button 
             onClick={() => setShowChatbot(true)}
-            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none"
+            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
             aria-label="Open chatbot"
           >
             {/* Custom PNG Image - will maintain original colors and shape */}
@@ -577,6 +576,13 @@ const HomePage = () => {
                 transition: 'filter 0.3s ease'
               }}
             />
+          
+          {/* Keywords below the icon */}
+          <div className="text-center" >
+            <p className="text-white text-sm font-medium px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
+              ASK ARTLEX!
+            </p>
+          </div>
           </button>
         </div>
       )}
@@ -705,4 +711,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
- 
