@@ -60,7 +60,6 @@ async sendContactForm(formData) {
     if (contentType && contentType.includes('application/json')) {
       data = await response.json();
     } else {
-      // If not JSON, get text and try to parse it
       const textResponse = await response.text();
       try {
         data = JSON.parse(textResponse);
@@ -76,52 +75,30 @@ async sendContactForm(formData) {
         data: data
       });
 
-      // Create structured error based on status code and API response
       const error = new Error(data.message || `Request failed with status ${response.status}`);
       error.status = response.status;
-      
+
       // Handle specific error cases based on status code
       switch(response.status) {
         case 400:
-          // Validation errors - check if data has field-specific errors
-          if (data.details && typeof data.details === 'object') {
-            error.details = data.details;
-          } else if (data.errors && typeof data.errors === 'object') {
-            error.details = data.errors;
-          } else {
-            // Generic validation error
-            error.details = { general: data.message || 'Validation failed' };
-          }
+          error.details = data.details || { general: 'Validation failed' };
           break;
-          
         case 413:
           error.message = 'File size exceeds maximum limit (5MB)';
-          error.details = { file: error.message };
           break;
-          
         case 415:
           error.message = 'File type not supported. Only PDF, DOCX, JPEG, and PNG files are allowed';
-          error.details = { file: error.message };
           break;
-          
-        case 422:
-          // Unprocessable entity - often validation errors
-          error.details = data.details || data.errors || { general: data.message || 'Invalid data provided' };
-          break;
-          
         case 500:
           error.message = 'Server error. Please try again later.';
-          error.details = { general: error.message };
           break;
-          
         default:
-          error.details = data.details || { general: data.message || `Request failed with status ${response.status}` };
+          error.details = data.details || { general: 'An unknown error occurred' };
       }
       
       throw error;
     }
 
-    // Success response
     console.log('[Contact API] Success response:', data);
     return data;
 
@@ -133,23 +110,7 @@ async sendContactForm(formData) {
       stack: error.stack
     });
     
-    // Re-throw the error with proper structure
-    if (error.status && error.details) {
-      // Already a structured error from above
-      throw error;
-    } else {
-      // Network or other errors
-      const enhancedError = new Error(
-        error.message || 'Network error. Please check your internet connection and try again.'
-      );
-      
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        enhancedError.message = 'Network error. Please check your internet connection and try again.';
-      }
-      
-      enhancedError.details = { general: enhancedError.message };
-      throw enhancedError;
-    }
+    throw new Error('Network error. Please check your internet connection and try again.');
   }
 }
 
