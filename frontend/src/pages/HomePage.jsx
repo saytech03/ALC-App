@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'; 
-import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search } from 'lucide-react'; 
+import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music } from 'lucide-react'; 
 import Navbar from '../components/Navbar';
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,12 @@ const HomePage = () => {
   const [dailyQuote, setDailyQuote] = useState({ text: '', author: '' });
   const [showChatbot, setShowChatbot] = useState(false);
   const chatSidebarRef = useRef(null);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [songs, setSongs] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
      
   const [formData, setFormData] = useState({
     name: '',
@@ -439,6 +445,38 @@ const HomePage = () => {
     e.preventDefault();
     console.log('Contact form submitted:', formData);
   };
+
+  // Music player functions
+  const searchSongs = async () => {
+    if (!searchQuery.trim()) return;
+    
+    // In a real implementation, you would call an API here
+    console.log(`Searching for: ${searchQuery}`);
+    
+    // Mock data - replace with actual API call
+    setSongs([
+      { id: 1, title: `${searchQuery} Song 1`, artist: 'Artist 1', url: 'https://example.com/song1.mp3' },
+      { id: 2, title: `${searchQuery} Song 2`, artist: 'Artist 2', url: 'https://example.com/song2.mp3' },
+      { id: 3, title: `${searchQuery} Song 3`, artist: 'Artist 3', url: 'https://example.com/song3.mp3' },
+    ]);
+  };
+  
+  const playSong = (song) => {
+    setCurrentSong(song);
+    setIsPlaying(true);
+    // In a real implementation, you would set the audio source here
+    // audioRef.current.src = song.url;
+    // audioRef.current.play().catch(e => console.error("Playback failed:", e));
+  };
+  
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      // audioRef.current.pause();
+    } else {
+      // audioRef.current.play().catch(e => console.error("Playback failed:", e));
+    }
+    setIsPlaying(!isPlaying);
+  };
     
   return (
     <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
@@ -457,34 +495,35 @@ const HomePage = () => {
       <div 
         className="relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('./gallery_.jpeg')`
+          backgroundImage: `url('./collage.jpeg')`,
+          filter: 'brightness(0.9) contrast(1.1)'
         }}
       >
-        {/* pink Overlay */}
-        <div className="absolute inset-0 bg-pink-200/50"></div>
+          
                 
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4">
           {/* Quote Section */}
-          <div className="mb-16 text-center">
-            <blockquote className="text-2xl md:text-3xl italic font-serif text-black mb-6 max-w-4xl mx-auto leading-relaxed" style={{fontFamily: 'Playfair Display, serif'}}>
-              "{dailyQuote.text}"
-            </blockquote>
-            <cite className="text-xl md:text-2xl font-serif text-black" style={{fontFamily: 'Playfair Display, serif'}}>
-              - {dailyQuote.author}
-            </cite>
-          </div>
+          <div className="mb-16 text-center backdrop-blur-md bg-black/30 p-8 rounded-lg"> 
+          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed">  
+            "{dailyQuote.text}"
+          </blockquote>
+          <cite className="text-xl md:text-2xl font-serif text-white">  
+            - {dailyQuote.author}
+          </cite>
+        </div>
 
           {/* Main Content Grid */}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Side - Text Content */}
+             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-8 rounded-lg">
             <div className="text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-black" style={{fontFamily: 'Arial, sans-serif'}}>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white" style={{fontFamily: 'Arial, sans-serif'}}>
                 Empowering<br/>
                 Artists<br/>
                 Legally
               </h1>
-              <p className="text-lg text-black mb-8 leading-relaxed">
+              <p className="text-lg text-white mb-8 leading-relaxed">
                 Our mission is to provide a platform for building discourse on Art Law 
                 for serving artists, lawyers, and students of both law and art 
                 disciplines, including art market professionals and members of the 
@@ -492,9 +531,10 @@ const HomePage = () => {
                 the gap between the artistic and the legal community.
               </p>
             </div>
+            </div>
 
             {/* Right Side - 3D Animated Cube */}
-            <div className="flex justify-center md:justify-end">
+            <div className="flex justify-center md:justify-end mr-22">
               <div className="relative">
                 {/* 3D Animated Cube */}
                 <div className="cube-container">
@@ -584,6 +624,107 @@ const HomePage = () => {
             </p>
           </div>
           </button>
+        </div>
+      )}
+
+      {/* Music Player Button */}
+      {!showMusicPlayer && (
+        <div className="fixed bottom-8 left-8 z-40 flex flex-col items-center">
+          <button 
+            onClick={() => setShowMusicPlayer(true)}
+            className="rounded-full p-3 shadow-xl transition-all duration-300 hover:scale-110 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 border-none mb-2"
+            aria-label="Open music player"
+          >
+            <Music className="w-6 h-6 text-white" />
+          </button>
+          <div className="text-center">
+            <p className="text-white text-sm font-medium px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
+              PLAY MUSIC
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Music Player Search Bar */}
+      {showMusicPlayer && (
+        <div className="fixed bottom-8 left-8 z-50 w-80 bg-white/95 backdrop-blur-lg shadow-2xl rounded-lg p-4 border border-gray-200">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Music Player</h3>
+            <button 
+              onClick={() => {
+                setShowMusicPlayer(false);
+                setIsPlaying(false);
+                setSearchQuery('');
+                setSongs([]);
+              }}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          
+          {/* Search Input */}
+          <div className="flex mb-4">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for songs..."
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onKeyPress={(e) => e.key === 'Enter' && searchSongs()}
+            />
+            <button 
+              onClick={searchSongs}
+              className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors"
+            >
+              Search
+            </button>
+          </div>
+          
+          {/* Song Results */}
+          {songs.length > 0 && (
+            <div className="max-h-60 overflow-y-auto mb-4">
+              {songs.map(song => (
+                <div 
+                  key={song.id} 
+                  className={`p-3 hover:bg-gray-100 rounded-lg cursor-pointer ${currentSong?.id === song.id ? 'bg-purple-50' : ''}`}
+                  onClick={() => playSong(song)}
+                >
+                  <div className="font-medium">{song.title}</div>
+                  <div className="text-sm text-gray-600">{song.artist}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* Now Playing */}
+          {currentSong && (
+            <div className="bg-gray-50 rounded-lg p-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">{currentSong.title}</div>
+                  <div className="text-sm text-gray-600">{currentSong.artist}</div>
+                </div>
+                <button 
+                  onClick={togglePlayPause}
+                  className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700"
+                >
+                  {isPlaying ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 20H6V4H10V20ZM18 20H14V4H18V20Z" fill="currentColor"/>
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19.5 12L6 20V4L19.5 12Z" fill="currentColor"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <audio ref={audioRef} hidden />
+            </div>
+          )}
         </div>
       )}
 
