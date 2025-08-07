@@ -39,78 +39,53 @@ class AuthService {
 // Updated sendContactForm method for authService.js
 async sendContactForm(formData) {
   try {
-    // Debug: Log form data contents
-    console.log('[DEBUG] FormData contents:');
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value instanceof File ? `${value.name} (${value.type}, ${value.size} bytes)` : value);
-    }
+    // Add timeout mechanism
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
       method: 'POST',
       body: formData,
+      signal: controller.signal,
       headers: {
         'Accept': 'application/json'
       }
     });
 
-    // Always try to parse as JSON first
-    let data;
-    const contentType = response.headers.get('content-type');
-    
-    if (contentType && contentType.includes('application/json')) {
-      data = await response.json();
-    } else {
-      const textResponse = await response.text();
-      try {
-        data = JSON.parse(textResponse);
-      } catch {
-        data = { message: textResponse || 'Unknown error occurred' };
-      }
-    }
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
-      console.error('[Contact API] Error response:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: data
-      });
-
-      const error = new Error(data.message || `Request failed with status ${response.status}`);
-      error.status = response.status;
-
-      // Handle specific error cases based on status code
-      switch(response.status) {
-        case 400:
-          error.details = data.details || { general: 'Validation failed' };
-          break;
-        case 413:
-          error.message = 'File size exceeds maximum limit (5MB)';
-          break;
-        case 415:
-          error.message = 'File type not supported. Only PDF, DOCX, JPEG, and PNG files are allowed';
-          break;
-        case 500:
-          error.message = 'Server error. Please try again later.';
-          break;
-        default:
-          error.details = data.details || { general: 'An unknown error occurred' };
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { message: await response.text() };
       }
-      
+
+      const error = new Error(errorData.message || `Request failed with status ${response.status}`);
+      error.status = response.status;
+      error.details = errorData.details || errorData.errors;
       throw error;
     }
 
-    console.log('[Contact API] Success response:', data);
-    return data;
+    return await response.json();
 
   } catch (error) {
-    console.error('[Contact API Error]', {
-      message: error.message,
-      status: error.status,
-      details: error.details,
-      stack: error.stack
-    });
+    console.error('Contact submission error:', error);
     
-    throw new Error('Network error. Please check your internet connection and try again.');
+    let userMessage = 'Submission failed. Please try again.';
+    if (error.name === 'AbortError') {
+      userMessage = 'Request timed out. Please try again.';
+    } else if (error.message.includes('Failed to fetch')) {
+      userMessage = 'Network error. Please check your internet connection.';
+    } else if (error.details) {
+      userMessage = Object.values(error.details).join(', ');
+    }
+
+    const enhancedError = new Error(userMessage);
+    enhancedError.status = error.status;
+    enhancedError.details = error.details;
+    throw enhancedError;
   }
 }
 
