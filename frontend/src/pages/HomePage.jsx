@@ -14,6 +14,7 @@ const HomePage = () => {
   const [songs, setSongs] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [bgPosition, setBgPosition] = useState('');
   const audioRef = useRef(null);
      
   const [formData, setFormData] = useState({
@@ -430,11 +431,14 @@ const HomePage = () => {
 
   // Get daily quote based on current date
   useEffect(() => {
-    const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const quoteIndex = dayOfYear % quotes.length;
-    setDailyQuote(quotes[quoteIndex]);
-  }, []);
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+  const quoteIndex = dayOfYear % quotes.length;
+  setDailyQuote(quotes[quoteIndex]);
+  
+  // Alternate background position daily
+  setBgPosition(dayOfYear % 2 === 0 ? 'bg-center' : '');
+}, []);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -493,14 +497,13 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <div 
-        className="relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('./collage.jpeg')`,
-          filter: 'brightness(0.9) contrast(1.1)'
-        }}
-      >
-          
-                
+          className={`relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
+          style={{
+            backgroundImage: `url('./collage.jpeg')`,
+            filter: 'brightness(0.9) contrast(1.1)'
+          }}
+        >
+            
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4">
           {/* Quote Section */}
