@@ -507,34 +507,34 @@ const HomePage = () => {
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4">
           {/* Quote Section */}
-          <div className="mb-16 text-center backdrop-blur-md bg-black/30 p-8 rounded-lg"> 
-          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed">  
+        <div className="mb-16 text-center backdrop-blur-md bg-black/40 p-8 rounded-xl border border-white/10">
+          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed font-light">  
             "{dailyQuote.text}"
           </blockquote>
-          <cite className="text-xl md:text-2xl font-serif text-white">  
+          <cite className="text-xl md:text-2xl font-serif text-white font-medium tracking-wide">  
             - {dailyQuote.author}
           </cite>
         </div>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             {/* Left Side - Text Content */}
-             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-8 rounded-lg">
-            <div className="text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white" style={{fontFamily: 'Arial, sans-serif'}}>
-                Empowering<br/>
-                Artists<br/>
-                Legally
-              </h1>
-              <p className="text-lg text-white mb-8 leading-relaxed">
-                Our mission is to provide a platform for building discourse on Art Law 
-                for serving artists, lawyers, and students of both law and art 
-                disciplines, including art market professionals and members of the 
-                general public. Importantly, this communion will attempt to bridge 
-                the gap between the artistic and the legal community.
-              </p>
-            </div>
-            </div>
+             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/40 p-8 rounded-xl border border-white/10">
+      <div className="text-left">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight tracking-tight">
+          Empowering<br className="hidden md:block"/>
+          Artists<br className="hidden md:block"/>
+          Legally
+        </h1>
+        <p className="text-lg text-white/90 mb-8 leading-relaxed font-light">
+          Our mission is to provide a platform for building discourse on Art Law 
+          for serving artists, lawyers, and students of both law and art 
+          disciplines, including art market professionals and members of the 
+          general public. Importantly, this communion will attempt to bridge 
+          the gap between the artistic and the legal community.
+        </p>
+      </div>
+    </div>
 
             {/* Right Side - 3D Animated Cube */}
             <div className="flex justify-center md:justify-end mr-22">
@@ -604,6 +604,7 @@ const HomePage = () => {
       {/* Enhanced Magnifying Glass Icon with Keywords */}
       {!showChatbot && (
         <div className="fixed bottom-8 right-8 z-40 flex flex-col items-center">
+          <div className="flex">
           <button 
             onClick={() => setShowChatbot(true)}
             className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
@@ -627,6 +628,7 @@ const HomePage = () => {
             </p>
           </div>
           </button>
+          </div>
         </div>
       )}
 
