@@ -20,49 +20,16 @@ const UserAvatarDropdown = ({ size = 27 }) => {
   const { user: authUser, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
 
-  // Avatar images array
   const avatarImages = [
     "/avatar1.png",
     "/avatar2.png", 
     "/avatar3.png"
   ];
 
-  // Initialize with auth context user data or localStorage
-  const [userData, setUserData] = useState(() => {
-    // First try auth context
-    if (authUser) {
-      return {
-        email: authUser.email,
-        id: authUser.id,
-        name: authUser.name,
-        alc_patronid: authUser.alc_patronid,
-        profileImageUrl: authUser.profileImageUrl,
-        work: authUser.occupation
-      };
-    }
-    
-    // Fallback to localStorage if auth context is not ready
-    try {
-      const storedUser = localStorage.getItem('currentUser');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        return {
-          email: user.email,
-          id: user.id,
-          name: user.name,
-          alc_patronid: user.alc_patronid || user.membershipId,
-          profileImageUrl: user.profileImageUrl,
-          work: user.occupation
-        };
-      }
-    } catch (error) {
-      console.error('Error parsing stored user data:', error);
-    }
-    
-    return null;
-  });
+  const [userData, setUserData] = useState(null);
 
-  // Sync with auth context changes and localStorage - this is crucial for persistence
+  // FIX: This useEffect now syncs state from both authUser and localStorage
+  // ensuring the profile image is picked up immediately after login.
   useEffect(() => {
     let updatedUserData = null;
     
@@ -92,62 +59,22 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           };
         }
       } catch (error) {
-        console.error('Error parsing stored user data:', error);
+        console.error('Error parsing stored user data from localStorage:', error);
       }
     }
     
-    if (updatedUserData) {
-      setUserData(updatedUserData);
-      
-      // Sync localStorage with auth context if auth is available
-      if (authUser) {
-        try {
-          const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-          if (storedUser.email) {
-            localStorage.setItem('currentUser', JSON.stringify({
-              ...storedUser,
-              name: authUser.name,
-              profileImageUrl: authUser.profileImageUrl,
-              occupation: authUser.occupation,
-              alc_patronid: authUser.alc_patronid
-            }));
-          }
-        } catch (error) {
-          console.error('Error updating localStorage:', error);
-        }
-      }
+    setUserData(updatedUserData);
+
+    // If a profile image exists, clear the random avatar logic
+    if (updatedUserData?.profileImageUrl) {
+        setRandomAvatar(null);
+        localStorage.removeItem('userAvatar');
     }
   }, [authUser]);
 
-  // Set random avatar on component mount - only if no profile image exists
+  // Set random avatar if no profile image exists
   useEffect(() => {
-    // Check for profile image from multiple sources
-    let hasProfileImage = false;
-    
-    // Check auth context
-    if (authUser?.profileImageUrl) {
-      hasProfileImage = true;
-    }
-    
-    // Check localStorage if auth context doesn't have it
-    if (!hasProfileImage) {
-      try {
-        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        if (storedUser?.profileImageUrl) {
-          hasProfileImage = true;
-        }
-      } catch (error) {
-        console.error('Error checking localStorage for profile image:', error);
-      }
-    }
-    
-    // Check current userData state
-    if (!hasProfileImage && userData?.profileImageUrl) {
-      hasProfileImage = true;
-    }
-    
-    if (!hasProfileImage) {
-      // Only set random avatar if no profile image exists anywhere
+    if (userData === null || !userData.profileImageUrl) {
       const storedAvatar = localStorage.getItem('userAvatar');
       if (storedAvatar) {
         setRandomAvatar(storedAvatar);
@@ -157,48 +84,20 @@ const UserAvatarDropdown = ({ size = 27 }) => {
         setRandomAvatar(selectedAvatar);
         localStorage.setItem('userAvatar', selectedAvatar);
       }
-    } else {
-      // Clear random avatar if profile image exists
-      setRandomAvatar(null);
     }
-  }, [authUser?.profileImageUrl, userData?.profileImageUrl]);
+  }, [userData, avatarImages]);
 
   const renderAvatar = () => {
-    // Get the most up-to-date profile image URL from multiple sources
-    let currentProfileImageUrl = null;
+    const currentProfileImageUrl = userData?.profileImageUrl;
     
-    // Priority 1: userData state
-    if (userData?.profileImageUrl) {
-      currentProfileImageUrl = userData.profileImageUrl;
-    }
-    
-    // Priority 2: Auth context
-    if (!currentProfileImageUrl && authUser?.profileImageUrl) {
-      currentProfileImageUrl = authUser.profileImageUrl;
-    }
-    
-    // Priority 3: Check localStorage directly
-    if (!currentProfileImageUrl) {
-      try {
-        const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        if (storedUser?.profileImageUrl) {
-          currentProfileImageUrl = storedUser.profileImageUrl;
-        }
-      } catch (error) {
-        console.error('Error reading profile image from localStorage:', error);
-      }
-    }
-    
-    // Render profile image if available
     if (currentProfileImageUrl) {
       return (
         <img 
-          src={`${currentProfileImageUrl}?t=${Date.now()}`} // Cache busting
+          src={`${currentProfileImageUrl}?t=${Date.now()}`}
           alt="Profile" 
           className="w-full h-full object-cover rounded-full"
           onError={(e) => {
             console.error('Profile image failed to load:', currentProfileImageUrl);
-            // Fallback to random avatar if profile image fails to load
             e.target.style.display = 'none';
             setUserData(prev => prev ? { ...prev, profileImageUrl: null } : null);
           }}
@@ -206,7 +105,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       );
     }
     
-    // Priority 4: Random avatar (only if no profile image)
     if (randomAvatar) {
       return (
         <img 
@@ -215,7 +113,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           className="w-full h-full object-cover rounded-full"
           onError={(e) => {
             console.error('Random avatar failed to load:', randomAvatar);
-            // Remove failed random avatar
             setRandomAvatar(null);
             localStorage.removeItem('userAvatar');
           }}
@@ -223,7 +120,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       );
     }
     
-    // Priority 5: Default icon
     return <User size={size} />;
   };
 
@@ -274,7 +170,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       
       setUserData(updatedUserData);
       
-      // Update localStorage with fresh data
       localStorage.setItem('currentUser', JSON.stringify({
         ...user,
         name: userDetails.name,
@@ -317,7 +212,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
         };
         setUserData(updatedUserData);
         
-        // Update localStorage
         const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
         localStorage.setItem('currentUser', JSON.stringify({
           ...storedUser,
@@ -415,7 +309,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
         
         setUserData(updatedUserData);
         
-        // Update localStorage with the new profile image URL
         const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
         localStorage.setItem('currentUser', JSON.stringify({
           ...storedUser,
@@ -424,7 +317,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           profileImageUrl: response.profileImageUrl
         }));
 
-        // Clear random avatar if profile image is uploaded
         if (response.profileImageUrl) {
           localStorage.removeItem('userAvatar');
           setRandomAvatar(null);
@@ -453,8 +345,8 @@ const UserAvatarDropdown = ({ size = 27 }) => {
     setSelectedImage(null);
     setImagePreview(null);
     setEditValues({
-      name: userData.name || '',
-      work: userData.work || ''
+      name: userData?.name || '',
+      work: userData?.work || ''
     });
   };
 
@@ -753,6 +645,9 @@ const AltNavbar = () => {
           <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             ALC Fenestra
           </Link>
+          <Link to="/" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Events
+          </Link>
           <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
             Contact Us
           </Link>
@@ -802,6 +697,13 @@ const AltNavbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               ALC Fenestra
+            </Link>
+            <Link 
+              to="/" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Events
             </Link>
             <Link 
               to="/contacth" 
