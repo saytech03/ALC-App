@@ -7,6 +7,13 @@
     background-repeat: no-repeat;
 }
 
+.loginad-bg {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/abs_law.jpeg");
+	background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .rainbow-bg {
 	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/rainbow.png");
 	background-size: cover;

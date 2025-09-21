@@ -603,7 +603,7 @@ const HomePage = () => {
 
       {/* Enhanced Magnifying Glass Icon with Keywords */}
       {!showChatbot && (
-        <div className="fixed bottom-8 right-8 z-40 flex flex-col items-center">
+        <div className="absolute bottom-8 right-8 z-40 flex flex-col items-center">
           <div className="flex">
           <button 
             onClick={() => setShowChatbot(true)}
@@ -629,107 +629,6 @@ const HomePage = () => {
           </div>
           </button>
           </div>
-        </div>
-      )}
-
-      {/* Music Player Button */}
-      {!showMusicPlayer && (
-        <div className="fixed bottom-8 left-8 z-40 flex flex-col items-center">
-          <button 
-            onClick={() => setShowMusicPlayer(true)}
-            className="rounded-full p-3 shadow-xl transition-all duration-300 hover:scale-110 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 border-none mb-2"
-            aria-label="Open music player"
-          >
-            <Music className="w-6 h-6 text-white" />
-          </button>
-          <div className="text-center">
-            <p className="text-white text-sm font-medium px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
-              PLAY MUSIC
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Music Player Search Bar */}
-      {showMusicPlayer && (
-        <div className="fixed bottom-8 left-8 z-50 w-80 bg-white/95 backdrop-blur-lg shadow-2xl rounded-lg p-4 border border-gray-200">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-medium">Music Player</h3>
-            <button 
-              onClick={() => {
-                setShowMusicPlayer(false);
-                setIsPlaying(false);
-                setSearchQuery('');
-                setSongs([]);
-              }}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          
-          {/* Search Input */}
-          <div className="flex mb-4">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for songs..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              onKeyPress={(e) => e.key === 'Enter' && searchSongs()}
-            />
-            <button 
-              onClick={searchSongs}
-              className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors"
-            >
-              Search
-            </button>
-          </div>
-          
-          {/* Song Results */}
-          {songs.length > 0 && (
-            <div className="max-h-60 overflow-y-auto mb-4">
-              {songs.map(song => (
-                <div 
-                  key={song.id} 
-                  className={`p-3 hover:bg-gray-100 rounded-lg cursor-pointer ${currentSong?.id === song.id ? 'bg-purple-50' : ''}`}
-                  onClick={() => playSong(song)}
-                >
-                  <div className="font-medium">{song.title}</div>
-                  <div className="text-sm text-gray-600">{song.artist}</div>
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Now Playing */}
-          {currentSong && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-medium">{currentSong.title}</div>
-                  <div className="text-sm text-gray-600">{currentSong.artist}</div>
-                </div>
-                <button 
-                  onClick={togglePlayPause}
-                  className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700"
-                >
-                  {isPlaying ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 20H6V4H10V20ZM18 20H14V4H18V20Z" fill="currentColor"/>
-                    </svg>
-                  ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.5 12L6 20V4L19.5 12Z" fill="currentColor"/>
-                    </svg>
-                  )}
-                </button>
-              </div>
-              <audio ref={audioRef} hidden />
-            </div>
-          )}
         </div>
       )}
 

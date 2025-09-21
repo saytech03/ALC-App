@@ -28,13 +28,33 @@ const ContactPage_ = () => {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     
+    // Clear previous messages
+    setSubmitMessage('');
+    setErrors({});
+
     // Validate required fields
+    const requiredFields = {
+      name: 'Name is required',
+      email: 'Email is required',
+      subject: 'Subject is required',
+      message: 'Message is required'
+    };
+
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.subject) newErrors.subject = 'Subject is required';
-    if (!formData.message) newErrors.message = 'Message is required';
-    if (!captchaValue) newErrors.captcha = 'Please complete the CAPTCHA verification';
+    Object.entries(requiredFields).forEach(([field, message]) => {
+      if (!formData[field]?.trim()) newErrors[field] = message;
+    });
+
+    // Validate CAPTCHA
+    {/*if (!captchaValue) {
+      newErrors.captcha = 'Please complete the CAPTCHA verification';
+    }*/}
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -42,43 +62,68 @@ const ContactPage_ = () => {
     }
 
     setIsSubmitting(true);
-    setSubmitMessage('');
-    setErrors({});
-    
+
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('name', formData.name);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('subject', formData.subject);
-      formDataToSend.append('message', formData.message);
       
+      // Add all required fields
+      formDataToSend.append('name', formData.name.trim());
+      formDataToSend.append('email', formData.email.trim());
+      formDataToSend.append('subject', formData.subject);
+      formDataToSend.append('message', formData.message.trim());
+      
+      // Add CAPTCHA value
+      //formDataToSend.append('captcha', captchaValue);
+
+      // Add optional file if exists
       if (attachedFile) {
+        // Client-side validation (matches API requirements)
+        const allowedTypes = [
+          'application/pdf',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'image/jpeg',
+          'image/png'
+        ];
+        
+        if (!allowedTypes.includes(attachedFile.type)) {
+          throw new Error('Only PDF, DOCX, JPEG or PNG files allowed');
+        }
+
+        if (attachedFile.size > 5 * 1024 * 1024) { // 5MB
+          throw new Error('File size exceeds 5MB limit');
+        }
+
         formDataToSend.append('blogFile', attachedFile);
       }
 
-      // Use the sendContactForm from AuthContext
       const response = await sendContactForm(formDataToSend);
-
-      setSubmitMessage('Thank you for your submission! We will get back to you soon.');
+      
+      // Handle success response
+      setSubmitMessage('Thank you for your submission!');
+      console.log('Submission successful:', response);
       
       // Reset form
       setFormData({ name: '', email: '', subject: '', message: '' });
       setAttachedFile(null);
-      setCaptchaValue(null);
-      document.getElementById('file-input').value = '';
+//setCaptchaValue(null);
+      
+      // Reset file input
+      const fileInput = document.getElementById('file-input');
+      if (fileInput) fileInput.value = '';
+      
+      // Reset CAPTCHA
+      //window.grecaptcha?.reset();
+
     } catch (error) {
-      if (error.message.includes('Maximum upload size exceeded')) {
-        setSubmitMessage('File size exceeds the maximum limit (5MB)');
-      } else if (error.message.includes('Only PDF, DOCX, or image files are allowed')) {
-        setSubmitMessage('Only PDF, DOCX, or image files are allowed');
-      } else if (error.message.includes('Validation failed')) {
-        // Handle backend validation errors
-        if (error.details) {
-          setErrors(error.details);
-        } else {
-          setSubmitMessage('Please fill all required fields correctly');
-        }
+      console.error('Submission error:', error);
+      
+      // Handle different error cases
+      if (error.details && typeof error.details === 'object') {
+        // Field-specific errors (400 validation)
+        setErrors(error.details);
+        setSubmitMessage('Please correct the errors below');
       } else {
+        // General errors (413, 415, etc)
         setSubmitMessage(error.message || 'Submission failed. Please try again.');
       }
     } finally {
@@ -127,7 +172,8 @@ const ContactPage_ = () => {
 
   const removeAttachment = () => {
     setAttachedFile(null);
-    document.getElementById('file-input').value = '';
+    const fileInput = document.getElementById('file-input');
+    if (fileInput) fileInput.value = '';
   };
 
   return (
@@ -245,16 +291,19 @@ const ContactPage_ = () => {
                   </div>
 
                   {/* ReCAPTCHA Component */}
-                  <div className="my-4">
+                  {/*<div className="my-4">
                     <ReCAPTCHA
-                      sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG" // Replace with your actual key
+                      sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG"
                       onChange={(value) => {
                         setCaptchaValue(value);
                         if (errors.captcha) setErrors(prev => ({ ...prev, captcha: '' }));
                       }}
+                      onExpired={() => {
+                        setCaptchaValue(null);
+                      }}
                     />
                     {errors.captcha && <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>}
-                  </div>
+                  </div>*/}
 
                   {/* Submit message display */}
                   {submitMessage && (
@@ -269,9 +318,9 @@ const ContactPage_ = () => {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                   // disabled={isSubmitting || !captchaValue}
                     className={`w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg ${
-                      isSubmitting 
+                      isSubmitting || !captchaValue
                         ? 'bg-gray-400 cursor-not-allowed' 
                         : 'bg-blue-600 hover:bg-blue-700'
                     }`}

@@ -46,9 +46,9 @@ const ContactPage = () => {
     });
 
     // Validate CAPTCHA
-    if (!captchaValue) {
+    {/*if (!captchaValue) {
       newErrors.captcha = 'Please complete the CAPTCHA verification';
-    }
+    }*/}
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -73,7 +73,7 @@ const ContactPage = () => {
       formDataToSend.append('message', formData.message.trim());
       
       // Add CAPTCHA value
-      formDataToSend.append('captcha', captchaValue);
+      //formDataToSend.append('captcha', captchaValue);
 
       // Add optional file if exists
       if (attachedFile) {
@@ -105,14 +105,14 @@ const ContactPage = () => {
       // Reset form
       setFormData({ name: '', email: '', subject: '', message: '' });
       setAttachedFile(null);
-      setCaptchaValue(null);
+//setCaptchaValue(null);
       
       // Reset file input
       const fileInput = document.getElementById('file-input');
       if (fileInput) fileInput.value = '';
       
       // Reset CAPTCHA
-      window.grecaptcha?.reset();
+      //window.grecaptcha?.reset();
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -291,7 +291,7 @@ const ContactPage = () => {
                   </div>
 
                   {/* ReCAPTCHA Component */}
-                  <div className="my-4">
+                  {/*<div className="my-4">
                     <ReCAPTCHA
                       sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG"
                       onChange={(value) => {
@@ -303,7 +303,7 @@ const ContactPage = () => {
                       }}
                     />
                     {errors.captcha && <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>}
-                  </div>
+                  </div>*/}
 
                   {/* Submit message display */}
                   {submitMessage && (
@@ -318,7 +318,7 @@ const ContactPage = () => {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting || !captchaValue}
+                   // disabled={isSubmitting || !captchaValue}
                     className={`w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg ${
                       isSubmitting || !captchaValue
                         ? 'bg-gray-400 cursor-not-allowed' 
