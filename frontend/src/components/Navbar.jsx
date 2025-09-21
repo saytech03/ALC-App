@@ -110,7 +110,7 @@ const Navbar = () => {
             ALC Fenestra
           </Link>
 
-          <Link to="/" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to="/events" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Events
           </Link>
 
@@ -174,7 +174,7 @@ const Navbar = () => {
             </Link>
 
             <Link 
-              to="/" 
+              to="/events" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
