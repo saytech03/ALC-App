@@ -35,59 +35,169 @@ class AuthService {
     }
   }
 
-// src/services/authService.js
-// Updated sendContactForm method for authService.js
-async sendContactForm(formData) {
-  try {
-    // Add timeout mechanism
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+  // NEW: Admin Login API
+  async adminLogin(credentials) {
+  const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.ADMIN_LOGIN, {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+  
+  if (response.token) {
+    // Create admin user object similar to regular login structure
+    const adminUser = {
+      username: credentials.username,
+      token: response.token,
+      isAdmin: true,
+      // Add any other admin-specific properties from response if available
+      ...(response.user || {}) // Include any user data from response
+    };
+    
+    // Store admin data similar to regular login
+    localStorage.setItem('adminUser', JSON.stringify(adminUser));
+    localStorage.setItem('adminToken', response.token);
+    
+    // Also store in a consistent format with regular user for compatibility
+    if (response.user) {
+      localStorage.setItem('admin_data', JSON.stringify(response.user));
+    }
+    
+    return {
+      success: true,
+      token: response.token,
+      user: adminUser // Return user object similar to regular login
+    };
+  }
+  
+  return {
+    success: false,
+    message: response.message || 'Admin login failed'
+  };
+}
 
-    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
-      method: 'POST',
-      body: formData,
-      signal: controller.signal,
-      headers: {
-        'Accept': 'application/json'
+  // NEW: Create Blog API (Admin Only)
+  async createBlog(blogData, adminToken) {
+    const formData = new FormData();
+    
+    // Add basic fields
+    formData.append('title', blogData.title);
+    formData.append('author', blogData.author);
+    
+    // Add sections with their content
+    blogData.sections.forEach((section, index) => {
+      formData.append(`sections[${index}].heading`, section.heading);
+      if (section.subHeading) {
+        formData.append(`sections[${index}].subHeading`, section.subHeading);
+      }
+      if (section.body) {
+        formData.append(`sections[${index}].body`, section.body);
+      }
+      
+      // Add images for this section
+      if (section.images && section.images.length > 0) {
+        section.images.forEach((image, imgIndex) => {
+          formData.append(`sections[${index}].images`, image);
+        });
+      }
+      
+      // Add references for this section
+      if (section.references && section.references.length > 0) {
+        section.references.forEach((reference, refIndex) => {
+          formData.append(`sections[${index}].references[${refIndex}]`, reference);
+        });
       }
     });
 
-    clearTimeout(timeoutId);
+    return await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.CREATE}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+      },
+      body: formData,
+    }).then(response => response.json());
+  }
 
-    if (!response.ok) {
-      let errorData;
-      try {
-        errorData = await response.json();
-      } catch {
-        errorData = { message: await response.text() };
+  // NEW: Get all blogs API
+  async getAllBlogs() {
+    return await this.request(API_CONFIG.ENDPOINTS.BLOG.GET_ALL, {
+      method: 'GET',
+    });
+  }
+
+  // NEW: Get a blog using blog_id (Admin Only)
+  async getBlogById(blogId, adminToken) {
+    return await this.request(`${API_CONFIG.ENDPOINTS.BLOG.GET_BY_ID}/${blogId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+      },
+    });
+  }
+
+  // NEW: Application Health API
+  async checkHealth() {
+    return await this.request(API_CONFIG.ENDPOINTS.HEALTH, {
+      method: 'GET',
+    });
+  }
+
+  // NEW: Password Update API
+  async updatePassword(passwordData) {
+    return await this.request(API_CONFIG.ENDPOINTS.AUTH.PASSWORD_UPDATE, {
+      method: 'POST',
+      body: JSON.stringify(passwordData),
+    });
+  }
+
+  async sendContactForm(formData) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 100000);
+
+      const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch {
+          errorData = { message: await response.text() };
+        }
+
+        const error = new Error(errorData.message || `Request failed with status ${response.status}`);
+        error.status = response.status;
+        error.details = errorData.details || errorData.errors;
+        throw error;
       }
 
-      const error = new Error(errorData.message || `Request failed with status ${response.status}`);
-      error.status = response.status;
-      error.details = errorData.details || errorData.errors;
-      throw error;
+      return await response.json();
+
+    } catch (error) {
+      console.error('Contact submission error:', error);
+      
+      let userMessage = 'Submission failed. Please try again.';
+      if (error.name === 'AbortError') {
+        userMessage = 'Request timed out. Please try again.';
+      } else if (error.message.includes('Failed to fetch')) {
+        userMessage = 'Network error. Please check your internet connection.';
+      } else if (error.details) {
+        userMessage = Object.values(error.details).join(', ');
+      }
+
+      const enhancedError = new Error(userMessage);
+      enhancedError.status = error.status;
+      enhancedError.details = error.details;
+      throw enhancedError;
     }
-
-    return await response.json();
-
-  } catch (error) {
-    console.error('Contact submission error:', error);
-    
-    let userMessage = 'Submission failed. Please try again.';
-    if (error.name === 'AbortError') {
-      userMessage = 'Request timed out. Please try again.';
-    } else if (error.message.includes('Failed to fetch')) {
-      userMessage = 'Network error. Please check your internet connection.';
-    } else if (error.details) {
-      userMessage = Object.values(error.details).join(', ');
-    }
-
-    const enhancedError = new Error(userMessage);
-    enhancedError.status = error.status;
-    enhancedError.details = error.details;
-    throw enhancedError;
   }
-}
 
   async register(userData) {
     const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.REGISTER, {
@@ -121,7 +231,8 @@ async sendContactForm(formData) {
         id: response.id,
         name: response.name,
         email: response.email,
-        occupation: response.occupation
+        occupation: response.occupation,
+        profileImageUrl: response.profileImageUrl || null // Ensure this field exists
       };
       localStorage.setItem('user_data', JSON.stringify(userData));
       
@@ -145,7 +256,8 @@ async sendContactForm(formData) {
       const currentUser = {
         email: response.user.email,
         token: response.token,
-        ...response.user
+        ...response.user,
+        profileImageUrl: response.user.profileImageUrl // Ensure it's explicitly stored
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       localStorage.setItem('auth_token', response.token);
@@ -165,7 +277,8 @@ async sendContactForm(formData) {
       const currentUser = {
         email: response.user.email,
         token: response.token,
-        ...response.user
+        ...response.user,
+        profileImageUrl: response.user.profileImageUrl // Ensure it's explicitly stored
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       localStorage.setItem('auth_token', response.token);
@@ -189,7 +302,7 @@ async sendContactForm(formData) {
       name: response.name,
       email: response.email,
       occupation: response.occupation,
-      profileImageUrl: response.profileImageUrl
+      profileImageUrl: response.profileImageUrl || null
     };
   }
 
@@ -231,7 +344,7 @@ async sendContactForm(formData) {
           ...currentUser,
           name: responseData.name,
           occupation: responseData.occupation,
-          profileImageUrl: responseData.profileImageUrl
+          profileImageUrl: responseData.profileImageUrl || null
         };
 
         localStorage.setItem('currentUser', JSON.stringify(updatedUser));
@@ -277,12 +390,22 @@ async sendContactForm(formData) {
     return localStorage.getItem('auth_token');
   }
 
+  // NEW: Get admin token
+  getAdminToken() {
+    return localStorage.getItem('adminToken');
+  }
+
   logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('temp_user_email');
     localStorage.removeItem('registration_pending');
+  }
+
+  // NEW: Admin logout
+  adminLogout() {
+    localStorage.removeItem('adminToken');
   }
 }
 

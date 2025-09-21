@@ -507,34 +507,34 @@ const HomePage_ = () => {
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4">
           {/* Quote Section */}
-          <div className="mb-16 text-center backdrop-blur-md bg-black/30 p-8 rounded-lg"> 
-          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed">  
+        <div className="mb-16 text-center backdrop-blur-md bg-black/40 p-8 rounded-xl border border-white/10">
+          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed font-light">  
             "{dailyQuote.text}"
           </blockquote>
-          <cite className="text-xl md:text-2xl font-serif text-white">  
+          <cite className="text-xl md:text-2xl font-serif text-white font-medium tracking-wide">  
             - {dailyQuote.author}
           </cite>
         </div>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             {/* Left Side - Text Content */}
-             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-8 rounded-lg">
-            <div className="text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white" style={{fontFamily: 'Arial, sans-serif'}}>
-                Empowering<br/>
-                Artists<br/>
-                Legally
-              </h1>
-              <p className="text-lg text-white mb-8 leading-relaxed">
-                Our mission is to provide a platform for building discourse on Art Law 
-                for serving artists, lawyers, and students of both law and art 
-                disciplines, including art market professionals and members of the 
-                general public. Importantly, this communion will attempt to bridge 
-                the gap between the artistic and the legal community.
-              </p>
-            </div>
-            </div>
+             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/40 p-8 rounded-xl border border-white/10">
+      <div className="text-left">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight tracking-tight">
+          Empowering<br className="hidden md:block"/>
+          Artists<br className="hidden md:block"/>
+          Legally
+        </h1>
+        <p className="text-lg text-white/90 mb-8 leading-relaxed font-light">
+          Our mission is to provide a platform for building discourse on Art Law 
+          for serving artists, lawyers, and students of both law and art 
+          disciplines, including art market professionals and members of the 
+          general public. Importantly, this communion will attempt to bridge 
+          the gap between the artistic and the legal community.
+        </p>
+      </div>
+    </div>
 
             {/* Right Side - 3D Animated Cube */}
             <div className="flex justify-center md:justify-end mr-22">
@@ -603,7 +603,8 @@ const HomePage_ = () => {
 
       {/* Enhanced Magnifying Glass Icon with Keywords */}
       {!showChatbot && (
-        <div className="fixed bottom-8 right-8 z-40 flex flex-col items-center">
+        <div className="absolute bottom-8 right-8 z-40 flex flex-col items-center">
+          <div className="flex">
           <button 
             onClick={() => setShowChatbot(true)}
             className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
@@ -627,107 +628,7 @@ const HomePage_ = () => {
             </p>
           </div>
           </button>
-        </div>
-      )}
-
-      {/* Music Player Button */}
-      {!showMusicPlayer && (
-        <div className="fixed bottom-8 left-8 z-40 flex flex-col items-center">
-          <button 
-            onClick={() => setShowMusicPlayer(true)}
-            className="rounded-full p-3 shadow-xl transition-all duration-300 hover:scale-110 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 border-none mb-2"
-            aria-label="Open music player"
-          >
-            <Music className="w-6 h-6 text-white" />
-          </button>
-          <div className="text-center">
-            <p className="text-white text-sm font-medium px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
-              PLAY MUSIC
-            </p>
           </div>
-        </div>
-      )}
-
-      {/* Music Player Search Bar */}
-      {showMusicPlayer && (
-        <div className="fixed bottom-8 left-8 z-50 w-80 bg-white/95 backdrop-blur-lg shadow-2xl rounded-lg p-4 border border-gray-200">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-medium">Music Player</h3>
-            <button 
-              onClick={() => {
-                setShowMusicPlayer(false);
-                setIsPlaying(false);
-                setSearchQuery('');
-                setSongs([]);
-              }}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          
-          {/* Search Input */}
-          <div className="flex mb-4">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for songs..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              onKeyPress={(e) => e.key === 'Enter' && searchSongs()}
-            />
-            <button 
-              onClick={searchSongs}
-              className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors"
-            >
-              Search
-            </button>
-          </div>
-          
-          {/* Song Results */}
-          {songs.length > 0 && (
-            <div className="max-h-60 overflow-y-auto mb-4">
-              {songs.map(song => (
-                <div 
-                  key={song.id} 
-                  className={`p-3 hover:bg-gray-100 rounded-lg cursor-pointer ${currentSong?.id === song.id ? 'bg-purple-50' : ''}`}
-                  onClick={() => playSong(song)}
-                >
-                  <div className="font-medium">{song.title}</div>
-                  <div className="text-sm text-gray-600">{song.artist}</div>
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Now Playing */}
-          {currentSong && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-medium">{currentSong.title}</div>
-                  <div className="text-sm text-gray-600">{currentSong.artist}</div>
-                </div>
-                <button 
-                  onClick={togglePlayPause}
-                  className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-700"
-                >
-                  {isPlaying ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 20H6V4H10V20ZM18 20H14V4H18V20Z" fill="currentColor"/>
-                    </svg>
-                  ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.5 12L6 20V4L19.5 12Z" fill="currentColor"/>
-                    </svg>
-                  )}
-                </button>
-              </div>
-              <audio ref={audioRef} hidden />
-            </div>
-          )}
         </div>
       )}
 

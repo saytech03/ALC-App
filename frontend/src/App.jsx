@@ -2,6 +2,8 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import HomePage_ from "./pages/HomePage_";
 import LoginPage from "./pages/LoginPage";
+import AdminLoginPage from "./admin/AdminLoginPage";
+import Adcontrol from "./admin/AdminControlPage"; 
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
 import { Toaster } from "react-hot-toast";
@@ -18,14 +20,25 @@ import AboutPage from "./pages/AboutPage";
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
 import OtpVerify from "./pages/OtpVerify";
+import CreateBlog from "./admin/CreateBlog";
 import useDocumentTitle from './hooks/useDocumentTitle';
 
-// Auth protection component
+// Auth protection component (unchanged)
 const RequireAuth = ({ children }) => {
   const user = localStorage.getItem('currentUser');
   if (!user) {
     // Redirect to login if no user found
     return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// Enhanced Admin auth protection component
+const RequireAdminAuth = ({ children }) => {
+  const user1 = localStorage.getItem('adminUser');
+  if (!user1) {
+    // Redirect to login if no user found
+    return <Navigate to="/admin" replace />;
   }
   return children;
 };
@@ -80,12 +93,28 @@ function App() {
           {/* Public routes */}
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/admin' element={<AdminLoginPage />} />
           <Route path='/signup' element={<SignUpPage />} />
           <Route path="/otp" element={<OtpVerify />} />
           <Route path='/bl' element={ <Blog />} />
           <Route path='/member' element={<MembersPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/au' element={ <AboutPage />} />
+          
+          {/* Admin routes - protected by admin authentication */}
+          <Route path='/acp' element={
+            <RequireAdminAuth>
+              <Adcontrol />
+            </RequireAdminAuth>
+          } />
+          
+          <Route path='/cb' element={
+            <RequireAdminAuth>
+              <CreateBlog />
+            </RequireAdminAuth>
+          } />
+          
+          {/* User routes - protected by regular user authentication */}
           <Route path='/h' element={
             <RequireAuth>
               <HomePage_ />
