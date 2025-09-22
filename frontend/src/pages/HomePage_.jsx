@@ -488,7 +488,7 @@ const HomePage_ = () => {
       {imgLoading && (
         <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
       )}
-      <AltNavbar/>
+      <Navbar/>
       
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
       {imgLoading && (
@@ -506,40 +506,146 @@ const HomePage_ = () => {
             
         {/* Content */}
         <div className="relative z-10 max-w-6xl mx-auto px-4">
-          {/* Quote Section */}
-        <div className="mb-16 text-center backdrop-blur-md bg-black/40 p-8 rounded-xl border border-white/10">
-          <blockquote className="text-2xl md:text-3xl italic font-serif text-white mb-6 max-w-4xl mx-auto leading-relaxed font-light">  
-            "{dailyQuote.text}"
-          </blockquote>
-          <cite className="text-xl md:text-2xl font-serif text-white font-medium tracking-wide">  
-            - {dailyQuote.author}
-          </cite>
-        </div>
+          {/* Quote Section - Made responsive */}
+          <div className="mb-8 md:mb-16 text-center backdrop-blur-md bg-black/40 p-4 md:p-8 rounded-xl border border-white/10">
+            <blockquote className="text-lg md:text-2xl lg:text-3xl italic font-serif text-white mb-4 md:mb-6 max-w-4xl mx-auto leading-relaxed font-light">  
+              "{dailyQuote.text}"
+            </blockquote>
+            <cite className="text-base md:text-xl lg:text-2xl font-serif text-white font-medium tracking-wide">  
+              - {dailyQuote.author}
+            </cite>
+          </div>
 
-          {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          {/* Main Content Grid - Stack on mobile */}
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-16 items-center">
             {/* Left Side - Text Content */}
-             <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/40 p-8 rounded-xl border border-white/10">
-      <div className="text-left">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white leading-tight tracking-tight">
-          Empowering<br className="hidden md:block"/>
-          Artists<br className="hidden md:block"/>
-          Legally
-        </h1>
-        <p className="text-lg text-white/90 mb-8 leading-relaxed font-light">
-          Our mission is to provide a platform for building discourse on Art Law 
-          for serving artists, lawyers, and students of both law and art 
-          disciplines, including art market professionals and members of the 
-          general public. Importantly, this communion will attempt to bridge 
-          the gap between the artistic and the legal community.
-        </p>
-      </div>
-    </div>
+            <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/40 p-4 md:p-8 rounded-xl border border-white/10">
+              <div className="text-left">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 text-white leading-tight tracking-tight">
+                  Empowering<br className="hidden md:block"/>
+                  Artists<br className="hidden md:block"/>
+                  Legally
+                </h1>
+                <p className="text-sm md:text-base lg:text-lg text-white/90 mb-6 md:mb-8 leading-relaxed font-light">
+                  Our mission is to provide a platform for building discourse on Art Law 
+                  for serving artists, lawyers, and students of both law and art 
+                  disciplines, including art market professionals and members of the 
+                  general public. Importantly, this communion will attempt to bridge 
+                  the gap between the artistic and the legal community.
+                </p>
+              </div>
+            </div>
 
-            {/* Right Side - 3D Animated Cube */}
-            <div className="flex justify-center md:justify-end mr-22">
+            {/* Right Side - 3D Animated Cube - Responsive sizing */}
+            <div className="flex justify-center md:justify-end">
               <div className="relative">
-                {/* 3D Animated Cube */}
+                {/* 3D Animated Cube - Responsive sizing */}
+                <div className="cube-container w-40 h-40 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
+                  <div className="cube">
+                    <div className="face front">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                        <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                          We would love to hear from you!
+                        </div>
+                      </div>
+                    </div>
+                    <div className="face back">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                        <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                         Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
+                        </div>
+                      </div>
+                    </div>
+                    <div className="face right">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                        <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                          We would love to hear from you!
+                        </div>
+                      </div>
+                    </div>
+                    <div className="face left">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                        <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                         Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
+                        </div>
+                      </div>
+                    </div>
+                    <div className="face top">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                       <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                          We would love to hear from you!
+                        </div>
+                      </div>
+                    </div>
+                    <div className="face bottom">
+                      <div className="text-center text-white p-2 md:p-4 lg:p-6">
+                         <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
+                         Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Magnifying Glass Icon with Keywords - Responsive positioning */}
+      {!showChatbot && (
+        <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-40 flex flex-col items-center">
+          <div className="flex">
+          <button 
+            onClick={() => setShowChatbot(true)}
+            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
+            aria-label="Open chatbot"
+          >
+            {/* Custom PNG Image - will maintain original colors and shape */}
+            <img 
+              src="/transparency.png" 
+              alt="Open Chatbot" 
+              className="w-12 h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
+              style={{
+                filter: 'brightness(0) invert(1)',
+                transition: 'filter 0.3s ease'
+              }}
+            />
+          
+          {/* Keywords below the icon */}
+          <div className="text-center" >
+            <p className="text-white text-xs md:text-sm font-medium px-2 md:px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
+              ASK ARTLEX!
+            </p>
+          </div>
+          </button>
+          </div>
+        </div>
+      )}
+
+      {/* Chatbot Sidebar with click-outside detection - Responsive width */}
+      <div 
+        ref={chatSidebarRef}
+        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
+      >
+        <div className="h-full flex flex-col">
+          {/* Chatbot Header */}
+          <div className="bg-black text-white p-4 flex justify-between items-center border-b border-gray-700">
+            <h3 className="text-lg font-medium tracking-tight">Art Law Assistant</h3>
+            <button 
+              onClick={() => setShowChatbot(false)}
+              className="text-white/70 hover:text-white transition-colors duration-200"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          
+         {/* Right Side - 3D Animated Cube - ORIGINAL SIZE PRESERVED */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* 3D Animated Cube - EXACTLY AS BEFORE */}
                 <div className="cube-container">
                   <div className="cube">
                     <div className="face front">
@@ -597,67 +703,7 @@ const HomePage_ = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Enhanced Magnifying Glass Icon with Keywords */}
-      {!showChatbot && (
-        <div className="absolute bottom-8 right-8 z-40 flex flex-col items-center">
-          <div className="flex">
-          <button 
-            onClick={() => setShowChatbot(true)}
-            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
-            aria-label="Open chatbot"
-          >
-            {/* Custom PNG Image - will maintain original colors and shape */}
-            <img 
-              src="/transparency.png" 
-              alt="Open Chatbot" 
-              className="w-18 h-18 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
-              style={{
-                filter: 'brightness(0) invert(1)',
-                transition: 'filter 0.3s ease'
-              }}
-            />
-          
-          {/* Keywords below the icon */}
-          <div className="text-center" >
-            <p className="text-white text-sm font-medium px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
-              ASK ARTLEX!
-            </p>
-          </div>
-          </button>
-          </div>
-        </div>
-      )}
-
-      {/* Chatbot Sidebar with click-outside detection */}
-      <div 
-        ref={chatSidebarRef}
-        className={`fixed inset-y-0 right-0 w-80 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
-      >
-        <div className="h-full flex flex-col">
-          {/* Chatbot Header */}
-          <div className="bg-black text-white p-4 flex justify-between items-center border-b border-gray-700">
-            <h3 className="text-lg font-medium tracking-tight">Art Law Assistant</h3>
-            <button 
-              onClick={() => setShowChatbot(false)}
-              className="text-white/70 hover:text-white transition-colors duration-200"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          
-          {/* Chatbot Messages Area */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
-            <div className="bg-gray-100 rounded-xl p-3 max-w-xs">
-              <p className="text-gray-800">Hello! How can I help you with art law today?</p>
-            </div>
-          </div>
-          
           {/* Chatbot Input Area */}
           <div className="border-t border-gray-200 p-4 bg-white/50">
             <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
@@ -679,7 +725,8 @@ const HomePage_ = () => {
         </div>
       </div>
 
-      {/* CSS for 3D Cube Animation */}
+      {/* CSS for 3D Cube Animation - Made responsive */}
+      {/* CSS for 3D Cube Animation - EXACTLY AS BEFORE */}
       <style jsx>{`
         .cube-container {
           width: 250px;
@@ -749,6 +796,13 @@ const HomePage_ = () => {
 
         .cube:hover {
           animation-play-state: paused;
+        }
+
+        /* Mobile adjustments for cube container only */
+        @media (max-width: 1024px) {
+          .cube-container {
+            margin: 0 auto;
+          }
         }
       `}</style>
     </div>

@@ -16,7 +16,7 @@ const EventsPage = () => {
       
       {/* Minimalist background with subtle pattern */}
       <div 
-        className="absolute inset-0 bg-gray-300 opacity-100 z-0"
+        className="absolute inset-0 bg-gray-600 opacity-100 z-0"
         style={{
           backgroundImage: `radial-gradient(circle at 25% 25%, rgba(30, 30, 40, 0.8) 0%, transparent 50%),
                             radial-gradient(circle at 75% 75%, rgba(20, 20, 30, 0.6) 0%, transparent 50%)`,
@@ -54,7 +54,7 @@ const EventsPage = () => {
                   <p className="text-gray-200 text-sm mb-4 leading-tight">
                     Dr. Shubha Majumdar, Superintending Archaeologist at ASI, provided an insider's view into heritage conservation challenges, legal protections, and ASI's role in safeguarding India's cultural legacy.
                   </p>
-                  <Link to="/login" className="inline-block text-blue-400 hover:text-blue-300 text-xs px-3 py-1.5 rounded bg-gray-700/50 hover:bg-gray-700/70 transition-colors">
+                  <Link to="/event1" className="inline-block text-blue-400 hover:text-blue-300 text-xs px-3 py-1.5 rounded bg-gray-700/50 hover:bg-gray-700/70 transition-colors">
                     CLICK HERE for event report
                   </Link>
                 </div>

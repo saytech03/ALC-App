@@ -23,6 +23,7 @@ import OtpVerify from "./pages/OtpVerify";
 import CreateBlog from "./admin/CreateBlog";
 import useDocumentTitle from './hooks/useDocumentTitle';
 import EventsPage from "./pages/Events";
+import Event1 from "./pages/Event1";
 
 // Auth protection component (unchanged)
 const RequireAuth = ({ children }) => {
@@ -102,6 +103,7 @@ function App() {
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/au' element={ <AboutPage />} />
           <Route path='/events' element={ <EventsPage />} />
+          <Route path='/event1' element={ <Event1 />} />    
           
           {/* Admin routes - protected by admin authentication */}
           <Route path='/acp' element={
