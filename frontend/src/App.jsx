@@ -23,6 +23,7 @@ import OtpVerify from "./pages/OtpVerify";
 import CreateBlog from "./admin/CreateBlog";
 import useDocumentTitle from './hooks/useDocumentTitle';
 import EventsPage from "./pages/Events";
+import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
 
 // Auth protection component (unchanged)
@@ -146,6 +147,12 @@ function App() {
           <Route path='/auh' element={
             <RequireAuth>
               <AboutPage_ />
+            </RequireAuth>
+          } />
+
+          <Route path='/eventsh' element={
+            <RequireAuth>
+              <EventsPage_ />
             </RequireAuth>
           } />
           
