@@ -645,7 +645,7 @@ const AltNavbar = () => {
           <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             ALC Fenestra
           </Link>
-          <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to="/eventsh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Events
           </Link>
           <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
