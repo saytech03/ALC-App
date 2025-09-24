@@ -76,10 +76,14 @@ const SignUpPage = () => {
             const response = await register(registrationData);
             
             if (response && (response.success || response.id)) {
+                // Only navigate to OTP page, don't consider registration complete yet
                 navigate('/otp', { 
-                    state: { email: email.trim().toLowerCase() } 
+                    state: { 
+                        email: email.trim().toLowerCase(),
+                        registrationData: registrationData
+                    } 
                 });
-                toast.success('Registration successful! Please verify your email.');
+                toast.success('OTP sent to your email. Please verify to activate your account.');
             } else {
                 setError(response?.message || 'Registration failed');
             }
@@ -96,6 +100,7 @@ const SignUpPage = () => {
                         toast.error('Invalid user content');
                         break;
                     case 409:
+                        // Show "Email already registered" for case 409 error
                         toast.error('Email already registered');
                         break;
                     case 422:
@@ -108,8 +113,10 @@ const SignUpPage = () => {
             } else if (error.message) {
                 const lowerMessage = error.message.toLowerCase();
                 
+                // Show "Email already registered" for case 409 OR if verified is false
                 if (lowerMessage.includes('email already registered') || 
-                    (lowerMessage.includes('email') && lowerMessage.includes('exist'))) {
+                    (lowerMessage.includes('email') && lowerMessage.includes('exist')) ||
+                    (lowerMessage.includes('verified') && lowerMessage.includes('true'))) {
                     toast.error('Email already registered');
                 } else if (lowerMessage.includes('invalid') || 
                            lowerMessage.includes('validation') ||

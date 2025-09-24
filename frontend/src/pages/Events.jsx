@@ -101,12 +101,6 @@ const EventsPage = () => {
                         <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
                           {event.category}
                         </span>
-                        {event.requiresLogin && (
-                          <span className="text-yellow-400 text-xs font-semibold flex items-center">
-                            <Lock className="w-3 h-3 mr-1" />
-                            Login Required
-                          </span>
-                        )}
                       </div>
                       
                       <h2 className="text-white text-xl md:text-2xl font-light mb-3 hover:text-blue-300 transition-colors">
@@ -142,11 +136,6 @@ const EventsPage = () => {
                           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </button>
                         
-                        {event.requiresLogin && (
-                          <span className="text-xs text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded">
-                            Member Exclusive
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -180,11 +169,6 @@ const EventsPage = () => {
               <p className="text-gray-600 mb-4">
                 Please login to access detailed event reports and exclusive content.
               </p>
-              {selectedEvent && (
-                <p className="text-sm text-gray-500 italic">
-                  "{selectedEvent.title}"
-                </p>
-              )}
             </div>
             
             <div className="flex justify-center gap-4">
@@ -202,14 +186,6 @@ const EventsPage = () => {
               </button>
             </div>
             
-            <div className="text-center mt-4">
-              <p className="text-sm text-gray-500">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
-                  Sign up for free
-                </Link>
-              </p>
-            </div>
           </div>
         </div>
       )}

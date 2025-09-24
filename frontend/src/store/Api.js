@@ -1,6 +1,6 @@
 // src/config/api.js
 const API_CONFIG = {
-  BASE_URL: 'https://alc-backend.onrender.com',
+  BASE_URL: 'http://localhost:8055',
   ENDPOINTS: {
     AUTH: {
       REGISTER: '/api/auth/register',
