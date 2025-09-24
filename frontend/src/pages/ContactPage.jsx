@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Paperclip, X } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../store/AuthContext';
-import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactPage = () => {
   const { sendContactForm } = useAuth();
@@ -18,12 +17,12 @@ const ContactPage = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [errors, setErrors] = useState({});
 
- const subjectOptions = [
-  { label: 'Remarks', value: 'REMARKS' },
-  { label: 'Collaboration', value: 'COLLABORATION' },
-  { label: 'Blog Submission', value: 'BLOG_SUBMISSION' },
-  { label: 'Others', value: 'OTHERS' }
-];
+  const subjectOptions = [
+    { label: 'Remarks', value: 'REMARKS' },
+    { label: 'Collaboration', value: 'COLLABORATION' },
+    { label: 'Blog Submission', value: 'BLOG_SUBMISSION' },
+    { label: 'Others', value: 'OTHERS' }
+  ];
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
@@ -45,11 +44,6 @@ const ContactPage = () => {
       if (!formData[field]?.trim()) newErrors[field] = message;
     });
 
-    // Validate CAPTCHA
-    {/*if (!captchaValue) {
-      newErrors.captcha = 'Please complete the CAPTCHA verification';
-    }*/}
-
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
@@ -65,14 +59,15 @@ const ContactPage = () => {
 
     try {
       const contactData = {
-  name: formData.name.trim(),
-  email: formData.email.trim(),
-  subject: formData.subject,
-  message: formData.message.trim(),
-  blogFile: attachedFile // This will be handled automatically
-};
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject, // Now this is just the string value
+        message: formData.message.trim(),
+        blogFile: attachedFile
+      };
 
-const response = await sendContactForm(contactData);      
+      const response = await sendContactForm(contactData);      
+      
       // Handle success response
       setSubmitMessage('Thank you for your submission!');
       console.log('Submission successful:', response);
@@ -80,25 +75,18 @@ const response = await sendContactForm(contactData);
       // Reset form
       setFormData({ name: '', email: '', subject: '', message: '' });
       setAttachedFile(null);
-//setCaptchaValue(null);
       
       // Reset file input
       const fileInput = document.getElementById('file-input');
       if (fileInput) fileInput.value = '';
-      
-      // Reset CAPTCHA
-      //window.grecaptcha?.reset();
 
     } catch (error) {
       console.error('Submission error:', error);
       
-      // Handle different error cases
       if (error.details && typeof error.details === 'object') {
-        // Field-specific errors (400 validation)
         setErrors(error.details);
         setSubmitMessage('Please correct the errors below');
       } else {
-        // General errors (413, 415, etc)
         setSubmitMessage(error.message || 'Submission failed. Please try again.');
       }
     } finally {
@@ -120,8 +108,6 @@ const response = await sendContactForm(contactData);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Client-side validation (also validated by backend)
-
       setAttachedFile(file);
       setSubmitMessage('');
     }
@@ -191,7 +177,9 @@ const response = await sendContactForm(contactData);
                     >
                       <option value="" disabled>Select a subject</option>
                       {subjectOptions.map((option) => (
-                        <option key={option} value={option}> {option.label}</option>
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
                       ))}
                     </select>
                     {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
@@ -247,22 +235,6 @@ const response = await sendContactForm(contactData);
                     {errors.blogFile && <p className="mt-1 text-sm text-red-600">{errors.blogFile}</p>}
                   </div>
 
-                  {/* ReCAPTCHA Component */}
-                  {/*<div className="my-4">
-                    <ReCAPTCHA
-                      sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG"
-                      onChange={(value) => {
-                        setCaptchaValue(value);
-                        if (errors.captcha) setErrors(prev => ({ ...prev, captcha: '' }));
-                      }}
-                      onExpired={() => {
-                        setCaptchaValue(null);
-                      }}
-                    />
-                    {errors.captcha && <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>}
-                  </div>*/}
-
-                  {/* Submit message display */}
                   {submitMessage && (
                     <div className={`mt-2 p-3 rounded-lg text-center ${
                       submitMessage.includes('Thank you') 
@@ -275,9 +247,9 @@ const response = await sendContactForm(contactData);
 
                   <button
                     type="submit"
-                   // disabled={isSubmitting || !captchaValue}
+                    disabled={isSubmitting}
                     className={`w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg ${
-                      isSubmitting || !captchaValue
+                      isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed' 
                         : 'bg-blue-600 hover:bg-blue-700'
                     }`}

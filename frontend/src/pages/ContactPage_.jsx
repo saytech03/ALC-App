@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Paperclip, X } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
 import { useAuth } from '../store/AuthContext';
-import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactPage_ = () => {
   const { sendContactForm } = useAuth();
@@ -19,10 +18,10 @@ const ContactPage_ = () => {
   const [errors, setErrors] = useState({});
 
   const subjectOptions = [
-    'Remarks',
-    'Collaborations',
-    'Blog Submissions',
-    'Others'
+    { label: 'Remarks', value: 'REMARKS' },
+    { label: 'Collaboration', value: 'COLLABORATION' },
+    { label: 'Blog Submission', value: 'BLOG_SUBMISSION' },
+    { label: 'Others', value: 'OTHERS' }
   ];
 
   const handleContactSubmit = async (e) => {
@@ -45,11 +44,6 @@ const ContactPage_ = () => {
       if (!formData[field]?.trim()) newErrors[field] = message;
     });
 
-    // Validate CAPTCHA
-    {/*if (!captchaValue) {
-      newErrors.captcha = 'Please complete the CAPTCHA verification';
-    }*/}
-
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
@@ -64,39 +58,15 @@ const ContactPage_ = () => {
     setIsSubmitting(true);
 
     try {
-      const formDataToSend = new FormData();
-      
-      // Add all required fields
-      formDataToSend.append('name', formData.name.trim());
-      formDataToSend.append('email', formData.email.trim());
-      formDataToSend.append('subject', formData.subject);
-      formDataToSend.append('message', formData.message.trim());
-      
-      // Add CAPTCHA value
-      //formDataToSend.append('captcha', captchaValue);
+      const contactData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject, // Now this is just the string value
+        message: formData.message.trim(),
+        blogFile: attachedFile
+      };
 
-      // Add optional file if exists
-      if (attachedFile) {
-        // Client-side validation (matches API requirements)
-        const allowedTypes = [
-          'application/pdf',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'image/jpeg',
-          'image/png'
-        ];
-        
-        if (!allowedTypes.includes(attachedFile.type)) {
-          throw new Error('Only PDF, DOCX, JPEG or PNG files allowed');
-        }
-
-        if (attachedFile.size > 5 * 1024 * 1024) { // 5MB
-          throw new Error('File size exceeds 5MB limit');
-        }
-
-        formDataToSend.append('blogFile', attachedFile);
-      }
-
-      const response = await sendContactForm(formDataToSend);
+      const response = await sendContactForm(contactData);      
       
       // Handle success response
       setSubmitMessage('Thank you for your submission!');
@@ -105,25 +75,18 @@ const ContactPage_ = () => {
       // Reset form
       setFormData({ name: '', email: '', subject: '', message: '' });
       setAttachedFile(null);
-//setCaptchaValue(null);
       
       // Reset file input
       const fileInput = document.getElementById('file-input');
       if (fileInput) fileInput.value = '';
-      
-      // Reset CAPTCHA
-      //window.grecaptcha?.reset();
 
     } catch (error) {
       console.error('Submission error:', error);
       
-      // Handle different error cases
       if (error.details && typeof error.details === 'object') {
-        // Field-specific errors (400 validation)
         setErrors(error.details);
         setSubmitMessage('Please correct the errors below');
       } else {
-        // General errors (413, 415, etc)
         setSubmitMessage(error.message || 'Submission failed. Please try again.');
       }
     } finally {
@@ -145,26 +108,6 @@ const ContactPage_ = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Client-side validation (also validated by backend)
-      const allowedTypes = [
-        'application/pdf', 
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'image/jpeg',
-        'image/png'
-      ];
-      
-      if (file.size > 5 * 1024 * 1024) { // 5MB
-        setSubmitMessage('File size exceeds the maximum limit (5MB)');
-        e.target.value = '';
-        return;
-      }
-
-      if (!allowedTypes.includes(file.type)) {
-        setSubmitMessage('Only PDF, DOCX, JPEG, or PNG files are allowed');
-        e.target.value = '';
-        return;
-      }
-
       setAttachedFile(file);
       setSubmitMessage('');
     }
@@ -234,7 +177,9 @@ const ContactPage_ = () => {
                     >
                       <option value="" disabled>Select a subject</option>
                       {subjectOptions.map((option) => (
-                        <option key={option} value={option}>{option}</option>
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
                       ))}
                     </select>
                     {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
@@ -290,22 +235,6 @@ const ContactPage_ = () => {
                     {errors.blogFile && <p className="mt-1 text-sm text-red-600">{errors.blogFile}</p>}
                   </div>
 
-                  {/* ReCAPTCHA Component */}
-                  {/*<div className="my-4">
-                    <ReCAPTCHA
-                      sitekey="6LfTAI4rAAAAAPzU2uSLCaGutMd3J-gOjfY8N5EG"
-                      onChange={(value) => {
-                        setCaptchaValue(value);
-                        if (errors.captcha) setErrors(prev => ({ ...prev, captcha: '' }));
-                      }}
-                      onExpired={() => {
-                        setCaptchaValue(null);
-                      }}
-                    />
-                    {errors.captcha && <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>}
-                  </div>*/}
-
-                  {/* Submit message display */}
                   {submitMessage && (
                     <div className={`mt-2 p-3 rounded-lg text-center ${
                       submitMessage.includes('Thank you') 
@@ -318,9 +247,9 @@ const ContactPage_ = () => {
 
                   <button
                     type="submit"
-                   // disabled={isSubmitting || !captchaValue}
+                    disabled={isSubmitting}
                     className={`w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg ${
-                      isSubmitting || !captchaValue
+                      isSubmitting
                         ? 'bg-gray-400 cursor-not-allowed' 
                         : 'bg-blue-600 hover:bg-blue-700'
                     }`}
