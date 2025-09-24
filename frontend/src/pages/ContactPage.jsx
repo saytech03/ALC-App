@@ -18,12 +18,12 @@ const ContactPage = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [errors, setErrors] = useState({});
 
-  const subjectOptions = [
-    'Remarks',
-    'Collaborations',
-    'Blog Submissions',
-    'Others'
-  ];
+ const subjectOptions = [
+  { label: 'Remarks', value: 'REMARKS' },
+  { label: 'Collaboration', value: 'COLLABORATION' },
+  { label: 'Blog Submission', value: 'BLOG_SUBMISSION' },
+  { label: 'Others', value: 'OTHERS' }
+];
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
@@ -64,40 +64,15 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     try {
-      const formDataToSend = new FormData();
-      
-      // Add all required fields
-      formDataToSend.append('name', formData.name.trim());
-      formDataToSend.append('email', formData.email.trim());
-      formDataToSend.append('subject', formData.subject);
-      formDataToSend.append('message', formData.message.trim());
-      
-      // Add CAPTCHA value
-      //formDataToSend.append('captcha', captchaValue);
+      const contactData = {
+  name: formData.name.trim(),
+  email: formData.email.trim(),
+  subject: formData.subject,
+  message: formData.message.trim(),
+  blogFile: attachedFile // This will be handled automatically
+};
 
-      // Add optional file if exists
-      if (attachedFile) {
-        // Client-side validation (matches API requirements)
-        const allowedTypes = [
-          'application/pdf',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'image/jpeg',
-          'image/png'
-        ];
-        
-        if (!allowedTypes.includes(attachedFile.type)) {
-          throw new Error('Only PDF, DOCX, JPEG or PNG files allowed');
-        }
-
-        if (attachedFile.size > 5 * 1024 * 1024) { // 5MB
-          throw new Error('File size exceeds 5MB limit');
-        }
-
-        formDataToSend.append('blogFile', attachedFile);
-      }
-
-      const response = await sendContactForm(formDataToSend);
-      
+const response = await sendContactForm(contactData);      
       // Handle success response
       setSubmitMessage('Thank you for your submission!');
       console.log('Submission successful:', response);
@@ -146,24 +121,6 @@ const ContactPage = () => {
     const file = e.target.files[0];
     if (file) {
       // Client-side validation (also validated by backend)
-      const allowedTypes = [
-        'application/pdf', 
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'image/jpeg',
-        'image/png'
-      ];
-      
-      if (file.size > 5 * 1024 * 1024) { // 5MB
-        setSubmitMessage('File size exceeds the maximum limit (5MB)');
-        e.target.value = '';
-        return;
-      }
-
-      if (!allowedTypes.includes(file.type)) {
-        setSubmitMessage('Only PDF, DOCX, JPEG, or PNG files are allowed');
-        e.target.value = '';
-        return;
-      }
 
       setAttachedFile(file);
       setSubmitMessage('');
@@ -234,7 +191,7 @@ const ContactPage = () => {
                     >
                       <option value="" disabled>Select a subject</option>
                       {subjectOptions.map((option) => (
-                        <option key={option} value={option}>{option}</option>
+                        <option key={option} value={option}> {option.label}</option>
                       ))}
                     </select>
                     {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}

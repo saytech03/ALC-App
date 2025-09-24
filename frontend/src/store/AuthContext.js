@@ -77,24 +77,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (credentials) => {
-    try {
-      const response = await authService.login(credentials);
-      if (response.success) {
-        // Fetch the full user details after successful login
-        const freshUserData = await authService.getUserDetails(response.user.email);
-        const fullUser = {
-          ...response.user,
-          ...freshUserData,
-          token: response.token
-        };
-        setUser(fullUser);
+ const login = async (credentials) => {
+  try {
+    const response = await authService.login(credentials);
+    if (response.success) {
+      // Check if user is verified before proceeding
+      if (!response.user.verified) {
+        throw new Error('Account not verified. Please check your email for verification link.');
       }
-      return response;
-    } catch (error) {
-      throw error;
+      
+      // Fetch the full user details after successful login
+      const freshUserData = await authService.getUserDetails(response.user.email);
+      const fullUser = {
+        ...response.user,
+        ...freshUserData,
+        token: response.token
+      };
+      setUser(fullUser);
     }
-  };
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
   const loginWithPatron = async (patronCredentials) => {
     try {
@@ -236,14 +241,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const sendContactForm = async (formData) => {
-    try {
-      const response = await authService.sendContactForm(formData);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
+ // REPLACE THIS FUNCTION:
+const sendContactForm = async (contactData) => {
+  try {
+    const response = await authService.submitContactForm(contactData);
+    return response;
+  } catch (error) {
+    console.error('Contact form submission error:', error);
+    throw error;
+  }
+};
 
   const logout = () => {
     authService.logout();

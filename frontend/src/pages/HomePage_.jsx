@@ -596,13 +596,13 @@ const HomePage_ = () => {
       {!showChatbot && (
         <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-40 flex flex-col items-center">
           <div className="flex">
-          <button 
+          {/*<button 
             onClick={() => setShowChatbot(true)}
             className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
             aria-label="Open chatbot"
           >
             {/* Custom PNG Image - will maintain original colors and shape */}
-            <img 
+           {/* <img 
               src="/transparency.png" 
               alt="Open Chatbot" 
               className="w-12 h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
@@ -612,13 +612,13 @@ const HomePage_ = () => {
               }}
             />
           
-          {/* Keywords below the icon */}
+           Keywords below the icon 
           <div className="text-center" >
             <p className="text-white text-xs md:text-sm font-medium px-2 md:px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
               ASK ARTLEX!
             </p>
           </div>
-          </button>
+          </button>*/}
           </div>
         </div>
       )}
@@ -642,67 +642,7 @@ const HomePage_ = () => {
             </button>
           </div>
           
-         {/* Right Side - 3D Animated Cube - ORIGINAL SIZE PRESERVED */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="relative">
-                {/* 3D Animated Cube - EXACTLY AS BEFORE */}
-                <div className="cube-container">
-                  <div className="cube">
-                    <div className="face front">
-                      <div className="text-center text-white p-6">
-                        <div className="text-xl font-bold mb-4">
-                          We would love to hear<br/>
-                          from you!
-                        </div>
-                      </div>
-                    </div>
-                    <div className="face back">
-                      <div className="text-center text-white p-6">
-                        <div className="text-xl font-bold mb-4">
-                         Write to us <u><Link to="/contact">here</Link></u> and<br/>
-                          we will publish your<br/>
-                          original ideas
-                        </div>
-                      </div>
-                    </div>
-                    <div className="face right">
-                      <div className="text-center text-white p-6">
-                        <div className="text-xl font-bold mb-4">
-                          We would love to hear<br/>
-                          from you!
-                        </div>
-                      </div>
-                    </div>
-                    <div className="face left">
-                      <div className="text-center text-white p-6">
-                        <div className="text-xl font-bold mb-4">
-                         Write to us <u><Link to="/contact">here</Link></u> and<br/>
-                          we will publish your<br/>
-                          original ideas
-                        </div>
-                      </div>
-                    </div>
-                    <div className="face top">
-                      <div className="text-center text-white p-6">
-                       <div className="text-xl font-bold mb-4">
-                          We would love to hear<br/>
-                          from you!
-                        </div>
-                      </div>
-                    </div>
-                    <div className="face bottom">
-                      <div className="text-center text-white p-6">
-                         <div className="text-xl font-bold mb-4">
-                         Write to us <u><Link to="/contact">here</Link></u> and<br/>
-                          we will publish your<br/>
-                          original ideas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+         
 
           {/* Chatbot Input Area */}
           <div className="border-t border-gray-200 p-4 bg-white/50">

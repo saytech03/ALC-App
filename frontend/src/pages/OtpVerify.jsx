@@ -31,8 +31,8 @@ const OtpVerify = () => {
         if (!/^\d{6}$/.test(otp)) {
             toast.error('Please enter a valid 6-digit code', {
                 style: {
-                    background: '#ef4444', // Red background
-                    color: '#fff', // White text
+                    background: '#ef4444',
+                    color: '#fff',
                 },
             });
             return;
@@ -46,31 +46,54 @@ const OtpVerify = () => {
             });
             
             if (response?.success || response?.token) {
-                toast.success('Email verified successfully! Please check your mail to access login credentials. Redirecting to login...', {
-                    style: {
-                        background: '#10b981', // Green background
-                        color: '#fff', // White text
-                    },
-                });
-                setTimeout(() => {
-                    navigate('/login', { replace: true });
-                }, 5000);
+                // Double-check that user is now verified
+                if (response.user && response.user.verified) {
+                    toast.success('Email verified successfully! Registration completed. Redirecting to login...', {
+                        style: {
+                            background: '#10b981',
+                            color: '#fff',
+                        },
+                    });
+                    setTimeout(() => {
+                        navigate('/login', { replace: true });
+                    }, 3000);
+                } else {
+                    throw new Error('Verification incomplete. Please try again.');
+                }
             } else {
                 toast.error(response?.message || 'Verification failed. Please try again.', {
                     style: {
-                        background: '#ef4444', // Red background
-                        color: '#fff', // White text
+                        background: '#ef4444',
+                        color: '#fff',
                     },
                 });
             }
         } catch (error) {
             console.error('Verification error:', error);
-            toast.error(error.response?.data?.message || 'An error occurred during verification.', {
-                style: {
-                    background: '#ef4444', // Red background
-                    color: '#fff', // White text
-                },
-            });
+            
+            // Handle specific OTP verification errors
+            if (error.response?.status === 400 || error.response?.status === 401) {
+                toast.error('Invalid OTP. Please check the code and try again.', {
+                    style: {
+                        background: '#ef4444',
+                        color: '#fff',
+                    },
+                });
+            } else if (error.message.includes('not verified')) {
+                toast.error('Account not verified. Please complete the verification process.', {
+                    style: {
+                        background: '#ef4444',
+                        color: '#fff',
+                    },
+                });
+            } else {
+                toast.error(error.message || 'Verification failed. Please try again.', {
+                    style: {
+                        background: '#ef4444',
+                        color: '#fff',
+                    },
+                });
+            }
         } finally {
             setIsLoading(false);
         }
@@ -79,18 +102,24 @@ const OtpVerify = () => {
     const handleResendOtp = async () => {
         try {
             setIsLoading(true);
-            toast.success('New verification code sent!', {
-                style: {
-                    background: '#10b981', // Green background
-                    color: '#fff', // White text
-                },
-            });
+            // You'll need to implement this endpoint in your authService
+            const response = await authService.resendOTP({ email: email.trim().toLowerCase() });
+            if (response.success) {
+                toast.success('New verification code sent!', {
+                    style: {
+                        background: '#10b981',
+                        color: '#fff',
+                    },
+                });
+            } else {
+                throw new Error(response.message || 'Failed to resend code');
+            }
         } catch (error) {
             console.error('Resend error:', error);
-            toast.error('Failed to resend code. Please try again.', {
+            toast.error(error.message || 'Failed to resend code. Please try again.', {
                 style: {
-                    background: '#ef4444', // Red background
-                    color: '#fff', // White text
+                    background: '#ef4444',
+                    color: '#fff',
                 },
             });
         } finally {
@@ -158,6 +187,11 @@ const OtpVerify = () => {
                         >
                             Didn't receive code? Resend
                         </button>
+                    </div>
+
+                    <div className="text-center text-gray-400 text-sm mt-4">
+                        <p>Note: You must complete verification to activate your account.</p>
+                        <p>Unverified accounts cannot login.</p>
                     </div>
                 </div>
             </div>

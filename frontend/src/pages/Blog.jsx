@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, Calendar, User, Clock, Eye, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, Lock } from 'lucide-react';
+import { ArrowRight, Calendar, User, Clock, Repeat, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, Lock } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,10 +21,10 @@ const Blog = () => {
       category: "ART LAW",
       date: "June 3, 2025",
       readTime: "12 min read",
-      views: "361",
+      reposts: "4",
       comments: 0,
-      reactions: 82,
-      likes: 82,
+      reactions: 5,
+      likes: 5,
       popularity: 99,
       featured: true,
       realUrl: "https://substack.com/@artlawcommunion/note/p-165113912?r=5s5n5l",
@@ -45,10 +45,10 @@ const Blog = () => {
       category: "ART LAW",
       date: "July 9, 2025",
       readTime: "18 min read",
-      views: "27",
+      reposts: "1",
       comments: 0,
-      reactions: 0,
-      likes: 2,
+      reactions: 3,
+      likes: 3,
       popularity: 98,
       featured: false,
       realUrl: "https://open.substack.com/pub/artlawcommunion/p/suppression-of-vice?utm_source=share&utm_medium=android&r=5s5n5l",
@@ -69,10 +69,10 @@ const Blog = () => {
         category: "ART LAW",
         date: "August 3, 2025",
         readTime: "15 min read",
-        views: "421",
-        comments: 7,
-        reactions: 95,
-        likes: 95,
+        reposts: "1",
+        comments: 0,
+        reactions: 1,
+        likes: 1,
         popularity: 96,
         featured: false,
         realUrl: "https://open.substack.com/pub/artlawcommunion/p/the-house-that-clive-did-not-build?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
@@ -93,10 +93,10 @@ const Blog = () => {
       category: "ART LAW",
       date: "August 3, 2025",
       readTime: "15 min read",
-      views: "421",
-      comments: 7,
-      reactions: 95,
-      likes: 95,
+      reposts: "1",
+      comments: 0,
+      reactions: 1,
+      likes: 1,
       popularity: 97,
       featured: false,
       realUrl: "https://open.substack.com/pub/artlawcommunion/p/anklets-of-oppression-the-fight-against?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
@@ -235,8 +235,8 @@ const Blog = () => {
                 {/* Engagement Stats */}
                 <div className="flex items-center space-x-6 mb-8 p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-2">
-                    <Eye className="w-5 h-5 text-blue-600" />
-                    <span className="font-semibold">{featuredArticle.views}</span>
+                    <Repeat className="w-5 h-5 text-blue-600" />
+                    <span className="font-semibold">{featuredArticle.reposts}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MessageCircle className="w-5 h-5 text-green-600" />
@@ -358,8 +358,8 @@ const Blog = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4 text-xs">
                             <span className="flex items-center space-x-1">
-                              <Eye className="w-3 h-3" />
-                              <span>{formatNumber(parseInt(article.views))}</span>
+                              <Repeat className="w-3 h-3" />
+                              <span>{formatNumber(parseInt(article.reposts))}</span>
                             </span>
                             <span className="flex items-center space-x-1">
                               <MessageCircle className="w-3 h-3" />
@@ -396,7 +396,7 @@ const Blog = () => {
                 >
                   {category}
                   <span className="ml-2 text-xs opacity-75">
-                    ({blogPosts.filter(post => category === 'All' || post.category === category).length})
+                    ({blogPosts.filter(post => category === 'All' || post.category === category).length-1})
                   </span>
                 </button>
               ))}
@@ -465,8 +465,8 @@ const Blog = () => {
                   <div className="flex items-center justify-between border-t pt-4">
                     <div className="flex items-center space-x-4 text-xs text-gray-500">
                       <span className="flex items-center space-x-1">
-                        <Eye className="w-3 h-3" />
-                        <span>{formatNumber(parseInt(article.views))}</span>
+                        <Repeat className="w-3 h-3" />
+                        <span>{formatNumber(parseInt(article.reposts))}</span>
                       </span>
                       <span className="flex items-center space-x-1">
                         <MessageCircle className="w-3 h-3" />

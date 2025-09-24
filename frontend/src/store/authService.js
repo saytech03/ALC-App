@@ -116,6 +116,13 @@ class AuthService {
     }).then(response => response.json());
   }
 
+  async resendOTP(emailData) {
+  return await this.request(API_CONFIG.ENDPOINTS.AUTH.RESEND_OTP, {
+    method: 'POST',
+    body: JSON.stringify(emailData),
+  });
+}
+
   // NEW: Get all blogs API
   async getAllBlogs() {
     return await this.request(API_CONFIG.ENDPOINTS.BLOG.GET_ALL, {
@@ -148,56 +155,96 @@ class AuthService {
     });
   }
 
-  async sendContactForm(formData) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 100000);
+ // REPLACE THIS EXISTING METHOD:
+async sendContactForm(formData) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 100000);
 
-      const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
-        method: 'POST',
-        body: formData,
-        signal: controller.signal,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.CONTACT}`, {
+      method: 'POST',
+      body: formData,
+      signal: controller.signal,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
 
-      clearTimeout(timeoutId);
+    clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        let errorData;
-        try {
-          errorData = await response.json();
-        } catch {
-          errorData = { message: await response.text() };
-        }
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { message: await response.text() };
+      }
 
-        const error = new Error(errorData.message || `Request failed with status ${response.status}`);
+      // Handle specific error responses from your API
+      if (response.status === 413) {
+        throw new Error('File size too large. Please upload a smaller file.');
+      }
+      
+      if (response.status === 400) {
+        const error = new Error(errorData.message || 'Validation failed');
         error.status = response.status;
         error.details = errorData.details || errorData.errors;
         throw error;
       }
 
-      return await response.json();
-
-    } catch (error) {
-      console.error('Contact submission error:', error);
-      
-      let userMessage = 'Submission failed. Please try again.';
-      if (error.name === 'AbortError') {
-        userMessage = 'Request timed out. Please try again.';
-      } else if (error.message.includes('Failed to fetch')) {
-        userMessage = 'Network error. Please check your internet connection.';
-      } else if (error.details) {
-        userMessage = Object.values(error.details).join(', ');
-      }
-
-      const enhancedError = new Error(userMessage);
-      enhancedError.status = error.status;
-      enhancedError.details = error.details;
-      throw enhancedError;
+      const error = new Error(errorData.message || `Request failed with status ${response.status}`);
+      error.status = response.status;
+      error.details = errorData.details || errorData.errors;
+      throw error;
     }
+
+    return await response.json();
+
+  } catch (error) {
+    console.error('Contact submission error:', error);
+    
+    let userMessage = 'Submission failed. Please try again.';
+    if (error.name === 'AbortError') {
+      userMessage = 'Request timed out. Please try again.';
+    } else if (error.message.includes('Failed to fetch')) {
+      userMessage = 'Network error. Please check your internet connection.';
+    } else if (error.details) {
+      // Format validation errors for display
+      userMessage = Object.values(error.details).join(', ');
+    } else if (error.message) {
+      userMessage = error.message;
+    }
+
+    const enhancedError = new Error(userMessage);
+    enhancedError.status = error.status;
+    enhancedError.details = error.details;
+    throw enhancedError;
   }
+}
+
+  // ADD THIS NEW METHOD:
+createContactFormData(contactData) {
+  const formData = new FormData();
+  
+  // Required fields
+  formData.append('name', contactData.name);
+  formData.append('email', contactData.email);
+  formData.append('subject', contactData.subject);
+  formData.append('message', contactData.message);
+  
+  // Optional file upload
+  if (contactData.blogFile) {
+    formData.append('blogFile', contactData.blogFile);
+  }
+  
+  return formData;
+}
+
+  // ADD THIS NEW METHOD:
+async submitContactForm(contactData) {
+  const formData = this.createContactFormData(contactData);
+  return await this.sendContactForm(formData);
+}
 
   async register(userData) {
     const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.REGISTER, {
@@ -247,25 +294,33 @@ class AuthService {
   }
 
   async login(credentials) {
-    const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN, {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    });
-    
-    if (response.success && response.token) {
-      const currentUser = {
-        email: response.user.email,
-        token: response.token,
-        ...response.user,
-        profileImageUrl: response.user.profileImageUrl // Ensure it's explicitly stored
-      };
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
+  const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN, {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+  
+  if (response.success && response.token) {
+    // Check if user is verified before allowing login
+    if (!response.user.verified) {
+      // Remove any stored data and throw error
+      this.logout();
+      throw new Error('Account not verified. Please check your email for verification link.');
     }
     
-    return response;
+    const currentUser = {
+      email: response.user.email,
+      token: response.token,
+      ...response.user,
+      profileImageUrl: response.user.profileImageUrl,
+      verified: response.user.verified // Ensure verified status is stored
+    };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('auth_token', response.token);
+    localStorage.setItem('user_data', JSON.stringify(response.user));
   }
+  
+  return response;
+}
 
   async loginWithPatron(patronCredentials) {
     const response = await this.request(API_CONFIG.ENDPOINTS.AUTH.LOGIN_PATRON, {
