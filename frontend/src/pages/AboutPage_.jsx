@@ -18,7 +18,7 @@ function AboutPage_() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('./raftmed.jpg')",
+            backgroundImage: "url('./leo_afrenov.jpg')",
             filter: 'brightness(0.9) contrast(1.1)'
           }}
           onLoad={() => setImgLoading(false)}
