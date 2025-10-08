@@ -18,11 +18,8 @@ const EventsPage_ = () => {
       <div 
         className="absolute inset-0 bg-gray-600 opacity-100 z-0"
         style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(30, 30, 40, 0.8) 0%, transparent 50%),
-                            radial-gradient(circle at 75% 75%, rgba(20, 20, 30, 0.6) 0%, transparent 50%)`,
-          backgroundSize: '50% 50%, 50% 50%',
-          backgroundPosition: 'top left, bottom right',
-          backgroundRepeat: 'no-repeat'
+          backgroundImage: `url('./blue_pat.jpg')`,
+          filter: 'brightness(0.9) contrast(1.1)',
         }}
         onLoad={() => setImgLoading(false)}
       />
@@ -63,11 +60,6 @@ const EventsPage_ = () => {
             
             {/* Additional events would follow the same pattern */}
             
-            {/* Footer text - Smaller */}
-            <div className="mt-16 text-gray-500 text-xs text-center">
-              <p>ART LAW COMMUNION</p>
-              <p className="mt-1">(A non-profit organization committed to advancing the understanding of art law)</p>
-            </div>
           </div>
         </div>
       </div>

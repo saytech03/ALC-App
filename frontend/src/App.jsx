@@ -62,7 +62,7 @@ function App() {
   if (isLoading) {
     return (
       <div className='h-screen'>
-        <div className='flex flex-col justify-center items-center bg-black h-full'>
+        <div className='flex flex-col justify-center items-center bg-white h-full'>
           <img 
             src="/alc_logo.png" 
             alt="Loading..." 

@@ -40,7 +40,6 @@ const HomePage_ = () => {
 
   // Array of quotes that will rotate daily
   const quotes = [
-    // Original quotes (unchanged)
     {
       text: "Art is perhaps the only territory that has kept hope alive. Because it is always about moving forward. Creativity never dies. Creativity looks forward, produces the future of hope.",
       author: "Gulmohammed Sheikh"
@@ -88,58 +87,6 @@ const HomePage_ = () => {
     {
       text: "The essence of all beautiful art, all great art, is gratitude.",
       author: "Friedrich Nietzsche"
-    },
-    {
-      text: "Art is the stored honey of the human soul.",
-      author: "Theodore Dreiser"
-    },
-    {
-      text: "Art is the signature of civilizations.",
-      author: "Beverly Sills"
-    },
-    {
-      text: "Art is the only way to run away without leaving home.",
-      author: "Twyla Tharp"
-    },
-    {
-      text: "Art is not a thing; it is a way.",
-      author: "Elbert Hubbard"
-    },
-    {
-      text: "Art is the unceasing effort to compete with the beauty of flowers - and never succeeding.",
-      author: "Marc Chagall"
-    },
-    {
-      text: "Art is the daughter of freedom.",
-      author: "Friedrich Schiller"
-    },
-    {
-      text: "Art is the proper task of life.",
-      author: "Friedrich Nietzsche"
-    },
-    {
-      text: "Art is the most beautiful deception of all.",
-      author: "Claude Debussy"
-    },
-    {
-      text: "Art is the elimination of the unnecessary.",
-      author: "Pablo Picasso"
-    },
-    {
-      text: "Art is the window to man's soul.",
-      author: "Judith Jamison"
-    },
-    {
-      text: "Art is the journey of a free soul.",
-      author: "Alev Oguz"
-    },
-    {
-      text: "Art is the child of imagination.",
-      author: "John F. Kennedy"
-    },
-    {
-      text: "Art is the most sublime mission of man.",
-      author: "Honoré de Balzac"
     },
     {
       text: "Art is the stored honey of the human soul.",
@@ -250,94 +197,6 @@ const HomePage_ = () => {
       author: "Charles Macklin"
     },
     {
-      text: "Law is a form of order, and good law must necessarily mean good order.",
-      author: "Aristotle"
-    },
-    {
-      text: "Justice is the insurance which we have on our lives and property.",
-      author: "Franklin D. Roosevelt"
-    },
-    {
-      text: "The law is the witness and external deposit of our moral life.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
-      author: "Jonathan Swift"
-    },
-    {
-      text: "Justice is the means by which established injustices are sanctioned.",
-      author: "Anatole France"
-    },
-    {
-      text: "The law is a jealous mistress.",
-      author: "Joseph Story"
-    },
-    {
-      text: "Law is the crystallization of the habit and thought of society.",
-      author: "Woodrow Wilson"
-    },
-    {
-      text: "Justice is the end of government.",
-      author: "James Madison"
-    },
-    {
-      text: "The law is the true embodiment of everything that's excellent.",
-      author: "W.S. Gilbert"
-    },
-    {
-      text: "Laws are the very bulwarks of liberty.",
-      author: "James A. Garfield"
-    },
-    {
-      text: "Justice is the ligament which holds civilized beings and civilized nations together.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a ass.",
-      author: "Charles Dickens"
-    },
-    {
-      text: "Law is the foundation of society.",
-      author: "John Locke"
-    },
-    {
-      text: "Justice is the great interest of man on earth.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a human institution.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are the silent judges of your conduct.",
-      author: "Plato"
-    },
-    {
-      text: "Justice is the tolerable accommodation of the conflicting interests of society.",
-      author: "Learned Hand"
-    },
-    {
-      text: "The law is a profession of words.",
-      author: "David Mellinkoff"
-    },
-    {
-      text: "Law is the embodiment of the moral sentiment of the people.",
-      author: "Rudolf von Jhering"
-    },
-    {
-      text: "Justice is the crowning glory of the virtues.",
-      author: "Marcus Tullius Cicero"
-    },
-    {
-      text: "The law is a sort of hocus-pocus science.",
-      author: "Charles Macklin"
-    },
-    {
-      text: "Law is a form of order, and good law must necessarily mean good order.",
-      author: "Aristotle"
-    },
-    {
       text: "Justice is the insurance which we have on our lives and property.",
       author: "Franklin D. Roosevelt"
     },
@@ -435,7 +294,7 @@ const HomePage_ = () => {
     setDailyQuote(quotes[quoteIndex]);
 
     // Alternate background position daily
-    setBgPosition(dayOfYear % 2 === 0 ? 'bg-center' : '');
+    setBgPosition(dayOfYear % 2 === 0 ? 'bg-center' : 'bg-top');
   }, []);
 
   const handleFormSubmit = (e) => {
@@ -452,10 +311,7 @@ const HomePage_ = () => {
   const searchSongs = async () => {
     if (!searchQuery.trim()) return;
 
-    // In a real implementation, you would call an API here
     console.log(`Searching for: ${searchQuery}`);
-
-    // Mock data - replace with actual API call
     setSongs([
       { id: 1, title: `${searchQuery} Song 1`, artist: 'Artist 1', url: 'https://example.com/song1.mp3' },
       { id: 2, title: `${searchQuery} Song 2`, artist: 'Artist 2', url: 'https://example.com/song2.mp3' },
@@ -466,9 +322,6 @@ const HomePage_ = () => {
   const playSong = (song) => {
     setCurrentSong(song);
     setIsPlaying(true);
-    // In a real implementation, you would set the audio source here
-    // audioRef.current.src = song.url;
-    // audioRef.current.play().catch(e => console.error("Playback failed:", e));
   };
 
   const togglePlayPause = () => {
@@ -484,260 +337,112 @@ const HomePage_ = () => {
     <div className="relative bg-white min-h-screen" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
       {/* Navbar */}
       {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
       )}
       <AltNavbar />
 
       {/* COOL OPTIMIZATION HACK FOR IMAGES */}
       {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
       )}
 
       {/* Hero Section */}
       <div
-        className={`relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
+        className={`relative flex flex-col items-center justify-center text-center py-16 sm:py-20 pt-24 sm:pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
         style={{
-          backgroundImage: `url('./collage.jpeg')`,
-          filter: 'brightness(0.9) contrast(1.1)'
+          backgroundImage: `url('./mem.jpg')`,
+          filter: 'brightness(0.9) contrast(1.1)',
         }}
       >
         {/* Main Content Container with Blur */}
-        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Updated blurred container */}
-          <div className="backdrop-blur-md bg-black/40 p-8 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-5xl">
+          <div className="backdrop-blur-md bg-black/40 p-8 sm:p-10 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-6xl">
             {/* Quote Section */}
-            <div className="mb-12 md:mb-16 text-center px-4">
-              <blockquote className="text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-white mb-4 md:mb-6 max-w-4xl mx-auto leading-relaxed font-light">
+            <div className="mb-12 sm:mb-16 md:mb-20 text-center px-4 sm:px-6">
+              <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-white mb-4 sm:mb-6 max-w-4xl mx-auto leading-relaxed font-light">
                 "{dailyQuote.text}"
               </blockquote>
-              <cite className="text-base md:text-xl lg:text-2xl font-serif text-white font-medium tracking-wide">
+              <cite className="text-sm sm:text-base md:text-xl lg:text-2xl font-serif text-white font-medium tracking-wide">
                 - {dailyQuote.author}
               </cite>
             </div>
 
             {/* Main Content Grid */}
-            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 items-center justify-between">
+            <div className="grid lg:grid-cols-2 gap-10 sm:gap-14 md:gap-18 lg:gap-24 items-center justify-between">
               {/* Left Side - Text Content */}
-              <div className="max-w-4xl mx-auto text-center">
-                <div className="text-left">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 text-white leading-tight tracking-tight">
-                    Empowering<br className="hidden md:block" />
-                    Artists<br className="hidden md:block" />
+              <div className="max-w-4xl mx-auto text-center sm:text-left">
+                <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight tracking-tight">
+                    Empowering<br className="hidden sm:block" />
+                    Artists<br className="hidden sm:block" />
                     Legally
                   </h1>
-                  <p className="text-sm md:text-base lg:text-lg text-white/90 mb-6 md:mb-8 leading-relaxed font-light">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
                     Our mission is to provide a platform for building discourse on Art Law
                     for serving artists, lawyers, and students of both law and art
                     disciplines, including art market professionals and members of the
                     general public. Importantly, this communion will attempt to bridge
-                    the gap between the artistic and the legal community.
+                    the gap between the artistic and legal community.
                   </p>
                 </div>
               </div>
 
-              {/* Right Side - 3D Animated Cube */}
-              <div className="flex justify-center md:justify-end">
-                <div className="relative transform scale-90 md:scale-100 lg:scale-110 xl:scale-125">
-                  <div className="cube-container w-40 h-40 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
-                    <div className="cube">
-                      <div className="face front">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face back">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face right">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face left">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face top">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face bottom">
-                        <div className="text-center text-white p-2 md:p-4 lg:p-6">
-                          <div className="text-xs md:text-sm lg:text-base xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Right Side - Contact Information in Paragraph Format */}
+              <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14 text-center sm:text-left">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
+                  We would love to hear from you! Whether you're an artist with legal questions, 
+                  a lawyer interested in art law, or a student exploring this interdisciplinary field, 
+                  your perspective is valuable to our community.
+                </p>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
+                  Write to us <u><Link to="/contact" className="text-white hover:text-white/80">here</Link></u> and we will publish your original ideas, research, or experiences to help bridge the gap between the artistic and legal communities.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Magnifying Glass Icon with Keywords */}
-      {!showChatbot && (
-        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-40 flex flex-col items-center">
-          <div className="flex">
-            <button
-              onClick={() => setShowChatbot(true)}
-              className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
-              aria-label="Open chatbot"
-            >
-              <img
-                src="/transparency.png"
-                alt="Open Chatbot"
-                className="w-12 h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
-                style={{
-                  filter: 'brightness(0) invert(1)',
-                  transition: 'filter 0.3s ease'
-                }}
-              />
-              <div className="text-center">
-                <p className="text-white text-xs md:text-sm font-medium px-2 md:px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
-                  ASK ARTLEX!
-                </p>
-              </div>
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Chatbot Sidebar with click-outside detection */}
       <div
         ref={chatSidebarRef}
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
+        className={`fixed inset-y-0 right-0 w-full sm:w-80 md:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
       >
         <div className="h-full flex flex-col">
           {/* Chatbot Header */}
-          <div className="bg-black text-white p-4 flex justify-between items-center border-b border-gray-700">
-            <h3 className="text-lg font-medium tracking-tight">Art Law Assistant</h3>
+          <div className="bg-black text-white p-4 sm:p-5 flex justify-between items-center border-b border-gray-700">
+            <h3 className="text-base sm:text-lg font-medium tracking-tight">Art Law Assistant</h3>
             <button
               onClick={() => setShowChatbot(false)}
               className="text-white/70 hover:text-white transition-colors duration-200"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
 
           {/* Chatbot Input Area */}
-          <div className="border-t border-gray-200 p-4 bg-white/50">
+          <div className="border-t border-gray-200 p-4 sm:p-5 bg-white/50">
             <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
               <input
                 type="text"
                 placeholder="Type your question..."
-                className="flex-1 px-4 py-2 focus:outline-none bg-transparent"
+                className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base focus:outline-none bg-transparent"
               />
-              <button className="bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors duration-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <button className="bg-black text-white px-3 sm:px-4 py-2 hover:bg-gray-800 transition-colors duration-200">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-2 text-center">
+            <p className="text-xs sm:text-sm text-gray-500 mt-2 text-center">
               Ask me anything about art law, copyright, or legal issues for artists.
             </p>
           </div>
         </div>
       </div>
-
-      {/* CSS for 3D Cube Animation */}
-      <style jsx>{`
-        .cube-container {
-          width: 256px;
-          height: 256px;
-          perspective: 1000px;
-        }
-
-        .cube {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          transform-style: preserve-3d;
-          animation: rotateCube 15s infinite linear;
-        }
-
-        .face {
-          position: absolute;
-          width: 256px;
-          height: 256px;
-          background: linear-gradient(45deg, #3b82f6, #1e40af, #1d4ed8);
-          border: 2px solid #1e40af;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: Arima, sans-serif;
-          box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .face.front {
-          transform: translateZ(128px);
-        }
-
-        .face.back {
-          transform: rotateY(180deg) translateZ(128px);
-        }
-
-        .face.right {
-          transform: rotateY(90deg) translateZ(128px);
-        }
-
-        .face.left {
-          transform: rotateY(-90deg) translateZ(128px);
-        }
-
-        .face.top {
-          transform: rotateX(90deg) translateZ(128px);
-        }
-
-        .face.bottom {
-          transform: rotateX(-90deg) translateZ(128px);
-        }
-
-        @keyframes rotateCube {
-          0% { transform: rotateX(0deg) rotateY(0deg); }
-          16.66% { transform: rotateX(0deg) rotateY(90deg); }
-          33.33% { transform: rotateX(0deg) rotateY(180deg); }
-          50% { transform: rotateX(0deg) rotateY(270deg); }
-          66.66% { transform: rotateX(90deg) rotateY(270deg); }
-          83.33% { transform: rotateX(180deg) rotateY(270deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg); }
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; transform: scale(1.15); }
-        }
-
-        .cube:hover {
-          animation-play-state: paused;
-        }
-
-        /* Mobile adjustments for cube container only */
-        @media (max-width: 1024px) {
-          .cube-container {
-            margin: 0 auto;
-          }
-        }
-      `}</style>
     </div>
   );
 };
