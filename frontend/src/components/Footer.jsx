@@ -2,8 +2,8 @@ import { Mail, Phone, PhoneCall, Instagram, Facebook, Linkedin } from 'lucide-re
 
 const Footer = () => {
 	return (
-		<footer className='py-6 md:px-8 md:py-0 bg-black text-white border-t border-gray-800'>
-			<div className='flex flex-col items-center justify-between gap-6 md:h-24 md:flex-row'>
+		<footer className='py-8 md:px-8 md:py-0 bg-black text-white border-t border-gray-800'>
+			<div className='flex flex-col items-center justify-between gap-8 md:h-36 md:flex-row'>
 				{/* Left side - Social Media Links */}
 				<div className='flex items-center gap-4'>
 					{/* Instagram Link */}
@@ -37,9 +37,17 @@ const Footer = () => {
 					</a>
 				</div>
 
-				{/* Center - Copyright */}
-				<div className='text-center text-sm text-white'>
-					 © 2025, Art Law Communion, All Rights Reserved
+				{/* Center - Disclaimer and Copyright */}
+				<div className='text-center text-sm text-white space-y-4'>
+					<div>
+						<p className='font-semibold'>DISCLAIMER:</p>
+						<p className='max-w-md'>
+							The material on this site is for general information only and is not legal advice. No liability is accepted for any loss or damage which may result from reliance on it. Always consult a qualified lawyer about a specific legal problem.
+						</p>
+					</div>
+					<div>
+						© 2025, Art Law Communion, All Rights Reserved
+					</div>
 				</div>
 
 				{/* Right side - Email */}

@@ -141,58 +141,6 @@ const HomePage = () => {
       author: "Honoré de Balzac"
     },
     {
-      text: "Art is the stored honey of the human soul.",
-      author: "Theodore Dreiser"
-    },
-    {
-      text: "Art is the signature of civilizations.",
-      author: "Beverly Sills"
-    },
-    {
-      text: "Art is the only way to run away without leaving home.",
-      author: "Twyla Tharp"
-    },
-    {
-      text: "Art is not a thing; it is a way.",
-      author: "Elbert Hubbard"
-    },
-    {
-      text: "Art is the unceasing effort to compete with the beauty of flowers - and never succeeding.",
-      author: "Marc Chagall"
-    },
-    {
-      text: "Art is the daughter of freedom.",
-      author: "Friedrich Schiller"
-    },
-    {
-      text: "Art is the proper task of life.",
-      author: "Friedrich Nietzsche"
-    },
-    {
-      text: "Art is the most beautiful deception of all.",
-      author: "Claude Debussy"
-    },
-    {
-      text: "Art is the elimination of the unnecessary.",
-      author: "Pablo Picasso"
-    },
-    {
-      text: "Art is the window to man's soul.",
-      author: "Judith Jamison"
-    },
-    {
-      text: "Art is the journey of a free soul.",
-      author: "Alev Oguz"
-    },
-    {
-      text: "Art is the child of imagination.",
-      author: "John F. Kennedy"
-    },
-    {
-      text: "Art is the most sublime mission of man.",
-      author: "Honoré de Balzac"
-    },
-    {
       text: "Where law ends, tyranny begins.",
       author: "William Pitt the Elder"
     },
@@ -247,94 +195,6 @@ const HomePage = () => {
     {
       text: "The law is a sort of hocus-pocus science.",
       author: "Charles Macklin"
-    },
-    {
-      text: "Law is a form of order, and good law must necessarily mean good order.",
-      author: "Aristotle"
-    },
-    {
-      text: "Justice is the insurance which we have on our lives and property.",
-      author: "Franklin D. Roosevelt"
-    },
-    {
-      text: "The law is the witness and external deposit of our moral life.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
-      author: "Jonathan Swift"
-    },
-    {
-      text: "Justice is the means by which established injustices are sanctioned.",
-      author: "Anatole France"
-    },
-    {
-      text: "The law is a jealous mistress.",
-      author: "Joseph Story"
-    },
-    {
-      text: "Law is the crystallization of the habit and thought of society.",
-      author: "Woodrow Wilson"
-    },
-    {
-      text: "Justice is the end of government.",
-      author: "James Madison"
-    },
-    {
-      text: "The law is the true embodiment of everything that's excellent.",
-      author: "W.S. Gilbert"
-    },
-    {
-      text: "Laws are the very bulwarks of liberty.",
-      author: "James A. Garfield"
-    },
-    {
-      text: "Justice is the ligament which holds civilized beings and civilized nations together.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a ass.",
-      author: "Charles Dickens"
-    },
-    {
-      text: "Law is the foundation of society.",
-      author: "John Locke"
-    },
-    {
-      text: "Justice is the great interest of man on earth.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a human institution.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are the silent judges of your conduct.",
-      author: "Plato"
-    },
-    {
-      text: "Justice is the tolerable accommodation of the conflicting interests of society.",
-      author: "Learned Hand"
-    },
-    {
-      text: "The law is a profession of words.",
-      author: "David Mellinkoff"
-    },
-    {
-      text: "Law is the embodiment of the moral sentiment of the people.",
-      author: "Rudolf von Jhering"
-    },
-    {
-      text: "Justice is the crowning glory of the virtues.",
-      author: "Marcus Tullius Cicero"
-    },
-    {
-      text: "The law is a sort of hocus-pocus science.",
-      author: "Charles Macklin"
-    },
-    {
-      text: "Law is a form of order, and good law must necessarily mean good order.",
-      author: "Aristotle"
     },
     {
       text: "Justice is the insurance which we have on our lives and property.",
@@ -490,16 +350,16 @@ const HomePage = () => {
       <div
         className={`relative flex flex-col items-center justify-center text-center py-16 sm:py-20 pt-24 sm:pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
         style={{
-          backgroundImage: `url('./collage.jpeg')`,
+          backgroundImage: `url('./mem.jpg')`,
           filter: 'brightness(0.9) contrast(1.1)',
         }}
       >
         {/* Main Content Container with Blur */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           {/* Updated blurred container */}
-          <div className="backdrop-blur-md bg-black/40 p-6 sm:p-8 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-5xl">
+          <div className="backdrop-blur-md bg-black/40 p-8 sm:p-10 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-6xl">
             {/* Quote Section */}
-            <div className="mb-12 sm:mb-16 text-center px-4 sm:px-6">
+            <div className="mb-12 sm:mb-16 md:mb-20 text-center px-4 sm:px-6">
               <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-white mb-4 sm:mb-6 max-w-4xl mx-auto leading-relaxed font-light">
                 "{dailyQuote.text}"
               </blockquote>
@@ -509,106 +369,40 @@ const HomePage = () => {
             </div>
 
             {/* Main Content Grid */}
-            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center justify-between">
+            <div className="grid lg:grid-cols-2 gap-10 sm:gap-14 md:gap-18 lg:gap-24 items-center justify-between">
               {/* Left Side - Text Content */}
               <div className="max-w-4xl mx-auto text-center sm:text-left">
-                <div className="text-left">
+                <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight tracking-tight">
                     Empowering<br className="hidden sm:block" />
                     Artists<br className="hidden sm:block" />
                     Legally
                   </h1>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-6 sm:mb-8 leading-relaxed font-light">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
                     Our mission is to provide a platform for building discourse on Art Law
                     for serving artists, lawyers, and students of both law and art
                     disciplines, including art market professionals and members of the
                     general public. Importantly, this communion will attempt to bridge
-                    the gap between the artistic and the legal community.
+                    the gap between the artistic and legal community.
                   </p>
                 </div>
               </div>
 
-              {/* Right Side - 3D Animated Cube */}
-              <div className="flex justify-center sm:justify-end">
-                <div className="relative transform scale-75 sm:scale-90 md:scale-100 lg:scale-110 xl:scale-125">
-                  <div className="cube-container w-32 h-32 sm:w-40 md:w-60 lg:w-72 xl:w-80">
-                    <div className="cube">
-                      <div className="face front">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face back">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face right">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face left">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face top">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            We would love to hear from you!
-                          </div>
-                        </div>
-                      </div>
-                      <div className="face bottom">
-                        <div className="text-center text-white p-2 sm:p-3 md:p-4 lg:p-6">
-                          <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-bold">
-                            Write to us <u><Link to="/contact">here</Link></u> and we will publish your original ideas
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Right Side - Contact Information in Paragraph Format */}
+              <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14 text-center sm:text-left">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
+                  We would love to hear from you! Whether you're an artist with legal questions, 
+                  a lawyer interested in art law, or a student exploring this interdisciplinary field, 
+                  your perspective is valuable to our community.
+                </p>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
+                  Write to us <u><Link to="/contact" className="text-white hover:text-white/80">here</Link></u> and we will publish your original ideas, research, or experiences to help bridge the gap between the artistic and legal communities.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Enhanced Magnifying Glass Icon with Keywords */}
-      {!showChatbot && (
-        <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-40 flex flex-col items-center">
-          <button
-            onClick={() => setShowChatbot(true)}
-            className="rounded-full p-0 shadow-xl transition-all duration-300 hover:scale-110 bg-transparent border-none mb-2"
-            aria-label="Open chatbot"
-          >
-            <img
-              src="/transparency.png"
-              alt="Open Chatbot"
-              className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain filter brightness-0 invert hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]"
-              style={{
-                filter: 'brightness(0) invert(1)',
-                transition: 'filter 0.3s ease',
-              }}
-            />
-            <div className="text-center">
-              <p className="text-white text-xs sm:text-sm font-medium px-2 sm:px-3 md:px-4 py-1 rounded-full backdrop-blur-sm shadow-lg hover:drop-shadow-xl transition-all animate-[pulse_2s_infinite]">
-                ASK ARTLEX!
-              </p>
-            </div>
-          </button>
-        </div>
-      )}
 
       {/* Chatbot Sidebar with click-outside detection */}
       <div
@@ -649,184 +443,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-
-      {/* CSS for 3D Cube Animation */}
-      <style jsx>{`
-        .cube-container {
-          width: 128px;
-          height: 128px;
-          perspective: 800px;
-        }
-        @media (min-width: 640px) {
-          .cube-container {
-            width: 160px;
-            height: 160px;
-          }
-        }
-        @media (min-width: 768px) {
-          .cube-container {
-            width: 192px;
-            height: 192px;
-          }
-        }
-        @media (min-width: 1024px) {
-          .cube-container {
-            width: 256px;
-            height: 256px;
-          }
-        }
-
-        .cube {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          transform-style: preserve-3d;
-          animation: rotateCube 15s infinite linear;
-        }
-
-        .face {
-          position: absolute;
-          width: 128px;
-          height: 128px;
-          background: linear-gradient(45deg, #3b82f6, #1e40af, #1d4ed8);
-          border: 2px solid #1e40af;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: Arima, sans-serif;
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        }
-        @media (min-width: 640px) {
-          .face {
-            width: 160px;
-            height: 160px;
-          }
-        }
-        @media (min-width: 768px) {
-          .face {
-            width: 192px;
-            height: 192px;
-          }
-        }
-        @media (min-width: 1024px) {
-          .face {
-            width: 256px;
-            height: 256px;
-          }
-        }
-
-        .face.front {
-          transform: translateZ(64px);
-        }
-        .face.back {
-          transform: rotateY(180deg) translateZ(64px);
-        }
-        .face.right {
-          transform: rotateY(90deg) translateZ(64px);
-        }
-        .face.left {
-          transform: rotateY(-90deg) translateZ(64px);
-        }
-        .face.top {
-          transform: rotateX(90deg) translateZ(64px);
-        }
-        .face.bottom {
-          transform: rotateX(-90deg) translateZ(64px);
-        }
-        @media (min-width: 640px) {
-          .face.front, .face.back, .face.right, .face.left, .face.top, .face.bottom {
-            transform: translateZ(80px);
-          }
-          .face.back {
-            transform: rotateY(180deg) translateZ(80px);
-          }
-          .face.right {
-            transform: rotateY(90deg) translateZ(80px);
-          }
-          .face.left {
-            transform: rotateY(-90deg) translateZ(80px);
-          }
-          .face.top {
-            transform: rotateX(90deg) translateZ(80px);
-          }
-          .face.bottom {
-            transform: rotateX(-90deg) translateZ(80px);
-          }
-        }
-        @media (min-width: 768px) {
-          .face.front, .face.back, .face.right, .face.left, .face.top, .face.bottom {
-            transform: translateZ(96px);
-          }
-          .face.back {
-            transform: rotateY(180deg) translateZ(96px);
-          }
-          .face.right {
-            transform: rotateY(90deg) translateZ(96px);
-          }
-          .face.left {
-            transform: rotateY(-90deg) translateZ(96px);
-          }
-          .face.top {
-            transform: rotateX(90deg) translateZ(96px);
-          }
-          .face.bottom {
-            transform: rotateX(-90deg) translateZ(96px);
-          }
-        }
-        @media (min-width: 1024px) {
-          .face.front, .face.back, .face.right, .face.left, .face.top, .face.bottom {
-            transform: translateZ(128px);
-          }
-          .face.back {
-            transform: rotateY(180deg) translateZ(128px);
-          }
-          .face.right {
-            transform: rotateY(90deg) translateZ(128px);
-          }
-          .face.left {
-            transform: rotateY(-90deg) translateZ(128px);
-          }
-          .face.top {
-            transform: rotateX(90deg) translateZ(128px);
-          }
-          .face.bottom {
-            transform: rotateX(-90deg) translateZ(128px);
-          }
-        }
-
-        @keyframes rotateCube {
-          0% { transform: rotateX(0deg) rotateY(0deg); }
-          16.66% { transform: rotateX(0deg) rotateY(90deg); }
-          33.33% { transform: rotateX(0deg) rotateY(180deg); }
-          50% { transform: rotateX(0deg) rotateY(270deg); }
-          66.66% { transform: rotateX(90deg) rotateY(270deg); }
-          83.33% { transform: rotateX(180deg) rotateY(270deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg); }
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; transform: scale(1.15); }
-        }
-
-        .cube:hover {
-          animation-play-state: paused;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 1024px) {
-          .cube-container {
-            margin: 0 auto;
-          }
-        }
-
-        /* Ensure text readability on smaller screens */
-        @media (max-width: 640px) {
-          .text-left {
-            text-align: center;
-          }
-        }
-      `}</style>
     </div>
   );
 };

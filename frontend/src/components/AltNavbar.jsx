@@ -27,127 +27,54 @@ const UserAvatarDropdown = ({ size = 27 }) => {
   ];
 
   const [userData, setUserData] = useState(null);
-  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
-  // FIX: Immediately fetch user data when authUser is detected
+  // FIX: This useEffect now syncs state from both authUser and localStorage
+  // ensuring the profile image is picked up immediately after login.
   useEffect(() => {
-    const fetchUserDataImmediately = async () => {
-      // Only run if we have authUser but no profile image, and haven't fetched yet
-      if (authUser && authUser.email && !hasFetchedInitialData) {
-        console.log('Auth user detected, fetching profile data immediately...');
-        
-        try {
-          const storedUser = localStorage.getItem('currentUser');
-          if (!storedUser) {
-            console.log('No stored user found');
-            return;
-          }
-          
-          const user = JSON.parse(storedUser);
-          if (!user?.token) {
-            console.log('No token found');
-            return;
-          }
-
-          // Fetch user details immediately
-          const response = await fetch(
-            `https://alc-backend.onrender.com/api/users?email=${encodeURIComponent(user.email)}`,
-            {
-              headers: {
-                'Authorization': `Bearer ${user.token}`,
-                'Content-Type': 'application/json'
-              }
-            }
-          );
-          
-          if (response.ok) {
-            const userDetails = await response.json();
-            console.log('Fetched user details immediately:', userDetails);
-            
-            const updatedUserData = {
-              email: userDetails.email,
-              id: userDetails.id,
-              name: userDetails.name,
-              alc_patronid: userDetails.membershipId,
-              profileImageUrl: userDetails.profileImageUrl,
-              work: userDetails.occupation
-            };
-            
-            setUserData(updatedUserData);
-            setHasFetchedInitialData(true);
-            
-            // Update localStorage with fresh data
-            localStorage.setItem('currentUser', JSON.stringify({
-              ...user,
-              name: userDetails.name,
-              profileImageUrl: userDetails.profileImageUrl,
-              occupation: userDetails.occupation,
-              membershipId: userDetails.membershipId
-            }));
-            
-            console.log('Profile image should now be available:', userDetails.profileImageUrl);
-          }
-        } catch (error) {
-          console.error('Error fetching initial user data:', error);
-        }
-      }
-    };
-
-    fetchUserDataImmediately();
-  }, [authUser, hasFetchedInitialData]);
-
-  // FIX: Simplified sync - just use whatever data we have immediately
-  useEffect(() => {
-    const syncUserData = () => {
-      let updatedUserData = null;
-      
-      // Priority 1: Use auth context if available
-      if (authUser) {
-        updatedUserData = {
-          email: authUser.email,
-          id: authUser.id,
-          name: authUser.name,
-          alc_patronid: authUser.alc_patronid || authUser.membershipId,
-          profileImageUrl: authUser.profileImageUrl,
-          work: authUser.occupation || authUser.work
-        };
-      }
-      
+    let updatedUserData = null;
+    
+    // Priority 1: Use auth context if available
+    if (authUser) {
+      updatedUserData = {
+        email: authUser.email,
+        id: authUser.id,
+        name: authUser.name,
+        alc_patronid: authUser.alc_patronid,
+        profileImageUrl: authUser.profileImageUrl,
+        work: authUser.occupation
+      };
+    } else {
       // Priority 2: Fallback to localStorage
-      if (!updatedUserData) {
-        try {
-          const storedUser = localStorage.getItem('currentUser');
-          if (storedUser) {
-            const user = JSON.parse(storedUser);
-            updatedUserData = {
-              email: user.email,
-              id: user.id,
-              name: user.name,
-              alc_patronid: user.alc_patronid || user.membershipId,
-              profileImageUrl: user.profileImageUrl,
-              work: user.occupation || user.work
-            };
-          }
-        } catch (error) {
-          console.error('Error parsing stored user data:', error);
+      try {
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          updatedUserData = {
+            email: user.email,
+            id: user.id,
+            name: user.name,
+            alc_patronid: user.alc_patronid || user.membershipId,
+            profileImageUrl: user.profileImageUrl,
+            work: user.occupation
+          };
         }
+      } catch (error) {
+        console.error('Error parsing stored user data from localStorage:', error);
       }
-      
-      setUserData(updatedUserData);
+    }
+    
+    setUserData(updatedUserData);
 
-      // Clear random avatar if profile image exists
-      if (updatedUserData?.profileImageUrl) {
+    // If a profile image exists, clear the random avatar logic
+    if (updatedUserData?.profileImageUrl) {
         setRandomAvatar(null);
         localStorage.removeItem('userAvatar');
-      }
-    };
-
-    syncUserData();
+    }
   }, [authUser]);
 
   // Set random avatar if no profile image exists
   useEffect(() => {
-    if (!userData?.profileImageUrl) {
+    if (userData === null || !userData.profileImageUrl) {
       const storedAvatar = localStorage.getItem('userAvatar');
       if (storedAvatar) {
         setRandomAvatar(storedAvatar);
@@ -157,13 +84,9 @@ const UserAvatarDropdown = ({ size = 27 }) => {
         setRandomAvatar(selectedAvatar);
         localStorage.setItem('userAvatar', selectedAvatar);
       }
-    } else {
-      setRandomAvatar(null);
-      localStorage.removeItem('userAvatar');
     }
   }, [userData, avatarImages]);
 
-  // FIX: Enhanced renderAvatar with immediate retry logic
   const renderAvatar = () => {
     const currentProfileImageUrl = userData?.profileImageUrl;
     
@@ -174,36 +97,9 @@ const UserAvatarDropdown = ({ size = 27 }) => {
           alt="Profile" 
           className="w-full h-full object-cover rounded-full"
           onError={(e) => {
-            console.error('Profile image failed to load, retrying...', currentProfileImageUrl);
-            
-            // Immediate retry with different cache busting
-            setTimeout(() => {
-              e.target.src = `${currentProfileImageUrl}?t=${Date.now()}`;
-            }, 100);
-            
-            // If still fails after retry, mark as invalid
-            setTimeout(() => {
-              if (e.target.complete && e.target.naturalWidth === 0) {
-                console.log('Profile image permanently failed, falling back');
-                setUserData(prev => prev ? { ...prev, profileImageUrl: null } : null);
-                
-                try {
-                  const storedUser = localStorage.getItem('currentUser');
-                  if (storedUser) {
-                    const user = JSON.parse(storedUser);
-                    localStorage.setItem('currentUser', JSON.stringify({
-                      ...user,
-                      profileImageUrl: null
-                    }));
-                  }
-                } catch (error) {
-                  console.error('Error updating localStorage:', error);
-                }
-              }
-            }, 500);
-          }}
-          onLoad={(e) => {
-            console.log('Profile image loaded successfully');
+            console.error('Profile image failed to load:', currentProfileImageUrl);
+            e.target.style.display = 'none';
+            setUserData(prev => prev ? { ...prev, profileImageUrl: null } : null);
           }}
         />
       );
@@ -273,7 +169,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       };
       
       setUserData(updatedUserData);
-      setHasFetchedInitialData(true);
       
       localStorage.setItem('currentUser', JSON.stringify({
         ...user,
@@ -339,7 +234,6 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       await logout();
       localStorage.removeItem('userAvatar');
       localStorage.removeItem('currentUser');
-      setHasFetchedInitialData(false);
       toast.success('Logged out successfully!');
       navigate('/login', { replace: true });
     } catch (error) {
@@ -715,6 +609,11 @@ const AltNavbar = () => {
     };
   }, []);
 
+  const handleNavClick = (path) => {
+    setIsMobileMenuOpen(false);
+    navigate(path);
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-black' : 'bg-transparent'
@@ -800,7 +699,7 @@ const AltNavbar = () => {
               ALC Fenestra
             </Link>
             <Link 
-              to="/eventsh" 
+              to="/h" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -820,4 +719,4 @@ const AltNavbar = () => {
   );
 };
 
-export default AltNavbar;
+export default AltNavbar; 

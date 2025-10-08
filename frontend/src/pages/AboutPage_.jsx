@@ -18,7 +18,7 @@ function AboutPage_() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('./leo_afrenov.jpg')",
+            backgroundImage: "url('./monum.jpg')",
             filter: 'brightness(0.9) contrast(1.1)'
           }}
           onLoad={() => setImgLoading(false)}
@@ -52,7 +52,7 @@ function AboutPage_() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('./monalisa.jpg')",
+            backgroundImage: "url('./photo_mem.jpg')",
             filter: 'brightness(0.9) contrast(1.1)'
           }}
         />
@@ -80,7 +80,7 @@ function AboutPage_() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('./guernicapb.png')",
+            backgroundImage: "url('./durga_puja.jpg')",
             filter: 'brightness(0.9) contrast(1.1)'
           }}
         />
@@ -96,19 +96,19 @@ function AboutPage_() {
               </p>
               <div className="text-left space-y-3 md:space-y-4">
                 <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]">I.</span>
+                  <span className="font-bold min-w-[2rem]"></span>
                   <span className="ml-2">
                     <strong>Performers:</strong> includes actors, singers, musicians, dancers, acrobats, jugglers, conjurers, snake charmers, or any other person who makes a performance.
                   </span>
                 </p>
                 <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]">II.</span>
+                  <span className="font-bold min-w-[2rem]"></span>
                   <span className="ml-2">
                     <strong>Artists:</strong> includes painters, sculptors, photographers, or any other person who creates art.
                   </span>
                 </p>
                 <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]">III.</span>
+                  <span className="font-bold min-w-[2rem]"></span>
                   <span className="ml-2">
                     <strong>Other stakeholders:</strong> includes dealers, collectors, museums, and trustees.
                   </span>
