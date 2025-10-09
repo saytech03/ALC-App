@@ -194,7 +194,7 @@ const HomePage = () => {
     },
     {
       text: "The law is a sort of hocus-pocus science.",
-      author: "Charles Macklin"
+      author: " Hawkins"
     },
     {
       text: "Justice is the insurance which we have on our lives and property.",
@@ -283,6 +283,10 @@ const HomePage = () => {
     {
       text: "The secret of getting ahead is getting started.",
       author: "Mark Twain"
+    },
+    {
+       text: "Art is not a mirror to reflect reality, but a hammer with which to shape it.",
+       author: "Bertolt Brecht"
     }
   ];
 
@@ -292,9 +296,6 @@ const HomePage = () => {
     const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
     const quoteIndex = dayOfYear % quotes.length;
     setDailyQuote(quotes[quoteIndex]);
-
-    // Alternate background position daily
-    setBgPosition(dayOfYear % 2 === 0 ? 'bg-center' : 'bg-top');
   }, []);
 
   const handleFormSubmit = (e) => {
@@ -341,12 +342,7 @@ const HomePage = () => {
       )}
       <Navbar />
 
-      {/* COOL OPTIMIZATION HACK FOR IMAGES */}
-      {imgLoading && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
-      )}
-
-      {/* Hero Section */}
+      {/* Top Section */}
       <div
         className={`relative flex flex-col items-center justify-center text-center py-16 sm:py-20 pt-24 sm:pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
         style={{
@@ -356,7 +352,6 @@ const HomePage = () => {
       >
         {/* Main Content Container with Blur */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          {/* Updated blurred container */}
           <div className="backdrop-blur-md bg-black/40 p-8 sm:p-10 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-6xl">
             {/* Quote Section */}
             <div className="mb-12 sm:mb-16 md:mb-20 text-center px-4 sm:px-6">
@@ -368,40 +363,48 @@ const HomePage = () => {
               </cite>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-2 gap-10 sm:gap-14 md:gap-18 lg:gap-24 items-center justify-between">
-              {/* Left Side - Text Content */}
-              <div className="max-w-4xl mx-auto text-center sm:text-left">
-                <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight tracking-tight">
-                    Empowering<br className="hidden sm:block" />
-                    Artists<br className="hidden sm:block" />
-                    Legally
-                  </h1>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
-                    Our mission is to provide a platform for building discourse on Art Law
-                    for serving artists, lawyers, and students of both law and art
-                    disciplines, including art market professionals and members of the
-                    general public. Importantly, this communion will attempt to bridge
-                    the gap between the artistic and legal community.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Side - Contact Information in Paragraph Format */}
-              <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14 text-center sm:text-left">
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
-                  We would love to hear from you! Whether you're an artist with legal questions, 
-                  a lawyer interested in art law, or a student exploring this interdisciplinary field, 
-                  your perspective is valuable to our community.
-                </p>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl">
-                  Write to us <u><Link to="/contact" className="text-white hover:text-white/80">here</Link></u> and we will publish your original ideas, research, or experiences to help bridge the gap between the artistic and legal communities.
+            {/* Empowering Artists Section */}
+            <div className="text-center">
+              <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight tracking-tight">
+                  Empowering Artists Legally
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl mx-auto">
+                  Our mission is to provide a platform for building discourse on Art Law
+                  for serving artists, lawyers, and students of both law and art
+                  disciplines, including art market professionals and members of the
+                  general public. Importantly, this communion will attempt to bridge
+                  the gap between the artistic and legal community.
                 </p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom Section */}
+      <div
+        className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-100"
+        style={{
+        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./brown_waves.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'brightness(0.8) contrast(1.1)',
+      }}
+      >
+       <div className="max-w-7xl mx-auto text-center">
+        <div className="space-y-8 sm:space-y-10 md:space-y-12">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed font-light max-w-2xl mx-auto">
+           Interested In Art and Art Law? Write to us what you think!
+          </p>
+          <Link
+            to="/contact"
+            className="inline-block bg-yellow-400 text-gray-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-lg hover:bg-yellow-500 transition-colors duration-200"
+          >
+            Submit your question
+          </Link>
+        </div>
+      </div>
       </div>
 
       {/* Chatbot Sidebar with click-outside detection */}

@@ -134,7 +134,7 @@ function Event1() {
                 {/* Back to Events Link */}
                 <div className="mt-12 text-center">
                     <Link
-                        to="/events"
+                        to="/eventsh"
                         className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
                     >
                         ← Back to All Events
