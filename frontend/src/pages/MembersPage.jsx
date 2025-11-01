@@ -10,26 +10,26 @@ const MembersPage = () => {
     {
       id: 1,
       name: "Priyanshu Kar",
-      position: "Founder",
+      position: "Co-Founder",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
     },
     {
       id: 2,
+      name: "Budhaditya Ghosh",
+      position: "Co-Founder",
+      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
+      detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he's interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
+      image: "./member3.png"
+    },
+    {
+      id: 3,
       name: "Aritro Banerjee",
       position: "Founding Member",
       info: "Fifth-year law student at St. Xavier's University, Kolkata",
       detailedInfo: "Aritro Banerjee is a fifth-year law student at St. Xavier's University, Kolkata, and member of the Art Law Communion. His passion for art and history drives his commitment to protecting artistic expression through legal advocacy. He believes law serves as a collective guardian of creativity and cultural heritage. Through the Art Law Communion, Aritro champions the principle that legal frameworks must shield and advocate for artistic freedom.",
       image: "./member2.png"
-    },
-    {
-      id: 3,
-      name: "Budhaditya Ghosh",
-      position: "Founding Member",
-      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he's interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
-      image: "./member3.png"
     },
     {
       id: 4,
