@@ -55,7 +55,7 @@ const EventsPage = () => {
       <div 
         className="absolute inset-0 bg-gray-600 opacity-100 z-0"
         style={{
-          backgroundImage: `url('./blue_pat.jpg')`,
+          backgroundImage: `url('./ww.avif')`,
           filter: 'brightness(0.9) contrast(1.1)',
         }}
         onLoad={() => setImgLoading(false)}
