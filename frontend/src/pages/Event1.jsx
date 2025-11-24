@@ -81,7 +81,7 @@ function Event1() {
                     </p>
 
                     {/* Image Placeholder 2 */}
-                    <div className="my-8 bg-gray-200 rounded-lg h-64 md:h-80 flex items-center justify-center">
+                    <div className="my-8 bg-gray-200 rounded-lg h-64 w-full md:h-80 flex items-center justify-center">
                          <img 
                     src="./event1_img2.jpg" 
                     alt="Event thumbnail" 
@@ -133,11 +133,11 @@ function Event1() {
 
                 {/* Back to Events Link */}
                 <div className="mt-12 text-center">
-                    <Link
+                     <Link
                         to="/eventsh"
-                        className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+                        className="self-start inline-block bg-blue-800 hover:bg-blue-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
                     >
-                        ← Back to All Events
+                        Back to Events
                     </Link>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music } from 'lucide-react';
+import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music, Facebook, Instagram, Youtube } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
 import { Link } from "react-router-dom";
 
@@ -335,7 +335,7 @@ const HomePage_ = () => {
   };
 
   return (
-    <div className="relative bg-white min-h-screen" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="relative bg-gray-500 min-h-screen" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
       {/* Navbar */}
       {imgLoading && (
         <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
@@ -343,46 +343,59 @@ const HomePage_ = () => {
       <AltNavbar />
 
       {/* Top Section */}
-      <div
-        className={`relative flex flex-col items-center justify-center text-center py-16 sm:py-20 pt-24 sm:pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
-        style={{
-          backgroundImage: `url('./mem.jpg')`,
-          filter: 'brightness(0.9) contrast(1.1)',
-        }}
-      >
-        {/* Main Content Container with Blur */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="backdrop-blur-md bg-black/40 p-8 sm:p-10 md:p-12 lg:p-16 rounded-xl border border-white/10 w-full max-w-6xl">
-            {/* Quote Section */}
-            <div className="mb-12 sm:mb-16 md:mb-20 text-center px-4 sm:px-6">
-              <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-white mb-4 sm:mb-6 max-w-4xl mx-auto leading-relaxed font-light">
-                "{dailyQuote.text}"
-              </blockquote>
-              <cite className="text-sm sm:text-base md:text-xl lg:text-2xl font-serif text-white font-medium tracking-wide">
-                - {dailyQuote.author}
-              </cite>
-            </div>
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Left Content */}
+        <div className="flex-1 px-4 sm:px-6 lg:px-8 py-8 lg:py-16 flex flex-col justify-center">
+          {/* Quote Section */}
+          <div className="mb-12 sm:mb-16 md:mb-20 text-left px-0 sm:px-0">
+            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-black mb-4 sm:mb-6 max-w-4xl leading-relaxed font-light">
+              "{dailyQuote.text}"
+            </blockquote>
+            <cite className="text-sm sm:text-base md:text-xl lg:text-2xl font-serif text-black font-medium tracking-wide">
+              - {dailyQuote.author}
+            </cite>
+          </div>
 
-            {/* Empowering Artists Section */}
-            <div className="text-center">
-              <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white leading-tight tracking-tight">
-                  Empowering Artists Legally
-                </h1>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed font-light max-w-2xl mx-auto">
-                  Our mission is to provide a platform for building discourse on Art Law
-                  for serving artists, lawyers, and students of both law and art
-                  disciplines, including art market professionals and members of the
-                  general public. Importantly, this communion will attempt to bridge
-                  the gap between the artistic and legal community.
-                </p>
-              </div>
+          {/* Empowering Artists Section */}
+          <div className="text-left">
+            <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-black leading-tight tracking-tight">
+                Empowering Artists Legally
+              </h1>
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black/90 leading-relaxed font-light max-w-2xl">
+                Our mission is to provide a platform for building discourse on Art Law
+                for serving artists, lawyers, and students of both law and art
+                disciplines, including art market professionals and members of the
+                general public. Importantly, this communion will attempt to bridge
+                the gap between the artistic and legal community.
+              </p>
             </div>
+          </div>
+
+          {/* Join Button */}
+          <Link
+            to="/contacth"
+            className="self-start inline-block bg-amber-800 hover:bg-amber-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
+          >
+            Contact Us
+          </Link>
+        </div>
+
+        {/* Right Image - Now perfectly sized and positioned */}
+        <div className="flex-1 relative overflow-hidden bg-gray-400">
+          <div className="absolute inset-0 flex items-center justify-center lg:justify-end px-8 lg:px-16">
+            <img
+              src="./mem.jpg"
+              alt="Person in library"
+              className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover object-top rounded-lg shadow-2xl translate-y-8 lg:translate-y-12"
+              onLoad={() => setImgLoading(false)}
+            />
           </div>
         </div>
       </div>
 
-      {/* Bottom Section */}
+      {/* Bottom Section - Kept commented as requested */}
+      {/* 
       <div
         className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-100"
         style={{
@@ -398,7 +411,7 @@ const HomePage_ = () => {
            Interested In Art and Art Law? Write to us what you think!
           </p>
           <Link
-            to="/contacth"
+            to="/contact"
             className="inline-block bg-yellow-400 text-gray-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-lg hover:bg-yellow-500 transition-colors duration-200"
           >
             Submit your question
@@ -406,6 +419,7 @@ const HomePage_ = () => {
         </div>
       </div>
       </div>
+      */}
 
       {/* Chatbot Sidebar with click-outside detection */}
       <div
@@ -431,7 +445,7 @@ const HomePage_ = () => {
             <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
               <input
                 type="text"
-                placeholder="Type your question..."
+                placeholder="Type your japan..."
                 className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base focus:outline-none bg-transparent"
               />
               <button className="bg-black text-white px-3 sm:px-4 py-2 hover:bg-gray-800 transition-colors duration-200">

@@ -10,7 +10,7 @@ const MembersPage_ = () => {
     {
       id: 1,
       name: "Priyanshu Kar",
-      position: "Co-Founder",
+      position: "Founder",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
@@ -103,7 +103,7 @@ const MembersPage_ = () => {
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale-[60%]"
                 />
                 
                 {/* Basic Info Overlay */}

@@ -15,21 +15,21 @@
 }
 
 .rainbow-bg {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/rainbow.png");
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/stand.avif");
 	background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .contact-bg {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/contact-bg.png");
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("vase.avif");
 	background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .ai-bg {
-	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/blabs.png");
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/pine.avif");
 	background-size: cover;
     background-position: center;
 }
