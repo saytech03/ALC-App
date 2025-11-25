@@ -335,12 +335,12 @@ const HomePage_ = () => {
   };
 
   return (
-    <div className="relative bg-gray-500 min-h-screen" style={{ fontFamily: 'Helvetica Neue, sans-serif' }}>
+    <div className="relative min-h-screen" style={{ fontFamily: 'Eb Garamond, sans-serif', backgroundColor: 'rgba(183, 184, 170, 1)' }}>
       {/* Navbar */}
       {imgLoading && (
         <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
       )}
-      <AltNavbar />
+      <AltNavbar style={{ backgroundColor: "rgba(98, 98, 91, 1)" }} />
 
       {/* Top Section */}
       <div className="flex flex-col lg:flex-row min-h-screen">
@@ -380,14 +380,14 @@ const HomePage_ = () => {
             Contact Us
           </Link>
         </div>
-
-        {/* Right Image - Now perfectly sized and positioned */}
-        <div className="flex-1 relative overflow-hidden bg-gray-400">
-          <div className="absolute inset-0 flex items-center justify-center lg:justify-end px-8 lg:px-16">
+      {/* Right Image - Perfectly responsive on mobile & desktop */}
+        <div className="flex-1 relative overflow-hidden bg-rgba(202, 180, 180, 1)">
+          <div className="absolute inset-0 flex items-center justify-center lg:justify-end px-6 sm:px-8 lg:px-16">
             <img
               src="./mem.jpg"
               alt="Person in library"
-              className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover object-top rounded-lg shadow-2xl translate-y-8 lg:translate-y-12"
+              className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover object-top rounded-lg shadow-2xl 
+                         translate-y-4 sm:translate-y-6 lg:translate-y-12"
               onLoad={() => setImgLoading(false)}
             />
           </div>
