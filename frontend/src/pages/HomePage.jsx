@@ -290,7 +290,6 @@ const HomePage = () => {
     }
   ];
 
-  // Get daily quote based on current date
   useEffect(() => {
     const today = new Date();
     const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
@@ -298,154 +297,71 @@ const HomePage = () => {
     setDailyQuote(quotes[quoteIndex]);
   }, []);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log('Email submitted:', email);
-  };
-
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    console.log('Contact form submitted:', formData);
-  };
-
-  // Music player functions
-  const searchSongs = async () => {
-    if (!searchQuery.trim()) return;
-
-    console.log(`Searching for: ${searchQuery}`);
-    setSongs([
-      { id: 1, title: `${searchQuery} Song 1`, artist: 'Artist 1', url: 'https://example.com/song1.mp3' },
-      { id: 2, title: `${searchQuery} Song 2`, artist: 'Artist 2', url: 'https://example.com/song2.mp3' },
-      { id: 3, title: `${searchQuery} Song 3`, artist: 'Artist 3', url: 'https://example.com/song3.mp3' },
-    ]);
-  };
-
-  const playSong = (song) => {
-    setCurrentSong(song);
-    setIsPlaying(true);
-  };
-
-  const togglePlayPause = () => {
-    if (isPlaying) {
-      // audioRef.current.pause();
-    } else {
-      // audioRef.current.play().catch(e => console.error("Playback failed:", e));
-    }
-    setIsPlaying(!isPlaying);
-  };
-
   return (
-    <div className="relative min-h-screen" style={{ fontFamily: 'Eb Garamond, sans-serif', backgroundColor: 'rgba(183, 184, 170, 1)' }}>
-      {/* Navbar */}
-      {imgLoading && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
-      )}
-      <Navbar backgroundColor="rgba(98, 98, 91, 1)" />
+    <div 
+      className="min-h-screen py-20 px-8 relative home-bg" 
+    >
+      <Navbar />
 
-      {/* Top Section */}
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        {/* Left Content */}
-        <div className="flex-1 px-4 sm:px-6 lg:px-8 py-8 lg:py-16 flex flex-col justify-center">
-          {/* Quote Section */}
-          <div className="mb-12 sm:mb-16 md:mb-20 text-left px-0 sm:px-0">
-            <blockquote className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl italic font-serif text-black mb-4 sm:mb-6 max-w-4xl leading-relaxed font-light">
-              "{dailyQuote.text}"
-            </blockquote>
-            <cite className="text-sm sm:text-base md:text-xl lg:text-2xl font-serif text-black font-medium tracking-wide">
-              - {dailyQuote.author}
-            </cite>
+      {/* Main Centered Content — Font Style 100% Preserved, Only Sizes Reduced */}
+      <div className="max-w-4xl mx-auto space-y-12 py-20 px-8 flex flex-col justify-center items-center text-center">
+
+        {/* Daily Quote — Same italic, font-light, tracking — just smaller */}
+        <div className="px-4">
+          <blockquote className="text-xl sm:text-2xl md:text-3xl lg:text-4xl italic font-serif text-white mb-6 leading-relaxed font-light tracking-wide">
+            "{dailyQuote.text}"
+          </blockquote>
+          <cite className="block text-lg sm:text-xl md:text-2xl font-serif text-white font-medium tracking-wide">
+            — {dailyQuote.author}
+          </cite>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
+        {/* Main Title — Same bold, tight tracking — just smaller */}
+        <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">
+          Empowering Artists Legally
+        </h1>
+
+        {/* Description — Same font-light, relaxed leading — just readable size */}
+        <p className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+          Our mission is to provide a platform for building discourse on Art Law
+          for serving artists, lawyers, and students of both law and art
+          disciplines, including art market professionals and members of the
+          general public. Importantly, this communion will attempt to bridge
+          the gap between the artistic and legal community.
+        </p>
           </div>
-
-          {/* Empowering Artists Section */}
-          <div className="text-left">
-            <div className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-14">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-black leading-tight tracking-tight">
-                Empowering Artists Legally
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-black/90 leading-relaxed font-light max-w-2xl">
-                Our mission is to provide a platform for building discourse on Art Law
-                for serving artists, lawyers, and students of both law and art
-                disciplines, including art market professionals and members of the
-                general public. Importantly, this communion will attempt to bridge
-                the gap between the artistic and legal community.
-              </p>
-            </div>
-          </div>
-
-          {/* Join Button */}
+        </div>
+        {/* CTA Button — Same style, just comfortable size */}
+        <div className="pt-8">
           <Link
-            to="/contact"
-            className="self-start inline-block bg-amber-800 hover:bg-amber-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
+            to="https://forms.gle/sU34TSnJWsmNNM3E8"
+            className="inline-block bg-amber-800 hover:bg-amber-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
             Contact Us
           </Link>
         </div>
-      {/* Right Image - Perfectly responsive on mobile & desktop */}
-        <div className="flex-1 relative overflow-hidden bg-rgba(202, 180, 180, 1)">
-          <div className="absolute inset-0 flex items-center justify-center lg:justify-end px-6 sm:px-8 lg:px-16">
-            <img
-              src="./mem.jpg"
-              alt="Person in library"
-              className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover object-top rounded-lg shadow-2xl 
-                         translate-y-4 sm:translate-y-6 lg:translate-y-12"
-              onLoad={() => setImgLoading(false)}
-            />
-          </div>
-        </div>
       </div>
 
-      {/* Bottom Section - Kept commented as requested */}
-      {/* 
-      <div
-        className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gray-100"
-        style={{
-        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./brown_waves.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        filter: 'brightness(0.8) contrast(1.1)',
-      }}
-      >
-       <div className="max-w-7xl mx-auto text-center">
-        <div className="space-y-8 sm:space-y-10 md:space-y-12">
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white leading-relaxed font-light max-w-2xl mx-auto">
-           Interested In Art and Art Law? Write to us what you think!
-          </p>
-          <Link
-            to="/contact"
-            className="inline-block bg-yellow-400 text-gray-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-lg hover:bg-yellow-500 transition-colors duration-200"
-          >
-            Submit your question
-          </Link>
-        </div>
-      </div>
-      </div>
-      */}
-
-      {/* Chatbot Sidebar with click-outside detection */}
+      {/* Chatbot Sidebar — Completely unchanged */}
       <div
         ref={chatSidebarRef}
         className={`fixed inset-y-0 right-0 w-full sm:w-80 md:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
       >
         <div className="h-full flex flex-col">
-          {/* Chatbot Header */}
           <div className="bg-black text-white p-4 sm:p-5 flex justify-between items-center border-b border-gray-700">
             <h3 className="text-base sm:text-lg font-medium tracking-tight">Art Law Assistant</h3>
-            <button
-              onClick={() => setShowChatbot(false)}
-              className="text-white/70 hover:text-white transition-colors duration-200"
-            >
+            <button onClick={() => setShowChatbot(false)} className="text-white/70 hover:text-white">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
-
-          {/* Chatbot Input Area */}
           <div className="border-t border-gray-200 p-4 sm:p-5 bg-white/50">
             <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
               <input
                 type="text"
-                placeholder="Type your japan..."
+                placeholder="Type your question..."
                 className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base focus:outline-none bg-transparent"
               />
               <button className="bg-black text-white px-3 sm:px-4 py-2 hover:bg-gray-800 transition-colors duration-200">

@@ -648,9 +648,9 @@ const AltNavbar = () => {
           <Link to="/eventsh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Events
           </Link>
-          <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
+         {/* <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
             Contact Us
-          </Link>
+          </Link>*/}
 
           <UserAvatarDropdown size={24} />
         </div>
@@ -705,13 +705,13 @@ const AltNavbar = () => {
             >
               Events
             </Link>
-            <Link 
+           {/* <Link 
               to="/contacth" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact Us
-            </Link>
+            </Link>*/}
           </div>
         </div>
       )}
