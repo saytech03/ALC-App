@@ -114,9 +114,9 @@ const Navbar = () => {
             Events
           </Link>
 
-          <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+         {/*} <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Contact Us
-          </Link>
+          </Link>*/}
 
           {/* Common User Dropdown for Desktop */}
           <UserDropdown size={20} />
@@ -181,13 +181,13 @@ const Navbar = () => {
               Events
             </Link>
 
-            <Link 
+           {/* <Link 
               to="/contact" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact Us
-            </Link>
+            </Link>*/}
           </div>
         </div>
       )}
