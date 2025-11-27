@@ -656,6 +656,7 @@ const AltNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const [patronId, setPatronId] = useState("user"); // Default fallback
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -669,6 +670,26 @@ const AltNavbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+
+  // NEW: Extract patron ID for building links
+  useEffect(() => {
+    const getPatronId = () => {
+      try {
+        // Try getting from localStorage
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          // Return ALC Patron ID, Membership ID, or fallback to 'user'
+          return user.alc_patronid || user.membershipId || "user";
+        }
+      } catch (e) {
+        console.error("Error getting patron ID for Navbar", e);
+      }
+      return "user";
+    };
+
+    setPatronId(getPatronId());
   }, []);
 
   const handleNavClick = (path) => {
@@ -695,22 +716,23 @@ const AltNavbar = () => {
         </div>
                                           
         <div className="hidden md:flex items-center gap-4 mr-1">
-          <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          {/* UPDATED LINKS with dynamic patronId */}
+          <Link to={`/${patronId}/h`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Home
           </Link>
-          <Link to="/auh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to={`/${patronId}/auh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             About Us
           </Link>
-          <Link to="/memberh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to={`/${patronId}/memberh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Team
           </Link>
-          <Link to="/blog" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to={`/${patronId}/blog`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             ALC Fenestra
           </Link>
-          <Link to="/eventsh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to={`/${patronId}/eventsh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Events
           </Link>
-         {/* <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
+         {/* <Link to={`/${patronId}/contacth`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
             Contact Us
           </Link>*/}
 
@@ -733,47 +755,40 @@ const AltNavbar = () => {
         <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-md">
           <div className="flex flex-col py-4 px-6 space-y-4">
             <Link 
-              to="/h" 
+              to={`/${patronId}/h`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link 
-              to="/auh" 
+              to={`/${patronId}/auh`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About Us
             </Link>
             <Link 
-              to="/memberh" 
+              to={`/${patronId}/memberh`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Team
             </Link>
             <Link 
-              to="/blog" 
+              to={`/${patronId}/blog`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               ALC Fenestra
             </Link>
             <Link 
-              to="/h" 
+              to={`/${patronId}/eventsh`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Events
             </Link>
-           {/* <Link 
-              to="/contacth" 
-              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact Us
-            </Link>*/}
           </div>
         </div>
       )}

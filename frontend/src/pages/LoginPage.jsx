@@ -72,17 +72,19 @@ const LoginPage = () => {
                 toast.success('Login successful! Welcome back!');
 
                 localStorage.setItem('currentUser', JSON.stringify({
-                email: response.email,
-                id: response.id,
-                name: response.name,
-                alc_patronid: response.membershipId,
-                profileImageUrl: response.profileImageUrl,
-                token: response.token
-            }));
+                    email: response.email,
+                    id: response.id,
+                    name: response.name,
+                    alc_patronid: response.membershipId,
+                    profileImageUrl: response.profileImageUrl,
+                    token: response.token
+                }));
                 
                 // Redirect to home page after successful login
+                // UPDATED: Dynamically construct path using patron ID
                 setTimeout(() => {
-                    navigate('/h', { replace: true });
+                    const redirectId = response.membershipId || response.alc_patronid || 'user';
+                    navigate(`/${redirectId}/h`, { replace: true });
                 }, 1000);
             } else {
                 setError(response?.message || 'Login failed');

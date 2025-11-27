@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AltNavbar from '../components/AltNavbar';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Event1() {
+    // NEW: State to determine the correct back path based on auth status
+    const [backPath, setBackPath] = useState("/events");
+
+    useEffect(() => {
+        try {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                const user = JSON.parse(storedUser);
+                const id = user.alc_patronid || user.membershipId || "user";
+                // If logged in, go back to the authenticated events page with dynamic ID
+                setBackPath(`/${id}/eventsh`);
+            } else {
+                // If public, go back to public events page
+                setBackPath("/events");
+            }
+        } catch (e) {
+            setBackPath("/events");
+        }
+    }, []);
+
     return (
         <div className="relative min-h-screen bg-black">
             {/* Geometric Doodled Background */}
@@ -134,7 +154,7 @@ function Event1() {
                 {/* Back to Events Link */}
                 <div className="mt-12 text-center">
                      <Link
-                        to="/eventsh"
+                        to={backPath}
                         className="self-start inline-block bg-blue-800 hover:bg-blue-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
                     >
                         Back to Events

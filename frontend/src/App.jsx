@@ -120,37 +120,38 @@ function App() {
           } />
           
           {/* User routes - protected by regular user authentication */}
-          <Route path='/h' element={
+          {/* UPDATED: Added /:patronId to the paths */}
+          <Route path='/:patronId/h' element={
             <RequireAuth>
               <HomePage_ />
             </RequireAuth>
           } />
           
-          <Route path='/memberh' element={
+          <Route path='/:patronId/memberh' element={
             <RequireAuth>
               <MembersPage_ />
             </RequireAuth>
           } />
           
-          <Route path='/blog' element={
+          <Route path='/:patronId/blog' element={
             <RequireAuth>
               <Blogspot />
             </RequireAuth>
           } />
           
-          <Route path='/contacth' element={
+          <Route path='/:patronId/contacth' element={
             <RequireAuth>
               <ContactPage_ />
             </RequireAuth>
           } />
           
-          <Route path='/auh' element={
+          <Route path='/:patronId/auh' element={
             <RequireAuth>
               <AboutPage_ />
             </RequireAuth>
           } />
 
-          <Route path='/eventsh' element={
+          <Route path='/:patronId/eventsh' element={
             <RequireAuth>
               <EventsPage_ />
             </RequireAuth>
