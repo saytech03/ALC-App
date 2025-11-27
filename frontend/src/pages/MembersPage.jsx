@@ -110,7 +110,7 @@ const MembersPage = () => {
           </div>
 
           {/* Bottom Row - 3 cards, perfectly centered and evenly spaced */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {coreMembers.slice(4, 7).map((member) => (
               <div
                 key={member.id}
