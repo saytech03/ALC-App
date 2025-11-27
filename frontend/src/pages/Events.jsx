@@ -65,7 +65,7 @@ const EventsPage = () => {
       <div className="relative pt-28 min-h-screen flex items-center justify-center z-10">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto p-4">
-            <h1 className="text-white text-3xl md:text-4xl font-light tracking-wide mb-8 text-center">OUR EVENTS</h1>
+            <h1 className="text-black font-bold text-3xl md:text-4xl tracking-wide mb-8 text-center">OUR EVENTS</h1>
             
             {/* Events Grid */}
             <div className="space-y-8">
