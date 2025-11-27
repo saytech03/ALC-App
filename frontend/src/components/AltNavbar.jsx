@@ -28,8 +28,64 @@ const UserAvatarDropdown = ({ size = 27 }) => {
 
   const [userData, setUserData] = useState(null);
 
-  // FIX: This useEffect now syncs state from both authUser and localStorage
-  // ensuring the profile image is picked up immediately after login.
+  // FIX: Added a silent fetch on mount to ensure profile image loads immediately
+  useEffect(() => {
+    const fetchLatestUserData = async () => {
+      try {
+        const storedUser = localStorage.getItem('currentUser');
+        if (!storedUser) return;
+        
+        const user = JSON.parse(storedUser);
+        if (!user?.token || !user?.email) return;
+
+        // Silently fetch latest data from API
+        const response = await fetch(
+          `https://alc-backend.onrender.com/api/users?email=${encodeURIComponent(user.email)}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${user.token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        
+        if (response.ok) {
+          const userDetails = await response.json();
+          
+          // Update state with fresh data from server
+          setUserData({
+            email: userDetails.email,
+            id: userDetails.id,
+            name: userDetails.name,
+            alc_patronid: userDetails.membershipId,
+            profileImageUrl: userDetails.profileImageUrl,
+            work: userDetails.occupation
+          });
+
+          // Update localStorage to keep it fresh
+          localStorage.setItem('currentUser', JSON.stringify({
+            ...user,
+            name: userDetails.name,
+            profileImageUrl: userDetails.profileImageUrl,
+            occupation: userDetails.occupation,
+            membershipId: userDetails.membershipId
+          }));
+
+          // Clean up random avatar if we found a real image
+          if (userDetails.profileImageUrl) {
+            setRandomAvatar(null);
+            localStorage.removeItem('userAvatar');
+          }
+        }
+      } catch (error) {
+        console.error("Background profile fetch error:", error);
+      }
+    };
+
+    fetchLatestUserData();
+  }, []); // Runs once on mount
+
+  // Sync with auth context context as fallback/initial state
   useEffect(() => {
     let updatedUserData = null;
     
@@ -63,9 +119,15 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       }
     }
     
-    setUserData(updatedUserData);
+    // Only set if we don't already have data (to prevent overriding the fresh fetch)
+    // or if authUser changed explicitly
+    setUserData(prev => {
+        if (!prev) return updatedUserData;
+        // Keep the one with the profile image if conflict
+        if (updatedUserData?.profileImageUrl && !prev.profileImageUrl) return updatedUserData;
+        return prev || updatedUserData;
+    });
 
-    // If a profile image exists, clear the random avatar logic
     if (updatedUserData?.profileImageUrl) {
         setRandomAvatar(null);
         localStorage.removeItem('userAvatar');
@@ -74,7 +136,7 @@ const UserAvatarDropdown = ({ size = 27 }) => {
 
   // Set random avatar if no profile image exists
   useEffect(() => {
-    if (userData === null || !userData.profileImageUrl) {
+    if (userData === null || (!userData.profileImageUrl && !userData.isLoading)) {
       const storedAvatar = localStorage.getItem('userAvatar');
       if (storedAvatar) {
         setRandomAvatar(storedAvatar);
@@ -93,13 +155,13 @@ const UserAvatarDropdown = ({ size = 27 }) => {
     if (currentProfileImageUrl) {
       return (
         <img 
-          src={`${currentProfileImageUrl}?t=${Date.now()}`}
+          src={`${currentProfileImageUrl}`}
           alt="Profile" 
           className="w-full h-full object-cover rounded-full"
           onError={(e) => {
             console.error('Profile image failed to load:', currentProfileImageUrl);
             e.target.style.display = 'none';
-            setUserData(prev => prev ? { ...prev, profileImageUrl: null } : null);
+            // Don't nullify immediately to prevent flashing, just switch to fallback in UI
           }}
         />
       );
@@ -719,4 +781,4 @@ const AltNavbar = () => {
   );
 };
 
-export default AltNavbar; 
+export default AltNavbar;
