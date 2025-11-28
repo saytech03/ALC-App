@@ -1,9 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AltNavbar from '../components/AltNavbar';
 import { Link } from "react-router-dom";
 
 const EventsPage_ = () => {
   const [imgLoading, setImgLoading] = useState(true);
+  const [patronId, setPatronId] = useState("user");
+
+  // NEW: Fetch the patron ID to build the correct link
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        const id = user.alc_patronid || user.membershipId || "user";
+        setPatronId(id);
+      }
+    } catch (e) {
+      console.error("Error fetching patron ID", e);
+    }
+  }, []);
   
   return (
     <div className="relative min-h-screen bg-gray-900">
@@ -18,7 +33,7 @@ const EventsPage_ = () => {
       <div 
         className="absolute inset-0 bg-gray-600 opacity-100 z-0"
         style={{
-          backgroundImage: `url('./ww.avif')`,
+          backgroundImage: `url('./pillar.jpg')`,
           filter: 'brightness(0.9) contrast(1.1)',
         }}
         onLoad={() => setImgLoading(false)}
@@ -28,13 +43,13 @@ const EventsPage_ = () => {
       <div className="relative pt-28 min-h-screen flex items-center justify-center z-10">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto p-4">
-            <h1 className="text-black text-3xl md:text-4xl font-bold tracking-wide mb-8 text-center">OUR EVENTS</h1>
+            <h1 className="text-white text-3xl md:text-4xl font-light tracking-wide mb-8 text-center">OUR EVENTS</h1>
             
             {/* Event Card with Integrated Image */}
             <div className="mb-12 bg-gray-800/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl border border-gray-700/50 transition-all duration-300 hover:border-blue-500/30">
               {/* Image and content in a single box */}
               <div className="flex flex-col md:flex-row">
-                {/* Image Section - Replace src with your image URL later */}
+                {/* Image Section */}
                 <div className="md:w-2/5">
                   <img 
                     src="./event1_thumbn.jpg" 
@@ -51,7 +66,11 @@ const EventsPage_ = () => {
                   <p className="text-gray-200 text-sm mb-4 leading-tight">
                     Dr. Shubha Majumdar, Superintending Archaeologist at ASI, provided an insider's view into heritage conservation challenges, legal protections, and ASI's role in safeguarding India's cultural legacy.
                   </p>
-                  <Link to="/event1" className="inline-block text-blue-400 hover:text-blue-300 text-xs px-3 py-1.5 rounded bg-gray-700/50 hover:bg-gray-700/70 transition-colors">
+                  
+                  {/* UPDATED: Dynamic Link using the fetched patronId */}
+                  {/* Make sure you have <Route path='/:patronId/event1' ... /> in App.jsx */}
+                  {/* OR change this to simply to="/event1" if using the public route */}
+                  <Link to={`/${patronId}/event1`} className="inline-block text-blue-400 hover:text-blue-300 text-xs px-3 py-1.5 rounded bg-gray-700/50 hover:bg-gray-700/70 transition-colors">
                     CLICK HERE for event report
                   </Link>
                 </div>

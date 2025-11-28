@@ -82,7 +82,7 @@ function App() {
           }
           
           .animate-slow-blink {
-            animation: slow-blink 1.1s ease-in-out infinite;
+            animation: slow-blink 0.8s ease-in-out infinite;
           }
         `}</style>
       </div>
@@ -103,8 +103,7 @@ function App() {
           <Route path='/member' element={<MembersPage />} />
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/au' element={ <AboutPage />} />
-          <Route path='/events' element={ <EventsPage />} />
-          <Route path='/event1' element={ <Event1 />} />    
+          <Route path='/events' element={ <EventsPage />} />   
           
           {/* Admin routes - protected by admin authentication */}
           <Route path='/acp' element={
@@ -154,6 +153,12 @@ function App() {
           <Route path='/:patronId/eventsh' element={
             <RequireAuth>
               <EventsPage_ />
+            </RequireAuth>
+          } />
+
+          <Route path='/:patronId/event1' element={
+            <RequireAuth>
+              <Event1 />
             </RequireAuth>
           } />
           

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 function Event1() {
     // NEW: State to determine the correct back path based on auth status
     const [backPath, setBackPath] = useState("/events");
+    const [imgLoading, setImgLoading] = useState(true);
 
     useEffect(() => {
         try {
@@ -25,23 +26,22 @@ function Event1() {
 
     return (
         <div className="relative min-h-screen bg-black">
+             {imgLoading && (
+        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+      )}
             {/* Geometric Doodled Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-400 to-blue-400 z-0">
                 {/* Geometric Pattern Overlay */}
-                <div className="absolute inset-0 opacity-10"
-                    style={{
-                        backgroundImage: `
-                            radial-gradient(circle at 20% 80%, #145fd6ff 0px, transparent 50%),
-                            radial-gradient(circle at 80% 20%, #10b981 0px, transparent 50%),
-                            radial-gradient(circle at 40% 40%, #8b5cf6 0px, transparent 50%),
-                            linear-gradient(45deg, transparent 49%, #ef4444 49%, #ef4444 51%, transparent 51%),
-                            linear-gradient(-45deg, transparent 49%, #f59e0b 49%, #f59e0b 51%, transparent 51%)
-                        `,
-                        backgroundSize: '400px 400px, 300px 300px, 500px 500px, 60px 60px, 60px 60px',
-                        backgroundPosition: '0% 0%, 100% 100%, 30% 70%, 0% 0%, 0% 0%'
-                    }}
-                ></div>
-            </div>
+                {/* Minimalist background with subtle pattern */}
+                    <div 
+                        className="absolute inset-0 bg-gray-600 opacity-100 z-0"
+                        style={{
+                        backgroundImage: `url('./shrine.jpg')`,
+                        filter: 'brightness(0.9) contrast(1.1)',
+                        }}
+                        onLoad={() => setImgLoading(false)}
+                    />
+                    </div>
 
             {/* Navbar */}
             <AltNavbar />
