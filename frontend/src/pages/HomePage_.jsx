@@ -336,7 +336,7 @@ const HomePage_ = () => {
         <div className="pt-8">
           <Link
             to="https://forms.gle/sU34TSnJWsmNNM3E8"
-            className="inline-block bg-amber-800 hover:bg-amber-900 text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
+            className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
             Contact Us
           </Link>

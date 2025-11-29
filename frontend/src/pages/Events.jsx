@@ -85,11 +85,11 @@ const EventsPage = () => {
                         className="w-full h-48 md:h-full object-cover"
                       />
                       {/* Lock icon overlay if login required */}
-                      {event.requiresLogin && (
+                     {/*} {event.requiresLogin && (
                         <div className="absolute top-4 right-4 bg-black/70 rounded-full p-2">
                           <Lock className="w-5 h-5 text-white" />
                         </div>
-                      )}
+                      )}*/}
                     </div>
                     
                     {/* Text Content Section */}
