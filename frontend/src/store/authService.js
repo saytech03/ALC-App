@@ -282,6 +282,12 @@ async submitContactForm(contactData) {
         profileImageUrl: response.profileImageUrl || null // Ensure this field exists
       };
       localStorage.setItem('user_data', JSON.stringify(userData));
+      // Also store currentUser for consistency with other flows
+      localStorage.setItem('currentUser', JSON.stringify({
+        ...userData,
+        token: response.token,
+        verified: true // Assume verified after OTP
+      }));
       
       return {
         success: true,

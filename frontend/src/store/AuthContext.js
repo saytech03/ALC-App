@@ -25,14 +25,19 @@ export const AuthProvider = ({ children }) => {
       }
       
       if (currentUser?.token && currentUser?.email) {
-        // Fetch the most recent user details from the backend
-        const freshUserData = await authService.getUserDetails(currentUser.email);
-        const updatedUser = {
-          ...currentUser,
-          profileImageUrl: freshUserData.profileImageUrl,
-          name: freshUserData.name,
-          occupation: freshUserData.occupation
-        };
+        // Fetch the most recent user details from the backend (with fallback)
+        let updatedUser = currentUser;
+        try {
+          const freshUserData = await authService.getUserDetails(currentUser.email);
+          updatedUser = {
+            ...currentUser,
+            profileImageUrl: freshUserData.profileImageUrl,
+            name: freshUserData.name,
+            occupation: freshUserData.occupation
+          };
+        } catch (fetchError) {
+          console.warn('Could not fetch fresh user details on auth check:', fetchError);
+        }
         localStorage.setItem('currentUser', JSON.stringify(updatedUser));
         setUser(updatedUser);
       } else {
@@ -62,12 +67,22 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.verifyOTP(otpData);
       if (response.success) {
-        // After successful OTP, fetch the full user details
-        const freshUserData = await authService.getUserDetails(response.user.email);
-        const fullUser = {
+        // Use response data as base, fetch fresh details if possible (with fallback)
+        let fullUser = {
           ...response.user,
-          ...freshUserData
+          token: response.token
         };
+        try {
+          const freshUserData = await authService.getUserDetails(response.user.email);
+          fullUser = {
+            ...fullUser,
+            ...freshUserData
+          };
+        } catch (fetchError) {
+          console.warn('Could not fetch fresh user details after OTP verification:', fetchError);
+        }
+        // Store the full user for consistency
+        localStorage.setItem('currentUser', JSON.stringify(fullUser));
         setUser(fullUser);
         setIsRegistrationPending(false);
       }
@@ -86,13 +101,22 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Account not verified. Please check your email for verification link.');
       }
       
-      // Fetch the full user details after successful login
-      const freshUserData = await authService.getUserDetails(response.user.email);
-      const fullUser = {
+      // Use response data as base, fetch full user details if possible (with fallback)
+      let fullUser = {
         ...response.user,
-        ...freshUserData,
         token: response.token
       };
+      try {
+        const freshUserData = await authService.getUserDetails(response.user.email);
+        fullUser = {
+          ...fullUser,
+          ...freshUserData
+        };
+      } catch (fetchError) {
+        console.warn('Could not fetch fresh user details after login:', fetchError);
+      }
+      // Store for consistency
+      localStorage.setItem('currentUser', JSON.stringify(fullUser));
       setUser(fullUser);
     }
     return response;
@@ -105,13 +129,22 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.loginWithPatron(patronCredentials);
       if (response.success) {
-        // Fetch the full user details after successful patron login
-        const freshUserData = await authService.getUserDetails(response.user.email);
-        const fullUser = {
+        // Use response data as base, fetch full user details if possible (with fallback)
+        let fullUser = {
           ...response.user,
-          ...freshUserData,
           token: response.token
         };
+        try {
+          const freshUserData = await authService.getUserDetails(response.user.email);
+          fullUser = {
+            ...fullUser,
+            ...freshUserData
+          };
+        } catch (fetchError) {
+          console.warn('Could not fetch fresh user details after patron login:', fetchError);
+        }
+        // Store for consistency
+        localStorage.setItem('currentUser', JSON.stringify(fullUser));
         setUser(fullUser);
       }
       return response;

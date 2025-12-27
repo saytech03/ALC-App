@@ -75,18 +75,14 @@ const SignUpPage = () => {
 
             const response = await register(registrationData);
             
-            if (response && (response.success || response.id)) {
-                // Only navigate to OTP page, don't consider registration complete yet
-                navigate('/otp', { 
-                    state: { 
-                        email: email.trim().toLowerCase(),
-                        registrationData: registrationData
-                    } 
-                });
-                toast.success('OTP sent to your email. Please verify to activate your account.');
-            } else {
-                setError(response?.message || 'Registration failed');
-            }
+            // Only navigate to OTP page, don't consider registration complete yet
+            navigate('/otp', { 
+                state: { 
+                    email: email.trim().toLowerCase(),
+                    registrationData: registrationData
+                } 
+            });
+            toast.success('OTP sent to your email. Please verify to activate your account.');
         } catch (error) {
             console.error('Registration error:', error);
             let errorMessage = 'Registration failed';
