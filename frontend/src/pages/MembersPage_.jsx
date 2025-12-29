@@ -26,7 +26,7 @@ const MembersPage_ = () => {
     {
       id: 3,
       name: "Aritro Banerjee",
-      position: "Founding Member",
+      position: "Co-Founder",
       info: "Fifth-year law student at St. Xavier's University, Kolkata",
       detailedInfo: "Aritro Banerjee is a fifth-year law student at St. Xavier's University, Kolkata, and member of the Art Law Communion. His passion for art and history drives his commitment to protecting artistic expression through legal advocacy. He believes law serves as a collective guardian of creativity and cultural heritage. Through the Art Law Communion, Aritro champions the principle that legal frameworks must shield and advocate for artistic freedom.",
       image: "./member2.png"
@@ -34,7 +34,7 @@ const MembersPage_ = () => {
     {
       id: 4,
       name: "Swaprabha Chattopadhyay",
-      position: "Founding Member",
+      position: "Co-Founder",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Swaprabha Chattopadhyay is a writer, poet, and artist pursuing law at West Bengal National University of Juridical Sciences, Kolkata. His poetry appears in reputed anthologies, he explores Cubism through geometric abstraction, practices traditional music, and advocates for traditional artists' and folk singers' rights.",
       image: "./member4.png"

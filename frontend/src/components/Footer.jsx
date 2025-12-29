@@ -42,7 +42,7 @@ const Footer = () => {
 					<div>
 						<p className='font-semibold'>DISCLAIMER:</p>
 						<p className='max-w-md'>
-							The material on this site is for general information only and is not legal advice. No liability is accepted for any loss or damage which may result from reliance on it. Always consult a qualified lawyer about a specific legal problem.
+							The material on this site is for general information only and is not legal advice. No liability is accepted for any loss or damage which may result from reliance on it.
 						</p>
 					</div>
 					<div>
