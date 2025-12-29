@@ -324,11 +324,7 @@ const HomePage_ = () => {
 
         {/* Description — Same font-light, relaxed leading — just readable size */}
         <p className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
-          Our mission is to provide a platform for building discourse on Art Law
-          for serving artists, lawyers, and students of both law and art
-          disciplines, including art market professionals and members of the
-          general public. Importantly, this communion will attempt to bridge
-          the gap between the artistic and legal community.
+          Our mission is to provide a platform for building discourse on Art Law in India and the Global South for serving artists, lawyers, and students of both law and art disciplines, including art market professionals and members of the general public. Importantly, we will attempt to bridge the gap between the artistic and legal community.
         </p>
           </div>
         </div>

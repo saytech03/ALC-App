@@ -309,14 +309,14 @@ const LoginPage = () => {
                     </form>
                     <div className='text-center text-gray-400'>
                         Don't have an account?{" "}
-                        <Link to={"/signup"} className='text-blue-500 hover:underline'>
-                            Sign Up
+                        <Link to={"/signup"} className='text-blue-500'>
+                            Register Now
                         </Link>
                         <br/>
                         Forgot Password?{" "}
                         <button 
                             onClick={() => setShowResetPopup(true)}
-                            className='text-blue-500 hover:underline'
+                            className='text-blue-500'
                         >
                             Reset Password
                         </button>
