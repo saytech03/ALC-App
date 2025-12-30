@@ -141,138 +141,6 @@ const HomePage = () => {
       author: "Honoré de Balzac"
     },
     {
-      text: "Where law ends, tyranny begins.",
-      author: "William Pitt the Elder"
-    },
-    {
-      text: "The law is reason, free from passion.",
-      author: "Aristotle"
-    },
-    {
-      text: "Injustice anywhere is a threat to justice everywhere.",
-      author: "Martin Luther King Jr."
-    },
-    {
-      text: "The first duty of society is justice.",
-      author: "Alexander Hamilton"
-    },
-    {
-      text: "Law and justice are not always the same.",
-      author: "Gloria Allred"
-    },
-    {
-      text: "Justice delayed is justice denied.",
-      author: "William E. Gladstone"
-    },
-    {
-      text: "The law is the public conscience.",
-      author: "Thomas Hobbes"
-    },
-    {
-      text: "Laws are spider webs through which the big flies pass and the little ones get caught.",
-      author: "Honoré de Balzac"
-    },
-    {
-      text: "Justice is truth in action.",
-      author: "Benjamin Disraeli"
-    },
-    {
-      text: "The law is the last result of human wisdom acting upon human experience.",
-      author: "Samuel Johnson"
-    },
-    {
-      text: "Law is order, and good law is good order.",
-      author: "Aristotle"
-    },
-    {
-      text: "Justice is the constant and perpetual will to allot to every man his due.",
-      author: "Domitus Ulpian"
-    },
-    {
-      text: "The law is not a light for you or any man to see by; the law is not an instrument of any kind.",
-      author: "John Fowles"
-    },
-    {
-      text: "The law is a sort of hocus-pocus science.",
-      author: " Hawkins"
-    },
-    {
-      text: "Justice is the insurance which we have on our lives and property.",
-      author: "Franklin D. Roosevelt"
-    },
-    {
-      text: "The law is the witness and external deposit of our moral life.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are like cobwebs, which may catch small flies, but let wasps and hornets break through.",
-      author: "Jonathan Swift"
-    },
-    {
-      text: "Justice is the means by which established injustices are sanctioned.",
-      author: "Anatole France"
-    },
-    {
-      text: "The law is a jealous mistress.",
-      author: "Joseph Story"
-    },
-    {
-      text: "Law is the crystallization of the habit and thought of society.",
-      author: "Woodrow Wilson"
-    },
-    {
-      text: "Justice is the end of government.",
-      author: "James Madison"
-    },
-    {
-      text: "The law is the true embodiment of everything that's excellent.",
-      author: "W.S. Gilbert"
-    },
-    {
-      text: "Laws are the very bulwarks of liberty.",
-      author: "James A. Garfield"
-    },
-    {
-      text: "Justice is the ligament which holds civilized beings and civilized nations together.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a ass.",
-      author: "Charles Dickens"
-    },
-    {
-      text: "Law is the foundation of society.",
-      author: "John Locke"
-    },
-    {
-      text: "Justice is the great interest of man on earth.",
-      author: "Daniel Webster"
-    },
-    {
-      text: "The law is a human institution.",
-      author: "Oliver Wendell Holmes Jr."
-    },
-    {
-      text: "Laws are the silent judges of your conduct.",
-      author: "Plato"
-    },
-    {
-      text: "Justice is the tolerable accommodation of the conflicting interests of society.",
-      author: "Learned Hand"
-    },
-    {
-      text: "The law is a profession of words.",
-      author: "David Mellinkoff"
-    },
-    {
-      text: "Law is the embodiment of the moral sentiment of the people.",
-      author: "Rudolf von Jhering"
-    },
-    {
-      text: "Justice is the crowning glory of the virtues.",
-      author: "Marcus Tullius Cicero"
-    },
-    {
       text: "Art and law are both attempts to bring order out of chaos.",
       author: "Martha Nussbaum"
     },
@@ -334,7 +202,7 @@ const HomePage = () => {
             to="https://forms.gle/sU34TSnJWsmNNM3E8"
             className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
-            Contact Us
+            Write To Us
           </Link>
         </div>
       </div>
