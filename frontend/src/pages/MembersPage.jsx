@@ -10,7 +10,7 @@ const MembersPage = () => {
     {
       id: 1,
       name: "Priyanshu Kar",
-      position: "Founder",
+      position: "Co-Founder",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
@@ -53,7 +53,7 @@ const MembersPage = () => {
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Ishika Hazra is a 2nd year law student at West Bengal National University of Juridical Sciences. She is an avid art enthusiast fascinated by the diverse stories that different artists tell through their creative expressions and believes such art forms are an invaluable part of any community.",
-      image: "./member6.png"
+      image: "./member6.jpeg"
     },
     {
       id: 7,
@@ -61,7 +61,7 @@ const MembersPage = () => {
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Kapu Vinuthna is a second year student of law at the WB National University of Juridical Sciences. She engages in different forms of writing and has a great appreciation for the passion and work that goes into art. She is very enthusiastic about contributing to the artistic community using her legal education, for she believes art is what makes us human.",
-      image: "./member8.png"
+      image: "./member7.png"
     }
   ];
 

@@ -238,7 +238,7 @@ const LoginPage = () => {
                     <form className='space-y-4' onSubmit={handleLogin}>
                         <div>
                             <label htmlFor='email' className='text-sm font-medium text-gray-300 block'>
-                                Email/ALC User ID
+                                Email/ALC Patron ID
                             </label>
                             <input
                                 type='text'
