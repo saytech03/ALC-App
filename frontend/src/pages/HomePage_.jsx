@@ -202,7 +202,7 @@ const HomePage_ = () => {
             to="https://forms.gle/sU34TSnJWsmNNM3E8"
             className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
-            Contact Us
+            Write To Us
           </Link>
         </div>
       </div>
