@@ -65,7 +65,29 @@ const MembersPage = () => {
     }
   ];
 
-  const selectedMemberData = coreMembers.find(m => m.id === selectedMember);
+  // === New Web Team Members (Placeholders) ===
+  const webMembers = [
+    {
+      id: 8,
+      name: "Debdutta Basu",
+      position: "Backend Developer",
+      info: "Programmer Analyst Trainee at Cognizant",
+      detailedInfo: "Debdutta Basu completed his Bachelor's degree from the University of Engineering and Management, Kolkata. A passionate software engineer specializing in Java Spring Boot, he architected and developed the robust backend system for the Art Law Communion. His technical expertise ensures the digital platform runs seamlessly, supporting the organization's mission to bridge the legal and artistic communities",
+      image: "./webmember1.jpeg" 
+    },
+    {
+      id: 9,
+      name: "Sayantan Pramanik",
+      position: "Frontend Developer",
+      info: "First year masters student in Computer Science & Engineering at Jadavpur University.",
+      detailedInfo: "Sayantan Pramanik is currently pursuing his Master's degree at Jadavpur University, having completed his Bachelor's from the Heritage Institute of Technology. Deeply devoted to enriching his knowledge in Machine Learning, he is also a passionate application developer. For the Art Law Communion, he spearheaded the frontend development and managed the seamless integration of backend systems, bringing the digital platform to life.",
+      image: "./webmember2.jpeg" // Placeholder image
+    }
+  ];
+
+  // Combine arrays so the modal can find data for any ID
+  const allMembers = [...coreMembers, ...webMembers];
+  const selectedMemberData = allMembers.find(m => m.id === selectedMember);
 
   return (
     <div className="min-h-screen py-20 px-8 relative rainbow-bg">
@@ -75,16 +97,16 @@ const MembersPage = () => {
       )}
 
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* === Header: The Team === */}
         <div className="mb-14 mt-20">
           <h1 className="text-white text-5xl md:text-6xl font-light tracking-wide">
             The Team
           </h1>
         </div>
 
-        {/* Members Grid - Top 4 (unchanged), Bottom 3 (centered & evenly spaced) */}
+        {/* === Core Members Grid === */}
         <div className="space-y-12">
-          {/* Top Row - 4 cards (exactly as before) */}
+          {/* Top Row - 4 cards */}
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {coreMembers.slice(0, 4).map((member) => (
               <div
@@ -97,7 +119,6 @@ const MembersPage = () => {
                     src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover grayscale-[80%]"
-                    onLoad={() => member.id === 7 && setImgLoading(false)}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
                     <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
@@ -109,7 +130,7 @@ const MembersPage = () => {
             ))}
           </div>
 
-          {/* Bottom Row - 3 cards, perfectly centered and evenly spaced */}
+          {/* Bottom Row - 3 cards, centered */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {coreMembers.slice(4, 7).map((member) => (
               <div
@@ -133,9 +154,43 @@ const MembersPage = () => {
             ))}
           </div>
         </div>
+
+        {/* === Header: The Web Team === */}
+        <div className="mb-14 mt-20">
+          <h1 className="text-white text-5xl md:text-6xl font-light tracking-wide">
+            The Web Team
+          </h1>
+        </div>
+
+        {/* === Web Team Grid - 2 cards centered === */}
+        {/* Changed max-w-4xl to max-w-3xl to make cards smaller and comparable to the cards above */}
+        <div className="grid grid-cols-2 gap-8 max-w-3xl mx-auto pb-20">
+            {webMembers.map((member) => (
+              <div
+                key={member.id}
+                className="relative group cursor-pointer"
+                onClick={() => setSelectedMember(member.id)}
+              >
+                <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover grayscale-[80%]"
+                    // Stop loading when the last image (id 9) is loaded
+                    onLoad={() => member.id === 9 && setImgLoading(false)}
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                    <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+                    <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
+                    <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
 
-      {/* Modal - 100% unchanged */}
+      {/* === Modal (Unchanged functionality) === */}
       {selectedMember && selectedMemberData && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-8"
