@@ -25,6 +25,7 @@ import useDocumentTitle from './hooks/useDocumentTitle';
 import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
+import Event2 from "./pages/Event2";
 
 // Auth protection component (unchanged)
 const RequireAuth = ({ children }) => {
@@ -159,6 +160,12 @@ function App() {
           <Route path='/:patronId/event1' element={
             <RequireAuth>
               <Event1 />
+            </RequireAuth>
+          } />
+
+          <Route path='/:patronId/event2' element={
+            <RequireAuth>
+              <Event2 />
             </RequireAuth>
           } />
           

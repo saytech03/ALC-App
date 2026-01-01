@@ -19,10 +19,22 @@ const EventsPage = () => {
       description: "Dr. Shubha Majumdar, Superintending Archaeologist at ASI, provided an insider's view into heritage conservation challenges, legal protections, and ASI's role in safeguarding India's cultural legacy.",
       image: "./event1_thumbn.jpg",
       category: "HERITAGE PRESERVATION LAW",
-      duration: "90 min",
-      attendees: "150+",
+      duration: "1 hour",
+      attendees: "100",
       requiresLogin: true
     },
+    {
+      id: 2,
+      title: "PERFORMING ARTS AND THE LAW:BEHIND THE SPOTLIGHTS",
+      speaker: "DR. SOMABHA BANDOPADHYAY",
+      date: "November 2, 2025",
+      description: "Dr. Somabha Bandopadhyay, Assistant Professor at National Forensic Sciences University, Delhi campus, delved into the legal intricacies of performing arts in India, covering intellectual property rights, contracts, and censorship issues faced by artists.",
+      image: "./event2_thumbn.jpeg",
+      category: "ART PRESERVATION LAW",
+      duration: "1 hour",
+      attendees: "100",
+      requiresLogin: true
+    }
     // Add more events here as needed
   ];
 
