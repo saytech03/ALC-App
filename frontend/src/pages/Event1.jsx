@@ -62,12 +62,12 @@ function Event1() {
                     </div>
                 </div>
 
-                {/* Image Placeholder 1 */}
-                <div className="mb-8 bg-gray-200 rounded-lg h-64 md:h-80 flex items-center justify-center">
+                {/* Image Placeholder 1 - Fixed to show full image */}
+                <div className="mb-8 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                     <img 
                     src="./event1_img.jpg" 
                     alt="Event thumbnail" 
-                    className="w-full h-48 md:h-full object-cover"
+                    className="w-full h-auto object-contain"
                   />
                 </div>
 
@@ -100,23 +100,22 @@ function Event1() {
                         encroachment, workforce shortages, and the loss of archaeological sites to modern development.
                     </p>
 
-                    {/* Image Placeholder 2 */}
-                    <div className="my-8 bg-gray-200 rounded-lg h-64 w-full md:h-80 flex items-center justify-center">
+                    {/* Image Placeholder 2 - Fixed to show full image */}
+                    <div className="my-8 bg-gray-200 rounded-lg w-full flex items-center justify-center overflow-hidden">
                          <img 
                     src="./event1_img2.jpg" 
                     alt="Event thumbnail" 
-                    className="w-full h-48 md:h-full object-cover"
+                    className="w-full h-auto object-contain"
                   />
                     </div>
 
-                    <p className="text-gray-700 leading-relaxed mb-6">
-                        The session shed light on the legal and policy gaps that hinder India's World Heritage nominations, 
-                        the importance of community engagement, and the urgent need for site-specific frameworks. 
-                        Dr. Majumdar underscored ASI's commitment to a scientific, neutral approach in excavations, 
-                        free from political or religious bias.
-                    </p>
-
                     <div className="bg-green-50 border-l-4 border-green-500 pl-6 py-4 mb-6">
+                        <p className="text-gray-700 font-semibold">
+                            The session shed light on the legal and policy gaps that hinder India's World Heritage nominations, 
+                            the importance of community engagement, and the urgent need for site-specific frameworks. 
+                            Dr. Majumdar underscored ASI's commitment to a scientific, neutral approach in excavations, 
+                            free from political or religious bias.
+                        </p>
                         <p className="text-gray-700 font-semibold">
                             The discussion concluded with a call to students, practitioners, and citizens alike: to recognize 
                             the value of India's cultural heritage and actively contribute to its protection.
