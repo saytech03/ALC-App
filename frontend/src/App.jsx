@@ -7,7 +7,7 @@ import Adcontrol from "./admin/AdminControlPage";
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
 import { Toaster, toast } from "react-hot-toast";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import Blogspot from "./pages/Blogspot";
 import Blog from "./pages/Blog";
 import MembersPage from "./pages/MembersPage";
@@ -28,12 +28,12 @@ import Event2 from "./pages/Event2";
 import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";
 
-// --- 1. Enhanced Auth Protection Component ---
+// --- 1. FIXED Auth Protection (Solves the deployment issue) ---
 const RequireAuth = ({ children }) => {
-  const { patronId } = useParams(); // Get ID from URL
+  const { patronId } = useParams(); // URL param (Always a String)
   const storedUser = localStorage.getItem('currentUser');
   
-  // Check if user is logged in
+  // 1. Check if user is logged in
   if (!storedUser) {
     return <Navigate to="/login" replace />;
   }
@@ -41,16 +41,17 @@ const RequireAuth = ({ children }) => {
   const user = JSON.parse(storedUser);
   const currentUserId = user.alc_patronid || user.membershipId || "user";
 
-  // Check if URL Patron ID matches the Logged In User ID
-  // If patronId exists in URL but doesn't match storage, deny access
-  if (patronId && patronId !== currentUserId) {
+  // 2. Compare IDs (Normalize both to String to prevent type errors)
+  // If the URL has an ID, and it doesn't match the storage ID, block access.
+  if (patronId && String(patronId).trim() !== String(currentUserId).trim()) {
+    // Redirect to 404 if they try to access someone else's route
     return <Navigate to="/404" replace />;
   }
 
   return children;
 };
 
-// Admin auth protection component (unchanged)
+// Admin auth protection component
 const RequireAdminAuth = ({ children }) => {
   const user1 = localStorage.getItem('adminUser');
   if (!user1) {
@@ -71,13 +72,16 @@ function App() {
     const user = localStorage.getItem('currentUser');
     if (!user) return;
 
-    // 1 Minute in milliseconds
-    const TIMEOUT_DURATION = 2* 60 * 1000; 
+    // 1 Minute in milliseconds (Change to 15 * 60 * 1000 for 15 mins)
+    const TIMEOUT_DURATION = 60 * 1000; 
     let timeoutId;
 
     const handleLogout = () => {
+      // Clear data
       localStorage.removeItem('currentUser');
+      // Show alert
       toast.error("Session expired due to inactivity.");
+      // Redirect to login
       navigate('/login');
     };
 
@@ -97,14 +101,14 @@ function App() {
     // Start initial timer
     resetTimer();
 
-    // Cleanup
+    // Cleanup listeners on unmount or path change
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       events.forEach(event => {
         document.removeEventListener(event, resetTimer);
       });
     };
-  }, [navigate, location.pathname]); // Re-run if path changes to ensure timer is active on new pages
+  }, [navigate, location.pathname]); // Re-run when path changes to keep timer alive
 
   // Loading Screen Logic
   useEffect(() => {
