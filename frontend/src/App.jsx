@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate, useLocation, useParams } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import HomePage_ from "./pages/HomePage_";
 import LoginPage from "./pages/LoginPage";
@@ -6,9 +6,8 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import Adcontrol from "./admin/AdminControlPage"; 
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
-import { Toaster } from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { Loader } from "lucide-react";
+import { Toaster, toast } from "react-hot-toast";
+import { useEffect, useState, useCallback } from "react";
 import Blogspot from "./pages/Blogspot";
 import Blog from "./pages/Blog";
 import MembersPage from "./pages/MembersPage";
@@ -28,23 +27,33 @@ import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
 import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";
-import { Analytics } from "@vercel/analytics/next"
 
-// Auth protection component (unchanged)
+// --- 1. Enhanced Auth Protection Component ---
 const RequireAuth = ({ children }) => {
-  const user = localStorage.getItem('currentUser');
-  if (!user) {
-    // Redirect to login if no user found
+  const { patronId } = useParams(); // Get ID from URL
+  const storedUser = localStorage.getItem('currentUser');
+  
+  // Check if user is logged in
+  if (!storedUser) {
     return <Navigate to="/login" replace />;
   }
+
+  const user = JSON.parse(storedUser);
+  const currentUserId = user.alc_patronid || user.membershipId || "user";
+
+  // Check if URL Patron ID matches the Logged In User ID
+  // If patronId exists in URL but doesn't match storage, deny access
+  if (patronId && patronId !== currentUserId) {
+    return <Navigate to="/404" replace />;
+  }
+
   return children;
 };
 
-// Enhanced Admin auth protection component
+// Admin auth protection component (unchanged)
 const RequireAdminAuth = ({ children }) => {
   const user1 = localStorage.getItem('adminUser');
   if (!user1) {
-    // Redirect to login if no user found
     return <Navigate to="/admin" replace />;
   }
   return children;
@@ -52,9 +61,52 @@ const RequireAdminAuth = ({ children }) => {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
   useDocumentTitle();
-  
 
+  // --- 2. Session Timeout Logic (1 Minute Inactivity) ---
+  useEffect(() => {
+    // Only set timeout if a user is logged in
+    const user = localStorage.getItem('currentUser');
+    if (!user) return;
+
+    // 1 Minute in milliseconds
+    const TIMEOUT_DURATION = 2* 60 * 1000; 
+    let timeoutId;
+
+    const handleLogout = () => {
+      localStorage.removeItem('currentUser');
+      toast.error("Session expired due to inactivity.");
+      navigate('/login');
+    };
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleLogout, TIMEOUT_DURATION);
+    };
+
+    // Events to track activity
+    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+    
+    // Attach listeners
+    events.forEach(event => {
+      document.addEventListener(event, resetTimer);
+    });
+
+    // Start initial timer
+    resetTimer();
+
+    // Cleanup
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [navigate, location.pathname]); // Re-run if path changes to ensure timer is active on new pages
+
+  // Loading Screen Logic
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -77,14 +129,9 @@ function App() {
         
         <style jsx>{`
           @keyframes slow-blink {
-            0%, 50% {
-              opacity: 1;
-            }
-            51%, 100% {
-              opacity: 0.3;
-            }
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
           }
-          
           .animate-slow-blink {
             animation: slow-blink 0.8s ease-in-out infinite;
           }
@@ -110,7 +157,7 @@ function App() {
           <Route path='/events' element={ <EventsPage />} />   
           <Route path='/res' element={ <Resources />} />
           
-          {/* Admin routes - protected by admin authentication */}
+          {/* Admin routes */}
           <Route path='/acp' element={
             <RequireAdminAuth>
               <Adcontrol />
@@ -123,8 +170,7 @@ function App() {
             </RequireAdminAuth>
           } />
           
-          {/* User routes - protected by regular user authentication */}
-          {/* UPDATED: Added /:patronId to the paths */}
+          {/* User routes - Protected & ID Verified */}
           <Route path='/:patronId/h' element={
             <RequireAuth>
               <HomePage_ />
@@ -179,8 +225,8 @@ function App() {
             </RequireAuth>
           } />
           
-          {/* Catch-all route */}
-          <Route path='/*' element={<NotFoundPage />} />
+          {/* Catch-all route for any undefined path */}
+          <Route path='*' element={<NotFoundPage />} />
         </Routes>
         <Footer/>
         <Toaster />
