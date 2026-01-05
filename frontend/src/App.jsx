@@ -26,6 +26,8 @@ import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
+import Resources from "./pages/Res";
+import Resources_ from "./pages/Res_";
 
 // Auth protection component (unchanged)
 const RequireAuth = ({ children }) => {
@@ -55,7 +57,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -105,6 +107,7 @@ function App() {
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/au' element={ <AboutPage />} />
           <Route path='/events' element={ <EventsPage />} />   
+          <Route path='/res' element={ <Resources />} />
           
           {/* Admin routes - protected by admin authentication */}
           <Route path='/acp' element={
@@ -166,6 +169,12 @@ function App() {
           <Route path='/:patronId/event2' element={
             <RequireAuth>
               <Event2 />
+            </RequireAuth>
+          } />
+
+           <Route path='/:patronId/resh' element={
+            <RequireAuth>
+              <Resources_ />
             </RequireAuth>
           } />
           
