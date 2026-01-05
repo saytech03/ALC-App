@@ -28,6 +28,7 @@ import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
 import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";
+import { Analytics } from "@vercel/analytics/next"
 
 // Auth protection component (unchanged)
 const RequireAuth = ({ children }) => {
