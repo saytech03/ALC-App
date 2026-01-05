@@ -25,8 +25,8 @@ import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
-import Resources from "./pages/Res";
-import Resources_ from "./pages/Res_";
+{/*import Resources from "./pages/Res";
+import Resources_ from "./pages/Res_";*/}
 
 // --- 1. FIXED Auth Protection (Solves the deployment issue) ---
 const RequireAuth = ({ children }) => {
@@ -159,7 +159,7 @@ function App() {
           <Route path='/contact' element={<ContactPage />} />
           <Route path='/au' element={ <AboutPage />} />
           <Route path='/events' element={ <EventsPage />} />   
-          <Route path='/res' element={ <Resources />} />
+         {/* <Route path='/res' element={ <Resources />} />
           
           {/* Admin routes */}
           <Route path='/acp' element={
@@ -223,11 +223,11 @@ function App() {
             </RequireAuth>
           } />
 
-           <Route path='/:patronId/resh' element={
+          {/*} <Route path='/:patronId/resh' element={
             <RequireAuth>
               <Resources_ />
             </RequireAuth>
-          } />
+          } />*/}
           
           {/* Catch-all route for any undefined path */}
           <Route path='*' element={<NotFoundPage />} />
