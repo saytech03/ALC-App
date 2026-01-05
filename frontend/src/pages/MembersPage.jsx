@@ -91,6 +91,9 @@ const MembersPage = () => {
 
   return (
     <div className="min-h-screen py-20 px-8 relative rainbow-bg">
+       {imgLoading && (
+        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+      )}
       <Navbar/>
       {imgLoading && (
         <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
