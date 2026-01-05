@@ -28,23 +28,51 @@ import Event2 from "./pages/Event2";
 {/*import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";*/}
 
-// --- 1. FIXED Auth Protection (Solves the deployment issue) ---
+// --- Helper: Scroll To Top ---
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+// --- NEW: Logout Wrapper for Public Routes ---
+// This ensures that if a logged-in user visits a public page, their session is killed immediately.
+const LogoutWrapper = ({ children }) => {
+  useEffect(() => {
+    const user = localStorage.getItem('currentUser');
+    if (user) {
+      localStorage.removeItem('currentUser');
+      // Optional: You can uncomment the line below if you want to notify them
+      // toast.success("You have been logged out.");
+    }
+  }, []);
+  
+  return children;
+};
+
+// --- Auth Protection Component ---
 const RequireAuth = ({ children }) => {
-  const { patronId } = useParams(); // URL param (Always a String)
+  const { patronId } = useParams(); 
   const storedUser = localStorage.getItem('currentUser');
   
-  // 1. Check if user is logged in
   if (!storedUser) {
     return <Navigate to="/login" replace />;
   }
 
-  const user = JSON.parse(storedUser);
+  let user;
+  try {
+    user = JSON.parse(storedUser);
+  } catch (error) {
+    localStorage.removeItem('currentUser');
+    return <Navigate to="/login" replace />;
+  }
+
   const currentUserId = user.alc_patronid || user.membershipId || "user";
 
-  // 2. Compare IDs (Normalize both to String to prevent type errors)
-  // If the URL has an ID, and it doesn't match the storage ID, block access.
+  // String comparison to handle Type Mismatch (Number vs String)
   if (patronId && String(patronId).trim() !== String(currentUserId).trim()) {
-    // Redirect to 404 if they try to access someone else's route
     return <Navigate to="/404" replace />;
   }
 
@@ -66,22 +94,25 @@ function App() {
   const location = useLocation();
   useDocumentTitle();
 
+  // --- 1. Handle "Before Hash" 404 Errors (Deployment Fix) ---
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path !== '/' && path !== '/index.html') {
+      window.location.replace(window.location.origin + '/#/404');
+    }
+  }, []);
+
   // --- 2. Session Timeout Logic (1 Minute Inactivity) ---
   useEffect(() => {
-    // Only set timeout if a user is logged in
     const user = localStorage.getItem('currentUser');
     if (!user) return;
 
-    // 1 Minute in milliseconds (Change to 15 * 60 * 1000 for 15 mins)
     const TIMEOUT_DURATION = 60 * 1000; 
     let timeoutId;
 
     const handleLogout = () => {
-      // Clear data
       localStorage.removeItem('currentUser');
-      // Show alert
       toast.error("Session expired due to inactivity.");
-      // Redirect to login
       navigate('/login');
     };
 
@@ -90,32 +121,22 @@ function App() {
       timeoutId = setTimeout(handleLogout, TIMEOUT_DURATION);
     };
 
-    // Events to track activity
-    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
-    
-    // Attach listeners
-    events.forEach(event => {
-      document.addEventListener(event, resetTimer);
-    });
-
-    // Start initial timer
+    // Optimization: Listen to fewer events to save performance
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(event => document.addEventListener(event, resetTimer));
     resetTimer();
 
-    // Cleanup listeners on unmount or path change
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
-      events.forEach(event => {
-        document.removeEventListener(event, resetTimer);
-      });
+      events.forEach(event => document.removeEventListener(event, resetTimer));
     };
-  }, [navigate, location.pathname]); // Re-run when path changes to keep timer alive
+  }, [navigate, location.pathname]);
 
-  // Loading Screen Logic
+  // Loading Screen
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -130,15 +151,9 @@ function App() {
           />
           <p className="text-white text-lg font-medium">Loading...</p>
         </div>
-        
         <style jsx>{`
-          @keyframes slow-blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-          }
-          .animate-slow-blink {
-            animation: slow-blink 0.8s ease-in-out infinite;
-          }
+          @keyframes slow-blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0.3; } }
+          .animate-slow-blink { animation: slow-blink 0.8s ease-in-out infinite; }
         `}</style>
       </div>
     );
@@ -147,21 +162,24 @@ function App() {
   return (
     <>
       <AuthProvider>
+        <ScrollToTop />
         <Routes>
-          {/* Public routes */}
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/admin' element={<AdminLoginPage />} />
-          <Route path='/signup' element={<SignUpPage />} />
-          <Route path="/otp" element={<OtpVerify />} />
-          <Route path='/bl' element={ <Blog />} />
-          <Route path='/member' element={<MembersPage />} />
-          <Route path='/contact' element={<ContactPage />} />
-          <Route path='/au' element={ <AboutPage />} />
-          <Route path='/events' element={ <EventsPage />} />   
-         {/* <Route path='/res' element={ <Resources />} />
+          {/* Public routes - NOW WRAPPED IN LogoutWrapper */}
+          <Route path='/' element={<LogoutWrapper><HomePage /></LogoutWrapper>} />
+          <Route path='/login' element={<LogoutWrapper><LoginPage /></LogoutWrapper>} />
+          <Route path='/signup' element={<LogoutWrapper><SignUpPage /></LogoutWrapper>} />
+          <Route path="/otp" element={<LogoutWrapper><OtpVerify /></LogoutWrapper>} />
+          <Route path='/bl' element={<LogoutWrapper><Blog /></LogoutWrapper>} />
+          <Route path='/member' element={<LogoutWrapper><MembersPage /></LogoutWrapper>} />
+          <Route path='/contact' element={<LogoutWrapper><ContactPage /></LogoutWrapper>} />
+          <Route path='/au' element={<LogoutWrapper><AboutPage /></LogoutWrapper>} />
+          <Route path='/events' element={<LogoutWrapper><EventsPage /></LogoutWrapper>} />   
+          {/*<Route path='/res' element={<LogoutWrapper><Resources /></LogoutWrapper>} />
           
-          {/* Admin routes */}
+          {/* Admin routes (Admin Login also clears regular user session) */}
+          <Route path='/admin' element={<LogoutWrapper><AdminLoginPage /></LogoutWrapper>} />
+          
+          {/* Admin Protected Routes */}
           <Route path='/acp' element={
             <RequireAdminAuth>
               <Adcontrol />
@@ -174,62 +192,18 @@ function App() {
             </RequireAdminAuth>
           } />
           
-          {/* User routes - Protected & ID Verified */}
-          <Route path='/:patronId/h' element={
-            <RequireAuth>
-              <HomePage_ />
-            </RequireAuth>
-          } />
+          {/* User Protected Routes */}
+          <Route path='/:patronId/h' element={<RequireAuth><HomePage_ /></RequireAuth>} />
+          <Route path='/:patronId/memberh' element={<RequireAuth><MembersPage_ /></RequireAuth>} />
+          <Route path='/:patronId/blog' element={<RequireAuth><Blogspot /></RequireAuth>} />
+          <Route path='/:patronId/contacth' element={<RequireAuth><ContactPage_ /></RequireAuth>} />
+          <Route path='/:patronId/auh' element={<RequireAuth><AboutPage_ /></RequireAuth>} />
+          <Route path='/:patronId/eventsh' element={<RequireAuth><EventsPage_ /></RequireAuth>} />
+          <Route path='/:patronId/event1' element={<RequireAuth><Event1 /></RequireAuth>} />
+          <Route path='/:patronId/event2' element={<RequireAuth><Event2 /></RequireAuth>} />
+          {/*<Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
           
-          <Route path='/:patronId/memberh' element={
-            <RequireAuth>
-              <MembersPage_ />
-            </RequireAuth>
-          } />
-          
-          <Route path='/:patronId/blog' element={
-            <RequireAuth>
-              <Blogspot />
-            </RequireAuth>
-          } />
-          
-          <Route path='/:patronId/contacth' element={
-            <RequireAuth>
-              <ContactPage_ />
-            </RequireAuth>
-          } />
-          
-          <Route path='/:patronId/auh' element={
-            <RequireAuth>
-              <AboutPage_ />
-            </RequireAuth>
-          } />
-
-          <Route path='/:patronId/eventsh' element={
-            <RequireAuth>
-              <EventsPage_ />
-            </RequireAuth>
-          } />
-
-          <Route path='/:patronId/event1' element={
-            <RequireAuth>
-              <Event1 />
-            </RequireAuth>
-          } />
-
-          <Route path='/:patronId/event2' element={
-            <RequireAuth>
-              <Event2 />
-            </RequireAuth>
-          } />
-
-          {/*} <Route path='/:patronId/resh' element={
-            <RequireAuth>
-              <Resources_ />
-            </RequireAuth>
-          } />*/}
-          
-          {/* Catch-all route for any undefined path */}
+          {/* Catch-all route */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
         <Footer/>
