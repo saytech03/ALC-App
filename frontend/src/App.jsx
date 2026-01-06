@@ -107,7 +107,7 @@ function App() {
     const user = localStorage.getItem('currentUser');
     if (!user) return;
 
-    const TIMEOUT_DURATION = 60 * 1000; 
+    const TIMEOUT_DURATION = 10* 60 * 1000; 
     let timeoutId;
 
     const handleLogout = () => {
