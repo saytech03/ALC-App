@@ -33,14 +33,6 @@ const MembersPage = () => {
     },
     {
       id: 4,
-      name: "Swaprabha Chattopadhyay",
-      position: "Co-Founder",
-      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Swaprabha Chattopadhyay is a writer, poet, and artist pursuing law at West Bengal National University of Juridical Sciences, Kolkata. His poetry appears in reputed anthologies, he explores Cubism through geometric abstraction, practices traditional music, and advocates for traditional artists' and folk singers' rights.",
-      image: "./member4.png"
-    },
-    {
-      id: 5,
       name: "Auronisha Roy",
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
@@ -48,7 +40,7 @@ const MembersPage = () => {
       image: "./member5.png"
     },
     {
-      id: 6,
+      id: 5,
       name: "Ishika Hazra",
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
@@ -56,7 +48,7 @@ const MembersPage = () => {
       image: "./member6.jpeg"
     },
     {
-      id: 7,
+      id: 6,
       name: "Kapu Vinuthna",
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
@@ -68,7 +60,7 @@ const MembersPage = () => {
   // === New Web Team Members (Placeholders) ===
   const webMembers = [
     {
-      id: 8,
+      id: 7,
       name: "Debdutta Basu",
       position: "Backend Developer",
       info: "Programmer Analyst Trainee at Cognizant",
@@ -76,7 +68,7 @@ const MembersPage = () => {
       image: "./webmember1.jpeg" 
     },
     {
-      id: 9,
+      id: 8,
       name: "Sayantan Pramanik",
       position: "Frontend Developer",
       info: "First year masters student in Computer Science & Engineering at Jadavpur University.",
@@ -110,8 +102,8 @@ const MembersPage = () => {
         {/* === Core Members Grid === */}
         <div className="space-y-12">
           {/* Top Row - 4 cards */}
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {coreMembers.slice(0, 4).map((member) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {coreMembers.slice(0, 3).map((member) => (
               <div
                 key={member.id}
                 className="relative group cursor-pointer"
@@ -135,7 +127,7 @@ const MembersPage = () => {
 
           {/* Bottom Row - 3 cards, centered */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {coreMembers.slice(4, 7).map((member) => (
+            {coreMembers.slice(3, 6).map((member) => (
               <div
                 key={member.id}
                 className="relative group cursor-pointer"
@@ -179,8 +171,8 @@ const MembersPage = () => {
                     src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover grayscale-[80%]"
-                    // Stop loading when the last image (id 9) is loaded
-                    onLoad={() => member.id === 9 && setImgLoading(false)}
+                    // Stop loading when the last image (id 8) is loaded
+                    onLoad={() => member.id === 8 && setImgLoading(false)}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
                     <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
