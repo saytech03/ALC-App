@@ -155,6 +155,10 @@ const HomePage_ = () => {
     {
        text: "Art is not a mirror to reflect reality, but a hammer with which to shape it.",
        author: "Bertolt Brecht"
+    },
+    {
+       text: "Like	law,	art	was	once	a	rule-based	activity.	In	classical	antiquity,	the	word	'art'	(Greek,'tekne',	Latin,	'ars')	was	the	name	given	to	any	activity	governed	by	rules.",
+       author: "Paul Kearns"
     }
   ];
 
