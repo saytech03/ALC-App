@@ -106,10 +106,34 @@ const Blogspot = () => {
         "Navigating Consent in Traditional Dance Settings",
         "Way Forward: Beyond Mechanical Legislation"
       ]
-  }
+  },
+  {
+      id: 5,
+      title: "No Copyright for Machines: The Ruling in Thaler v. Perlmutter",
+      author: "Divija Manaktala",
+      introduction: "A pivotal moment for AI art: The US District Court for the District of Columbia affirms that human authorship is a bedrock requirement of copyright, denying protection to works created entirely by artificial intelligence.",
+      category: "TRIBAL RIGHTS",
+      date: "August 24, 2023",
+      readTime: "5 min read",
+      reposts: "1",
+      comments: 0,
+      reactions: 1,
+      likes: 1,
+      popularity: 92,
+      featured: false,
+      realUrl: "https://substack.com/@artlawcommunion/note/c-209218438?r=5s5n5l",
+      image: "./thaler.webp", 
+      subheadings: [
+        "Stephen Thaler and the 'Creativity Machine'",
+        "The US Copyright Office's Consistent Denial",
+        "The Human Authorship Requirement in US Law",
+        "Distinguishing AI-Assisted vs. AI-Generated Works",
+        "Implications for the Future of Generative AI"
+      ]
+    }
   ];
 
-  const categories = ['All', 'ART LAW' ];
+  const categories = ['All', 'ART LAW', 'TRIBAL RIGHTS' ];
   
   // Get featured article (highest popularity)
   const featuredArticle = blogPosts.find(post => post.featured) || blogPosts[0];
@@ -404,7 +428,7 @@ const Blogspot = () => {
                 >
                   {category}
                   <span className="ml-2 text-xs opacity-75">
-                    ({blogPosts.filter(post => category === 'All' || post.category === category).length-1})
+                    ({blogPosts.filter(post => category === 'All' || post.category === category).length})
                   </span>
                 </button>
               ))}
