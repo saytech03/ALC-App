@@ -112,11 +112,11 @@ const Blog = () => {
   },
   {
       id: 5,
-      title: "No Copyright for Machines: The Ruling in Thaler v. Perlmutter",
+      title: "Digitising Tribal Art Archives in India: Consent, Ownership, and the Problem of Data Colonialism",
       author: "Divija Manaktala",
-      introduction: "A pivotal moment for AI art: The US District Court for the District of Columbia affirms that human authorship is a bedrock requirement of copyright, denying protection to works created entirely by artificial intelligence.",
+      introduction: "The digitisation of tribal and indigenous art across India takes many forms, ranging from Gond paintings and Warli murals to ritual performances and oral narratives documented by museums, universities, individual collectors, and other cultural institutions around the world. Digitisation is discussed as a harmless preservation process2 aimed at protecting against cultural loss and material degradation. Nevertheless, in cases where tribal art is uploaded into digital collections without any substantive permission or benefit-sharing, preservation starts to seem like extraction.",
       category: "TRIBAL RIGHTS",
-      date: "August 24, 2023",
+      date: "February 3, 2026",
       readTime: "5 min read",
       reposts: "1",
       comments: 0,
@@ -127,11 +127,10 @@ const Blog = () => {
       realUrl: "https://substack.com/@artlawcommunion/note/c-209218438?r=5s5n5l",
       image: "./thaler.webp", 
       subheadings: [
-        "Stephen Thaler and the 'Creativity Machine'",
-        "The US Copyright Office's Consistent Denial",
-        "The Human Authorship Requirement in US Law",
-        "Distinguishing AI-Assisted vs. AI-Generated Works",
-        "Implications for the Future of Generative AI"
+        "Data Colonialism in the Digitisation of Indigenous Art",
+        "The Absence of Community Consent and Benefit-Sharing",
+        "Legal Gaps in Copyright, Constitutional, and Heritage Frameworks",
+        "From Extraction to Ethical Preservation"
       ]
     }
   ];
