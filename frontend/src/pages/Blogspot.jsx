@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Repeat, ArrowRight, Calendar, User, Clock, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink } from 'lucide-react';
+import { Repeat, ArrowRight, Calendar, User, Clock, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
 
 const Blogspot = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
-   const [imgLoading, setImgLoading] = useState(true);
+  const [imgLoading, setImgLoading] = useState(true);
 
   // Reduced blog data to 7 posts
   const blogPosts = [
@@ -411,6 +411,95 @@ const Blogspot = () => {
               </div>
             </div>
           </div>
+
+          {/* === SUBMISSION GUIDELINES SECTION === */}
+          <div className="mb-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="bg-blue-900 p-6 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <FileText className="w-8 h-8 text-blue-300" />
+                <h2 className="text-2xl font-bold text-white">Submission Guidelines</h2>
+              </div>
+              <span className="bg-blue-800 text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+                Rolling Basis
+              </span>
+            </div>
+            
+            <div className="p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                    Key Requirements
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">1.</div>
+                      <span>Word count: 1,000 - 1,500 words (flexible subject to approval).</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">2.</div>
+                      <span>Topic must relate to Art & Cultural Heritage Law.</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">3.</div>
+                      <span>Original and unpublished manuscripts only.</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">4.</div>
+                      <span>Co-authorship allowed (max 2 authors).</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">5.</div>
+                      <span>Include at least 3 relevant images with clear sources.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <FileText className="w-5 h-5 text-blue-600 mr-2" />
+                    Formatting & Policy
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">6.</div>
+                      <span>Font: Garamond, Size 12.</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">7.</div>
+                      <span>Mandatory citations (footnotes + hyperlinks). Uniform style.</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">8.</div>
+                      <span>Strict no-plagiarism policy. Rejection without review if violated.</span>
+                    </li>
+                    <li className="flex items-start text-sm text-gray-700">
+                      <div className="min-w-6 font-bold text-blue-600">9.</div>
+                      <span>Authors are responsible for facts and views stated.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-lg">
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Non-adherence leads to rejection without review.
+                </div>
+                
+                <a 
+                  href="https://forms.gle/AdNb8uAFJDxmzvk27" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                >
+                  Submit via Google Form
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* === END SUBMISSION GUIDELINES SECTION === */}
 
           {/* Category Filter */}
           <div className="mb-8">
