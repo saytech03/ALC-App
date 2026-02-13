@@ -16,6 +16,7 @@ const HomePage_ = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [bgPosition, setBgPosition] = useState('');
   const audioRef = useRef(null);
+  const [patronId, setPatronId] = useState("user"); // Added for dynamic linking
 
   const [formData, setFormData] = useState({
     name: '',
@@ -23,6 +24,20 @@ const HomePage_ = () => {
     phone: '',
     message: ''
   });
+
+  // NEW: Fetch the patron ID to build the correct link
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        const id = user.alc_patronid || user.membershipId || "user";
+        setPatronId(id);
+      }
+    } catch (e) {
+      console.error("Error fetching patron ID", e);
+    }
+  }, []);
 
   // Handle click outside to close sidebar
   useEffect(() => {
@@ -200,13 +215,20 @@ const HomePage_ = () => {
         </p>
           </div>
         </div>
-        {/* CTA Button — Same style, just comfortable size */}
-        <div className="pt-8">
+        
+        {/* CTA Buttons */}
+        <div className="pt-8 flex flex-wrap justify-center gap-4">
           <Link
             to="https://forms.gle/sU34TSnJWsmNNM3E8"
             className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
             Write To Us
+          </Link>
+          <Link
+            to={`/${patronId}/blog`}
+            className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
+          >
+            Submit Blogs
           </Link>
         </div>
       </div>
