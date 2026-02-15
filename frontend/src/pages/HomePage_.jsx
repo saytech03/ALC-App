@@ -228,7 +228,7 @@ const HomePage_ = () => {
             to={`/${patronId}/blog`}
             className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
           >
-            Submit Blogs
+            Contribute to our Blog - ALC Fenestra
           </Link>
         </div>
       </div>
