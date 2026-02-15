@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from "react-router-dom";
-import { Lock, Calendar, User, Clock, ArrowRight } from 'lucide-react';
+import { Lock, Calendar, User, Clock, ArrowRight, Sparkles, MapPin, ExternalLink } from 'lucide-react';
 
 const EventsPage = () => {
   const [imgLoading, setImgLoading] = useState(true);
@@ -9,8 +9,25 @@ const EventsPage = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
 
-  // Sample events data (you can expand this with more events)
-  const events = [
+  // Upcoming events data with external links
+  const upcomingEvents = [
+    {
+      id: 3,
+      title: "HANDS ON: SEXUAL HARASSMENT IN THE CREATIVE INDUSTRY",
+      speaker: "DR. ARSHIYA SETHI",
+      date: "February 20, 2026",
+      venue: "Online",
+      description: "Our session on Sexual Harassment in the Creative Industry confronts hidden power dynamics, silences, and structural gaps shaping artistic spaces through an unflinching conversation with leading artivist Arshiya Sethi. Join us as we reimagine the arts as spaces of dignity, consent, and equity—where creativity can truly thrive without fear.",
+      image: "./Arshiya2.jpeg",
+      category: "ART, CREATIVE INDUSTRY",
+      requiresLogin: false,
+      registrationLink: "https://forms.gle/TApRVW6jAgH2H7a86", // Google Form link
+      learnMoreLink: "#" // Add your learn more link here when available
+    }
+  ];
+
+  // Archived events data
+  const archivedEvents = [
     {
       id: 1,
       title: "PAPER TO PRACTICE: HERITAGE CONSERVATION IN THE TRENCHES",
@@ -25,7 +42,7 @@ const EventsPage = () => {
     },
     {
       id: 2,
-      title: "PERFORMING ARTS AND THE LAW:BEHIND THE SPOTLIGHTS",
+      title: "PERFORMING ARTS AND THE LAW: BEHIND THE SPOTLIGHTS",
       speaker: "DR. SOMABHA BANDOPADHYAY",
       date: "November 2, 2025",
       description: "Dr. Somabha Bandopadhyay, Assistant Professor at National Forensic Sciences University, Delhi campus, delved into the legal intricacies of performing arts in India, covering intellectual property rights, contracts, and censorship issues faced by artists.",
@@ -35,17 +52,23 @@ const EventsPage = () => {
       attendees: "100",
       requiresLogin: true
     }
-    // Add more events here as needed
   ];
 
-  // Function to handle event click
-  const handleEventClick = (event) => {
+  // Function to handle archived event click
+  const handleArchivedEventClick = (event) => {
     if (event.requiresLogin) {
       setSelectedEvent(event);
       setShowLoginModal(true);
     } else {
-      // If no login required, navigate directly to event page
       navigate(`/event${event.id}`);
+    }
+  };
+
+  // Function to handle external link clicks
+  const handleExternalLink = (e, link) => {
+    e.stopPropagation(); // Prevent card click event
+    if (link && link !== "#") {
+      window.open(link, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -53,6 +76,157 @@ const EventsPage = () => {
     navigate('/login');
     setShowLoginModal(false);
   };
+
+  // Upcoming Event Card Component - Featured style
+  const UpcomingEventCard = ({ event }) => (
+    <div className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl border border-amber-500/30 transition-all duration-300 hover:border-amber-400/50 hover:shadow-amber-500/20 group">
+      {/* Upcoming Badge */}
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+        <Sparkles className="w-4 h-4" />
+        UPCOMING EVENT
+      </div>
+
+      <div className="flex flex-col lg:flex-row">
+        {/* Image Section */}
+        <div className="lg:w-2/5 relative overflow-hidden">
+          <img 
+            src={event.image} 
+            alt="Event thumbnail" 
+            className="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent lg:bg-gradient-to-r" />
+        </div>
+        
+        {/* Text Content Section */}
+        <div className="lg:w-3/5 p-6 lg:p-8">
+          {/* Category */}
+          <div className="flex items-center justify-between mb-4 mt-8 lg:mt-0">
+            <span className="bg-amber-600/20 text-amber-400 border border-amber-500/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide">
+              {event.category}
+            </span>
+          </div>
+          
+          {/* Title */}
+          <h2 className="text-white text-2xl lg:text-3xl font-semibold mb-4 leading-tight group-hover:text-amber-300 transition-colors">
+            {event.title}
+          </h2>
+          
+          {/* Speaker */}
+          <p className="text-amber-400 text-base mb-4 font-medium flex items-center">
+            <User className="w-5 h-5 mr-2" />
+            {event.speaker}
+          </p>
+          
+          {/* Event Details */}
+          <div className="flex flex-wrap gap-4 text-gray-300 text-sm mb-5 bg-gray-800/50 rounded-lg p-4">
+            <span className="flex items-center">
+              <Calendar className="w-4 h-4 mr-2 text-amber-400" />
+              {event.date}
+            </span>
+            <span className="flex items-center">
+              <MapPin className="w-4 h-4 mr-2 text-amber-400" />
+              {event.venue}
+            </span>
+          </div>
+          
+          {/* Description */}
+          <p className="text-gray-300 text-sm mb-6 leading-relaxed line-clamp-4">
+            {event.description}
+          </p>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-4">
+           {/* <button 
+              onClick={(e) => handleExternalLink(e, event.learnMoreLink)}
+              className="inline-flex items-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-500/30 group/btn"
+              disabled={!event.learnMoreLink || event.learnMoreLink === "#"}
+            >
+              <span>Learn More</span>
+              {event.learnMoreLink && event.learnMoreLink !== "#" ? (
+                <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+              ) : (
+                <ArrowRight className="w-4 h-4 ml-2 opacity-50" />
+              )}
+            </button>*/}
+            
+            <a 
+              href={event.registrationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center border border-amber-500/50 text-amber-400 hover:bg-amber-500/10 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300"
+            >
+              <span>Register For Free</span>
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Archived Event Card Component
+  const ArchivedEventCard = ({ event }) => (
+    <div 
+      className="bg-gray-800/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl border border-gray-700/50 transition-all duration-300 hover:border-blue-500/30 hover:shadow-2xl cursor-pointer"
+      onClick={() => handleArchivedEventClick(event)}
+    >
+      <div className="flex flex-col md:flex-row">
+        {/* Image Section */}
+        <div className="md:w-2/5 relative">
+          <img 
+            src={event.image} 
+            alt="Event thumbnail" 
+            className="w-full h-48 md:h-full object-cover"
+          />
+        </div>
+        
+        {/* Text Content Section */}
+        <div className="md:w-3/5 p-6">
+          <div className="flex items-center justify-between mb-3">
+            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+              {event.category}
+            </span>
+          </div>
+          
+          <h2 className="text-white text-xl md:text-2xl font-light mb-3 hover:text-blue-300 transition-colors">
+            {event.title}
+          </h2>
+          
+          <p className="text-blue-300 text-sm mb-2 font-medium flex items-center">
+            <User className="w-4 h-4 mr-2" />
+            {event.speaker}
+          </p>
+          
+          <div className="flex flex-wrap gap-4 text-gray-400 text-xs mb-4">
+            <span className="flex items-center">
+              <Calendar className="w-3 h-3 mr-1" />
+              {event.date}
+            </span>
+            <span className="flex items-center">
+              <Clock className="w-3 h-3 mr-1" />
+              {event.duration}
+            </span>
+            <span className="flex items-center">
+              👥 {event.attendees}
+            </span>
+          </div>
+          
+          <p className="text-gray-200 text-sm mb-4 leading-relaxed">
+            {event.description}
+          </p>
+          
+          <div className="flex items-center justify-between">
+            <button className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors group">
+              <span>View Event Details</span>
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="relative min-h-screen bg-gray-900">
@@ -74,89 +248,50 @@ const EventsPage = () => {
       />
       
       {/* Content */}
-      <div className="relative pt-28 min-h-screen flex items-center justify-center z-10">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto p-4">
-            <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide mb-8 text-center">OUR EVENTS</h1>
+      <div className="relative pt-28 min-h-screen z-10">
+        <div className="container mx-auto px-4 pb-16">
+          <div className="max-w-5xl mx-auto p-4">
             
-            {/* Events Grid */}
-            <div className="space-y-8">
-              {events.map((event) => (
-                <div 
-                  key={event.id}
-                  className="bg-gray-800/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl border border-gray-700/50 transition-all duration-300 hover:border-blue-500/30 hover:shadow-2xl cursor-pointer"
-                  onClick={() => handleEventClick(event)}
-                >
-                  {/* Image and content in a single box */}
-                  <div className="flex flex-col md:flex-row">
-                    {/* Image Section */}
-                    <div className="md:w-2/5 relative">
-                      <img 
-                        src={event.image} 
-                        alt="Event thumbnail" 
-                        className="w-full h-48 md:h-full object-cover"
-                      />
-                      {/* Lock icon overlay if login required */}
-                     {/*} {event.requiresLogin && (
-                        <div className="absolute top-4 right-4 bg-black/70 rounded-full p-2">
-                          <Lock className="w-5 h-5 text-white" />
-                        </div>
-                      )}*/}
-                    </div>
-                    
-                    {/* Text Content Section */}
-                    <div className="md:w-3/5 p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                          {event.category}
-                        </span>
-                      </div>
-                      
-                      <h2 className="text-white text-xl md:text-2xl font-light mb-3 hover:text-blue-300 transition-colors">
-                        {event.title}
-                      </h2>
-                      
-                      <p className="text-blue-300 text-sm mb-2 font-medium flex items-center">
-                        <User className="w-4 h-4 mr-2" />
-                        {event.speaker}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-4 text-gray-400 text-xs mb-4">
-                        <span className="flex items-center">
-                          <Calendar className="w-3 h-3 mr-1" />
-                          {event.date}
-                        </span>
-                        <span className="flex items-center">
-                          <Clock className="w-3 h-3 mr-1" />
-                          {event.duration}
-                        </span>
-                        <span className="flex items-center">
-                          👥 {event.attendees}
-                        </span>
-                      </div>
-                      
-                      <p className="text-gray-200 text-sm mb-4 leading-relaxed">
-                        {event.description}
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <button className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors group">
-                          <span>View Event Details</span>
-                          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                        
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Upcoming Events Section */}
+            <div className="mb-20">
+              <div className="flex items-center justify-center gap-4 mb-10">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-500/50" />
+                <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center flex items-center gap-3">
+                  <Sparkles className="w-8 h-8 text-amber-400" />
+                  UPCOMING EVENTS
+                </h1>
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-500/50" />
+              </div>
+              
+              <div className="space-y-8">
+                {upcomingEvents.map((event) => (
+                  <UpcomingEventCard key={event.id} event={event} />
+                ))}
+              </div>
+            </div>
+            
+            {/* Archived Events Section */}
+            <div>
+              <div className="flex items-center justify-center gap-4 mb-10">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-blue-500/50" />
+                <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center">
+                  ARCHIVED EVENTS
+                </h1>
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-blue-500/50" />
+              </div>
+              
+              <div className="space-y-8">
+                {archivedEvents.map((event) => (
+                  <ArchivedEventCard key={event.id} event={event} />
+                ))}
+              </div>
             </div>
             
           </div>
         </div>
       </div>
 
-      {/* Login Modal - Same as Blog page */}
+      {/* Login Modal */}
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
@@ -189,7 +324,6 @@ const EventsPage = () => {
                 Login
               </button>
             </div>
-            
           </div>
         </div>
       )}
