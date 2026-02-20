@@ -10,7 +10,7 @@ const EventsPage = () => {
   const navigate = useNavigate();
 
   // Upcoming events data with external links
-  const upcomingEvents = [
+  /*const upcomingEvents = [
     {
       id: 3,
       title: "HANDS ON: SEXUAL HARASSMENT IN THE CREATIVE INDUSTRY",
@@ -21,10 +21,10 @@ const EventsPage = () => {
       image: "./Arshiya2.jpeg",
       category: "ART, CREATIVE INDUSTRY",
       requiresLogin: false,
-      registrationLink: "https://forms.gle/TApRVW6jAgH2H7a86", // Google Form link
-      learnMoreLink: "#" // Add your learn more link here when available
+      registrationLink: "https://forms.gle/TApRVW6jAgH2H7a86",
+      learnMoreLink: "#"
     }
-  ];
+  ];*/
 
   // Archived events data
   const archivedEvents = [
@@ -65,12 +65,12 @@ const EventsPage = () => {
   };
 
   // Function to handle external link clicks
-  const handleExternalLink = (e, link) => {
-    e.stopPropagation(); // Prevent card click event
+  /*const handleExternalLink = (e, link) => {
+    e.stopPropagation();
     if (link && link !== "#") {
       window.open(link, '_blank', 'noopener,noreferrer');
     }
-  };
+  };*/
 
   const handleLogin = () => {
     navigate('/login');
@@ -78,47 +78,39 @@ const EventsPage = () => {
   };
 
   // Upcoming Event Card Component - Featured style
-  const UpcomingEventCard = ({ event }) => (
+  /*const UpcomingEventCard = ({ event }) => (
     <div className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl border border-amber-500/30 transition-all duration-300 hover:border-amber-400/50 hover:shadow-amber-500/20 group">
-      {/* Upcoming Badge */}
       <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
         <Sparkles className="w-4 h-4" />
         UPCOMING EVENT
       </div>
 
       <div className="flex flex-col lg:flex-row">
-        {/* Image Section */}
         <div className="lg:w-2/5 relative overflow-hidden">
           <img 
             src={event.image} 
             alt="Event thumbnail" 
             className="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent lg:bg-gradient-to-r" />
         </div>
         
-        {/* Text Content Section */}
         <div className="lg:w-3/5 p-6 lg:p-8">
-          {/* Category */}
           <div className="flex items-center justify-between mb-4 mt-8 lg:mt-0">
             <span className="bg-amber-600/20 text-amber-400 border border-amber-500/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide">
               {event.category}
             </span>
           </div>
           
-          {/* Title */}
           <h2 className="text-white text-2xl lg:text-3xl font-semibold mb-4 leading-tight group-hover:text-amber-300 transition-colors">
             {event.title}
           </h2>
           
-          {/* Speaker */}
           <p className="text-amber-400 text-base mb-4 font-medium flex items-center">
             <User className="w-5 h-5 mr-2" />
             {event.speaker}
           </p>
           
-          {/* Event Details */}
           <div className="flex flex-wrap gap-4 text-gray-300 text-sm mb-5 bg-gray-800/50 rounded-lg p-4">
             <span className="flex items-center">
               <Calendar className="w-4 h-4 mr-2 text-amber-400" />
@@ -130,26 +122,11 @@ const EventsPage = () => {
             </span>
           </div>
           
-          {/* Description */}
           <p className="text-gray-300 text-sm mb-6 leading-relaxed line-clamp-4">
             {event.description}
           </p>
           
-          {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-4">
-           {/* <button 
-              onClick={(e) => handleExternalLink(e, event.learnMoreLink)}
-              className="inline-flex items-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-500/30 group/btn"
-              disabled={!event.learnMoreLink || event.learnMoreLink === "#"}
-            >
-              <span>Learn More</span>
-              {event.learnMoreLink && event.learnMoreLink !== "#" ? (
-                <ExternalLink className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-              ) : (
-                <ArrowRight className="w-4 h-4 ml-2 opacity-50" />
-              )}
-            </button>*/}
-            
             <a 
               href={event.registrationLink}
               target="_blank"
@@ -164,7 +141,7 @@ const EventsPage = () => {
         </div>
       </div>
     </div>
-  );
+  );*/
 
   // Archived Event Card Component
   const ArchivedEventCard = ({ event }) => (
@@ -252,7 +229,8 @@ const EventsPage = () => {
         <div className="container mx-auto px-4 pb-16">
           <div className="max-w-5xl mx-auto p-4">
             
-            {/* Upcoming Events Section */}
+            {/* Upcoming Events Section - COMMENTED OUT */}
+            {/*
             <div className="mb-20">
               <div className="flex items-center justify-center gap-4 mb-10">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-500/50" />
@@ -269,6 +247,7 @@ const EventsPage = () => {
                 ))}
               </div>
             </div>
+            */}
             
             {/* Archived Events Section */}
             <div>
