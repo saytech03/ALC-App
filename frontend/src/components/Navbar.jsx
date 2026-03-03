@@ -114,6 +114,14 @@ const Navbar = () => {
             Events
           </Link>
 
+          <Link to="/newsletter" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Newsletter 
+          </Link>
+
+          <Link to="/res" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Resources
+          </Link>"
+
          {/*} <Link to="/contact" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Contact Us
           </Link>*/}
@@ -179,6 +187,14 @@ const Navbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Events
+            </Link>
+
+            <Link 
+              to="/res" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Resources
             </Link>
 
            {/* <Link 
