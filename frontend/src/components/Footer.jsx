@@ -46,7 +46,7 @@ const Footer = () => {
 						</p>
 					</div>
 					<div>
-						© 2025, Art Law Communion, All Rights Reserved
+						© 2026, Art Law Communion, All Rights Reserved
 					</div>
 				</div>
 
