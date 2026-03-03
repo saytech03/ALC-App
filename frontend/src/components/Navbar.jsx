@@ -189,6 +189,14 @@ const Navbar = () => {
               Events
             </Link>
 
+            <Link 
+              to="/newsletter" 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Newsletter
+            </Link>
+
            {/* <Link 
               to="/res" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
