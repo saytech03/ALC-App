@@ -25,6 +25,8 @@ import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
+import Newsletter from "./pages/Newslet"; 
+import Newsletter_ from "./pages/Newslet_";
 {/*import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";*/}
 
@@ -173,7 +175,8 @@ function App() {
           <Route path='/member' element={<LogoutWrapper><MembersPage /></LogoutWrapper>} />
           <Route path='/contact' element={<LogoutWrapper><ContactPage /></LogoutWrapper>} />
           <Route path='/au' element={<LogoutWrapper><AboutPage /></LogoutWrapper>} />
-          <Route path='/events' element={<LogoutWrapper><EventsPage /></LogoutWrapper>} />   
+          <Route path='/events' element={<LogoutWrapper><EventsPage /></LogoutWrapper>} /> 
+          <Route path='/newsletter' element={<LogoutWrapper><Newsletter /></LogoutWrapper>} />  
           {/*<Route path='/res' element={<LogoutWrapper><Resources /></LogoutWrapper>} />
           
           {/* Admin routes (Admin Login also clears regular user session) */}
@@ -201,6 +204,7 @@ function App() {
           <Route path='/:patronId/eventsh' element={<RequireAuth><EventsPage_ /></RequireAuth>} />
           <Route path='/:patronId/event1' element={<RequireAuth><Event1 /></RequireAuth>} />
           <Route path='/:patronId/event2' element={<RequireAuth><Event2 /></RequireAuth>} />
+          <Route path='/:patronId/newsh' element={<RequireAuth><Newsletter_ /></RequireAuth>} />
           {/*<Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
           
           {/* Catch-all route */}
