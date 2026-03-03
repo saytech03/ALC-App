@@ -18,6 +18,8 @@ const useDocumentTitle = () => {
       '/bl': 'ALC - Blog',
       '/member': 'ALC - Members',
       '/contact': 'ALC - Contact Us',
+      '/events': 'ALC - Events',
+      '/newsletter': 'ALC - Newsletter',
       '/au': 'ALC - About Us',
       '/h': 'ALC - Home',
       '/memberh': 'ALC - Members',

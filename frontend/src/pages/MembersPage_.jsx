@@ -7,21 +7,21 @@ const MembersPage_ = () => {
 
   const coreMembers = [
     // === Your 7 members (unchanged) ===
-    {
+     {
       id: 1,
-      name: "Priyanshu Kar",
-      position: "Founder",
-      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
-      image: "./member1.png"
-    },
-    {
-      id: 2,
       name: "Budhaditya Ghosh",
       position: "Co-Founder",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he's interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
       image: "./member3.png"
+    },
+    {
+      id: 2,
+      name: "Priyanshu Kar",
+      position: "Founder",
+      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
+      detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
+      image: "./member1.png"
     },
     {
       id: 3,
