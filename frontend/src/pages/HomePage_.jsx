@@ -174,6 +174,10 @@ const HomePage_ = () => {
     {
        text: "Like	law,	art	was	once	a	rule-based	activity.	In	classical	antiquity,	the	word	'art'	(Greek,'tekne',	Latin,	'ars')	was	the	name	given	to	any	activity	governed	by	rules.",
        author: "Paul Kearns"
+    },
+    {
+      text: "The artist must be not merely creator but also conjurer. Art, by its very nature, is illusion.",
+      author: "Jessica Daraby"
     }
   ];
 
