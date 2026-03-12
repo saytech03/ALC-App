@@ -23,7 +23,7 @@ if not api_key:
     print("CRITICAL: GOOGLE_API_KEY is missing from Vercel Settings!")
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 @app.post("/api/chat")
 async def chat_endpoint(
