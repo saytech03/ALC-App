@@ -26,7 +26,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 # ✅ FIX: Change 2.5 to 1.5
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-3")
 
 @app.post("/api/chat")
 async def chat_endpoint(
