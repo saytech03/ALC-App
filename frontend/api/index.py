@@ -1,31 +1,11 @@
-from fastapi import FastAPI, HTTPException, Form, UploadFile, File, Request
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
-from typing import List, Optional
+import google.generativeai as genai
 import os
-import uvicorn
-import io
-
-# Install these: pip install PyPDF2 python-docx
-try:
-    import PyPDF2
-    PDF_SUPPORT = True
-except ImportError:
-    PDF_SUPPORT = False
-    print("⚠️ PyPDF2 not installed. PDF text extraction disabled.")
-
-try:
-    import docx
-    DOCX_SUPPORT = True
-except ImportError:
-    DOCX_SUPPORT = False
 
 app = FastAPI()
 
-# 1. Enable CORS
+# Enable CORS for your website
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -34,118 +14,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. Setup Google Gemini
+# --- GET API KEY ---
+# Use the Vercel Environment Variable
+
 api_key = "AIzaSyAbcnNEwFsBEf0p9LhVov9pM5vDUH2gOYo"
 
-llm = ChatGoogleGenerativeAI(
-    model="models/gemini-2.5-flash",
-    google_api_key=api_key,
-    temperature=0.3
-)
-
-def extract_text_from_file(file: UploadFile) -> str:
-    """Extract text from PDF, DOCX, or TXT files"""
-    filename = file.filename.lower()
-    content = ""
-    
-    try:
-        file_bytes = file.file.read()
-        
-        if filename.endswith('.pdf') and PDF_SUPPORT:
-            # Extract PDF text
-            pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
-            for page in pdf_reader.pages:
-                content += page.extract_text() + "\n"
-                
-        elif filename.endswith('.docx') and DOCX_SUPPORT:
-            # Extract DOCX text
-            doc = docx.Document(io.BytesIO(file_bytes))
-            for para in doc.paragraphs:
-                content += para.text + "\n"
-                
-        elif filename.endswith('.txt'):
-            # Plain text
-            content = file_bytes.decode('utf-8')
-            
-        else:
-            # Try to decode as text anyway
-            try:
-                content = file_bytes.decode('utf-8')
-            except:
-                return f"[File '{file.filename}' uploaded but text could not be extracted]"
-        
-        # Limit content length to avoid token limits
-        if len(content) > 15000:
-            content = content[:15000] + "\n\n[Document truncated due to length...]"
-            
-        return content
-        
-    except Exception as e:
-        return f"[Error reading {file.filename}: {str(e)}]"
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.post("/api/chat")
 async def chat_endpoint(
-    request: Request,
-    user_message: Optional[str] = Form(""),
-    file: Optional[UploadFile] = File(None)  # Changed to single file for simplicity
+    user_message: str = Form(...), # Expect Form data, not JSON
+    file: UploadFile | None = File(None)
 ):
     try:
-        full_context = user_message or ""
+        parts = []
         
-        # Process file if uploaded
+        # System Instruction
+        system_text = "You are ManjuLex, an Art Law AI. Answer legally and concisely."
+        parts.append(system_text)
+
+        # Handle File
         if file:
-            file_text = extract_text_from_file(file)
-            full_context += f"\n\n[Document Content from {file.filename}]:\n{file_text}"
-            
-            # If no user message, create a default prompt
-            if not user_message:
-                full_context += "\n\nPlease analyze this document and provide insights."
-        
-        if not full_context.strip():
-            return {"reply": "Please provide a message or upload a document."}
+            content = await file.read()
+            parts.append({
+                "mime_type": file.content_type,
+                "data": content
+            })
 
-        # Generate response
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are ManjuLex, an expert Art Law Consultant. Analyze documents carefully and provide clear legal insights. Be professional and concise."),
-            ("human", "{user_message}")
-        ])
-        chain = prompt | llm | StrOutputParser()
+        # Handle Text
+        if user_message:
+            parts.append(user_message)
+
+        # Generate Response
+        response = model.generate_content(parts)
         
-        response = chain.invoke({"user_message": full_context})
-        return {"reply": response}
-        
+        return {"reply": response.text}
+
     except Exception as e:
-        print(f"Chat Error: {e}")
+        print(f"Server Error: {e}")
+        # Return the actual error to the frontend so we can debug
         raise HTTPException(status_code=500, detail=str(e))
-
-# Contract scanner endpoint remains the same
-class ContractInput(BaseModel):
-    contract_text: str
-
-parser = JsonOutputParser()
-
-@app.post("/api/agent/review-contract")
-async def review_contract(contract_input: ContractInput):
-    try:
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are an AI Legal Auditor. Return STRICT JSON:
-            {
-                "risk_score": (integer 0-100),
-                "summary": "Brief summary",
-                "dangerous_clauses": ["clause 1", "clause 2"],
-                "missing_clauses": ["protection 1", "protection 2"]
-            }"""),
-            ("human", "Analyze this contract:\n\n{contract_text}")
-        ])
-        chain = prompt | llm | parser
-        return chain.invoke({"contract_text": contract_input.contract_text})
-    except Exception as e:
-        return {
-            "risk_score": 0,
-            "summary": f"Error: {str(e)}",
-            "dangerous_clauses": [],
-            "missing_clauses": []
-        }
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
