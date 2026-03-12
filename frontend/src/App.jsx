@@ -28,7 +28,7 @@ import Event2 from "./pages/Event2";
 import Newsletter from "./pages/Newslet"; 
 import Newsletter_ from "./pages/Newslet_";
 // --- NEW AI IMPORTS ---
-import AiHub from "./pages/AiHub";
+/*import AiHub from "./pages/AiHub";*/
 import ContractScanner from "./pages/ContractScanner";
 import AiChat from "./pages/AiChat";
 import Resources from "./pages/Res";
@@ -221,7 +221,7 @@ function App() {
           <Route path='/:patronId/event1' element={<RequireAuth><Event1 /></RequireAuth>} />
           <Route path='/:patronId/event2' element={<RequireAuth><Event2 /></RequireAuth>} />
           <Route path='/:patronId/newsh' element={<RequireAuth><Newsletter_ /></RequireAuth>} />
-          <Route path='/:patronId/ai' element={<RequireAuth><AiHub /></RequireAuth>} />
+          {/* <Route path='/:patronId/ai' element={<RequireAuth><AiHub /></RequireAuth>} /> */}
           <Route path='/:patronId/ai/scanner' element={<RequireAuth><ContractScanner /></RequireAuth>} />
           <Route path='/:patronId/ai/chat' element={<RequireAuth><AiChat /></RequireAuth>} />
           <Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
