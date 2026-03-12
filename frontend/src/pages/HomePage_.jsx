@@ -39,20 +39,6 @@ const HomePage_ = () => {
     }
   }, []);
 
-  // Handle click outside to close sidebar
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (showChatbot && chatSidebarRef.current && !chatSidebarRef.current.contains(event.target)) {
-        setShowChatbot(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showChatbot]);
-
   // Array of quotes that will rotate daily
   const quotes = [
     {
@@ -237,39 +223,14 @@ const HomePage_ = () => {
         </div>
       </div>
 
-      {/* Chatbot Sidebar — Completely unchanged */}
-      <div
-        ref={chatSidebarRef}
-        className={`fixed inset-y-0 right-0 w-full sm:w-80 md:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
+      {/* Simplistic Magnifying Glass Icon (Redirects to AI Chat) */}
+      <Link 
+        to={`/${patronId}/ai/chat`}
+        className="fixed bottom-8 right-8 bg-white/90 hover:bg-white text-black p-4 rounded-full shadow-lg transition-all duration-300 z-50 flex items-center justify-center border border-gray-200"
+        title="Search Art Law AI"
       >
-        <div className="h-full flex flex-col">
-          <div className="bg-black text-white p-4 sm:p-5 flex justify-between items-center border-b border-gray-700">
-            <h3 className="text-base sm:text-lg font-medium tracking-tight">Art Law Assistant</h3>
-            <button onClick={() => setShowChatbot(false)} className="text-white/70 hover:text-white">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="border-t border-gray-200 p-4 sm:p-5 bg-white/50">
-            <div className="flex rounded-lg overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-black focus-within:border-transparent transition-all duration-200">
-              <input
-                type="text"
-                placeholder="Type your question..."
-                className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base focus:outline-none bg-transparent"
-              />
-              <button className="bg-black text-white px-3 sm:px-4 py-2 hover:bg-gray-800 transition-colors duration-200">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-            <p className="text-xs sm:text-sm text-gray-500 mt-2 text-center">
-              Ask me anything about art law, copyright, or legal issues for artists.
-            </p>
-          </div>
-        </div>
-      </div>
+        <Search size={24} strokeWidth={2} />
+      </Link>
     </div>
   );
 };

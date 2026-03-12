@@ -27,8 +27,13 @@ import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
 import Newsletter from "./pages/Newslet"; 
 import Newsletter_ from "./pages/Newslet_";
-{/*import Resources from "./pages/Res";
-import Resources_ from "./pages/Res_";*/}
+// --- NEW AI IMPORTS ---
+import AiHub from "./pages/AiHub";
+import ContractScanner from "./pages/ContractScanner";
+import AiChat from "./pages/AiChat";
+import Resources from "./pages/Res";
+import Resources_ from "./pages/Res_";
+import CreateEvent from "./admin/CreateEvent";
 
 // --- Helper: Scroll To Top ---
 const ScrollToTop = () => {
@@ -74,6 +79,7 @@ const RequireAuth = ({ children }) => {
   const currentUserId = user.alc_patronid || user.membershipId || "user";
 
   // String comparison to handle Type Mismatch (Number vs String)
+  // Note: For AI routes without patronId in URL, this check is skipped (allowing access to any logged-in user)
   if (patronId && String(patronId).trim() !== String(currentUserId).trim()) {
     return <Navigate to="/404" replace />;
   }
@@ -177,7 +183,7 @@ function App() {
           <Route path='/au' element={<LogoutWrapper><AboutPage /></LogoutWrapper>} />
           <Route path='/events' element={<LogoutWrapper><EventsPage /></LogoutWrapper>} /> 
           <Route path='/newsletter' element={<LogoutWrapper><Newsletter /></LogoutWrapper>} />  
-          {/*<Route path='/res' element={<LogoutWrapper><Resources /></LogoutWrapper>} />
+          <Route path='/res' element={<LogoutWrapper><Resources /></LogoutWrapper>} />
           
           {/* Admin routes (Admin Login also clears regular user session) */}
           <Route path='/admin' element={<LogoutWrapper><AdminLoginPage /></LogoutWrapper>} />
@@ -188,12 +194,22 @@ function App() {
               <Adcontrol />
             </RequireAdminAuth>
           } />
+
           
           <Route path='/cb' element={
             <RequireAdminAuth>
               <CreateBlog />
             </RequireAdminAuth>
           } />
+
+          <Route path='/ce' element={
+            <RequireAdminAuth>
+              <CreateEvent />
+            </RequireAdminAuth>
+          } />
+
+          {/* --- NEW AGENTIC AI ROUTES (Protected) --- */}
+          {/* These are accessible to any logged-in user. */}
           
           {/* User Protected Routes */}
           <Route path='/:patronId/h' element={<RequireAuth><HomePage_ /></RequireAuth>} />
@@ -205,7 +221,10 @@ function App() {
           <Route path='/:patronId/event1' element={<RequireAuth><Event1 /></RequireAuth>} />
           <Route path='/:patronId/event2' element={<RequireAuth><Event2 /></RequireAuth>} />
           <Route path='/:patronId/newsh' element={<RequireAuth><Newsletter_ /></RequireAuth>} />
-          {/*<Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
+          <Route path='/:patronId/ai' element={<RequireAuth><AiHub /></RequireAuth>} />
+          <Route path='/:patronId/ai/scanner' element={<RequireAuth><ContractScanner /></RequireAuth>} />
+          <Route path='/:patronId/ai/chat' element={<RequireAuth><AiChat /></RequireAuth>} />
+          <Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
           
           {/* Catch-all route */}
           <Route path='*' element={<NotFoundPage />} />
