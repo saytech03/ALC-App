@@ -15,19 +15,22 @@ app.add_middleware(
 )
 
 # --- GET API KEY ---
-# Use the Vercel Environment Variable
-api_key = "AIzaSyAbcnNEwFsBEf0p9LhVov9pM5vDUH2gOYo"
+# ⚠️ SECURITY WARNING: You posted your real API key in the chat. 
+# ⚠️ Please go to Google AI Studio and regenerate it immediately after this.
+# It is better to use os.environ.get("GOOGLE_API_KEY") for security.
+api_key = "AIzaSyAbcnNEwFsBEf0p9LhVov9pM5vDUH2gOYo" 
 
-# Safety check: If key is missing, print a warning to logs
 if not api_key:
-    print("CRITICAL: GOOGLE_API_KEY is missing from Vercel Settings!")
+    print("CRITICAL: GOOGLE_API_KEY is missing!")
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-2.5-flash")
+
+# ✅ FIX: Change 2.5 to 1.5
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.post("/api/chat")
 async def chat_endpoint(
-    user_message: str = Form(...), # Expect Form data, not JSON
+    user_message: str = Form(None), # Changed to Form(None) to prevent validation error if empty
     file: UploadFile | None = File(None)
 ):
     try:
@@ -48,6 +51,10 @@ async def chat_endpoint(
         # Handle Text
         if user_message:
             parts.append(user_message)
+        
+        # Handle case where user sends nothing (prevents crash)
+        if not user_message and not file:
+             return {"reply": "Please provide a message or a file."}
 
         # Generate Response
         response = model.generate_content(parts)
@@ -56,5 +63,5 @@ async def chat_endpoint(
 
     except Exception as e:
         print(f"Server Error: {e}")
-        # Return the actual error to the frontend so we can debug
+        # This print will show up in Vercel Logs if it fails again
         raise HTTPException(status_code=500, detail=str(e))
