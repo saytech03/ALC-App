@@ -1,12 +1,11 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Request
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
-import uvicorn
-import json
+import os
 
 app = FastAPI()
 
-# CORS
+# Enable CORS for your website
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,63 +14,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- GET API KEY ---
+# Use the Vercel Environment Variable
 api_key = "AIzaSyAbcnNEwFsBEf0p9LhVov9pM5vDUH2gOYo"
+
+# Safety check: If key is missing, print a warning to logs
 if not api_key:
-    print("🚨 CRITICAL: GOOGLE_API_KEY missing in Vercel Settings!")
-    api_key = "AIza-placeholder"  # This will fail gracefully
+    print("CRITICAL: GOOGLE_API_KEY is missing from Vercel Settings!")
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-pro")  # Stable model
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.post("/api/chat")
-async def chat_endpoint(request: Request):
+async def chat_endpoint(
+    user_message: str = Form(...), # Expect Form data, not JSON
+    file: UploadFile | None = File(None)
+):
     try:
-        # AUTO-DETECT JSON vs FormData
-        content_type = request.headers.get('content-type', '').lower()
+        parts = []
         
-        user_message = ""
-        file_content = None
-        
-        if 'application/json' in content_type:
-            # Handle JSON (text-only chat)
-            body = await request.body()
-            data = json.loads(body)
-            user_message = data.get('user_message', '')
-        else:
-            # Handle FormData (text + file)
-            form = await request.form()
-            user_message = form.get('user_message', '')
-            uploaded_file = form.get('file')
-            if uploaded_file:
-                # Read file bytes for Gemini
-                file_bytes = await uploaded_file.read()
-                file_content = {
-                    "mime_type": uploaded_file.content_type or "application/octet-stream",
-                    "data": file_bytes
-                }
-        
-        # Prepare prompt for Gemini
-        parts = ["You are ManjuLex, an Art Law AI. Answer legally and concisely."]
-        
-        if file_content:
-            parts.append(file_content)
-            if not user_message:
-                user_message = "Analyze this document for legal issues."
-        
+        # System Instruction
+        system_text = "You are ManjuLex, an Art Law AI. Answer legally and concisely."
+        parts.append(system_text)
+
+        # Handle File
+        if file:
+            content = await file.read()
+            parts.append({
+                "mime_type": file.content_type,
+                "data": content
+            })
+
+        # Handle Text
         if user_message:
             parts.append(user_message)
-        
-        if not user_message and not file_content:
-            return {"reply": "Please provide a message."}
-        
-        # Call Gemini
+
+        # Generate Response
         response = model.generate_content(parts)
         
         return {"reply": response.text}
-        
-    except Exception as e:
-        print(f"🚨 Server Error: {e}")
-        raise HTTPException(status_code=500, detail=f"AI Error: {str(e)}")
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    except Exception as e:
+        print(f"Server Error: {e}")
+        # Return the actual error to the frontend so we can debug
+        raise HTTPException(status_code=500, detail=str(e))
