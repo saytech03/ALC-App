@@ -301,7 +301,7 @@ const AiChat = () => {
         <div 
           className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 relative"
           style={{ 
-            backgroundColor: '#5f5f6a', // zinc-900
+            backgroundColor: '#18181b', // zinc-900
             backgroundImage: doodlePattern,
             backgroundRepeat: 'repeat'
           }}
