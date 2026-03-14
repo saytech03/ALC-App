@@ -1,9 +1,10 @@
 fastapi
 uvicorn
-google-generativeai
+mangum
 langchain
 langchain-google-genai
+pydantic
 python-multipart
-python-dotenv
 PyPDF2
-mangum
+python-docx
+python-dotenv
