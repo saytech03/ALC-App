@@ -39,13 +39,35 @@ app.add_middleware(
 )
 
 # 2. Setup Google Gemini
-api_key = os.getenv("GOOGLE_API_KEY")
+# Prefer a production environment variable; fall back to the other supported name.
+api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    google_api_key=api_key,
-    temperature=0.3
-)
+_llm = None
+
+def get_llm():
+    """Return a cached ChatGoogleGenerativeAI client or initialize it.
+
+    This is done lazily so that missing or invalid API keys do not crash
+    module import time (helpful for serverless deployments).
+    """
+
+    global _llm
+    if _llm is not None:
+        return _llm
+
+    if not api_key:
+        raise RuntimeError(
+            "Missing Gemini API key. Set GOOGLE_API_KEY or GEMINI_API_KEY in the environment."
+        )
+
+    # NOTE: Use a supported model name for the Gemini Developer API.
+    _llm = ChatGoogleGenerativeAI(
+        model="models/gemini-2.5-flash",
+        google_api_key=api_key,
+        temperature=0.3
+    )
+
+    return _llm
 
 def extract_text_from_file(file: UploadFile) -> str:
     """Extract text from PDF, DOCX, or TXT files"""
@@ -109,18 +131,19 @@ async def chat_endpoint(
             return {"reply": "Please provide a message or upload a document."}
 
         # Generate response
+        llm = get_llm()
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are ManjuLex, an expert Art Law Consultant. Analyze documents carefully and provide clear legal insights. Be professional and concise."),
             ("human", "{user_message}")
         ])
         chain = prompt | llm | StrOutputParser()
-        
+
         response = chain.invoke({"user_message": full_context})
         return {"reply": response}
-        
+
     except Exception as e:
         print(f"Chat Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        return {"reply": "Sorry, I couldn't process your request right now.", "error": str(e)}
 
 # Contract scanner endpoint remains the same
 class ContractInput(BaseModel):
@@ -141,9 +164,11 @@ async def review_contract(contract_input: ContractInput):
             }"""),
             ("human", "Analyze this contract:\n\n{contract_text}")
         ])
+        llm = get_llm()
         chain = prompt | llm | parser
         return chain.invoke({"contract_text": contract_input.contract_text})
     except Exception as e:
+        print(f"Contract review error: {e}")
         return {
             "risk_score": 0,
             "summary": f"Error: {str(e)}",

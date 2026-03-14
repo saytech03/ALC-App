@@ -175,7 +175,13 @@ const AiChat = () => {
         body: formData
       });
 
-      const data = await res.json();
+      let data;
+      if (!res.ok) {
+        const text = await res.text();
+        data = { reply: `Server error (${res.status}): ${text}` };
+      } else {
+        data = await res.json();
+      }
       
       const aiMsg = {
         role: 'assistant',
