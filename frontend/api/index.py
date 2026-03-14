@@ -62,7 +62,7 @@ def get_llm():
 
     # NOTE: Use a supported model name for the Gemini Developer API.
     _llm = ChatGoogleGenerativeAI(
-        model="models/gemini-2.5-flash",
+        model="models/gemini-1.5-flash",
         google_api_key=api_key,
         temperature=0.3
     )
