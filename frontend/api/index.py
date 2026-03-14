@@ -8,6 +8,10 @@ from typing import List, Optional
 import os
 import uvicorn
 import io
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 # Install these: pip install PyPDF2 python-docx
 try:
@@ -35,10 +39,10 @@ app.add_middleware(
 )
 
 # 2. Setup Google Gemini
-api_key = "AIzaSyBrfiaxhC1jU9_T_9IwQE19UzH1D91XeR8"
+api_key = os.getenv("GOOGLE_API_KEY")
 
 llm = ChatGoogleGenerativeAI(
-    model="models/gemini-2.5-flash",
+    model="gemini-2.5-flash",
     google_api_key=api_key,
     temperature=0.3
 )
