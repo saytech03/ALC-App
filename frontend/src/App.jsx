@@ -25,6 +25,7 @@ import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
 import Event1 from "./pages/Event1";
 import Event2 from "./pages/Event2";
+import Event3 from "./pages/Event3";
 import Newsletter from "./pages/Newslet"; 
 import Newsletter_ from "./pages/Newslet_";
 {/*import Resources from "./pages/Res";
@@ -204,6 +205,7 @@ function App() {
           <Route path='/:patronId/eventsh' element={<RequireAuth><EventsPage_ /></RequireAuth>} />
           <Route path='/:patronId/event1' element={<RequireAuth><Event1 /></RequireAuth>} />
           <Route path='/:patronId/event2' element={<RequireAuth><Event2 /></RequireAuth>} />
+          <Route path='/:patronId/event3' element={<RequireAuth><Event3 /></RequireAuth>} />  
           <Route path='/:patronId/newsh' element={<RequireAuth><Newsletter_ /></RequireAuth>} />
           {/*<Route path='/:patronId/resh' element={<RequireAuth><Resources_ /></RequireAuth>} />
           
