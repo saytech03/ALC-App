@@ -58,7 +58,7 @@ const EventsPage = () => {
       speaker: "DR. ARSHIYA SETHI",
       date: "February 20, 2026",
       description: "Dr. Arshiya Sethi, a leading artivist, confronted the hidden power dynamics and structural gaps surrounding sexual harassment in the creative industry, reimagining artistic spaces through the lenses of dignity, consent, and equity to ensure a professional environment where creativity thrives without fear.",
-      image: "./Arshiya2.jpeg",
+      image: "./event3_thumb.jpeg",
       category: "ART, CREATIVE INDUSTRY",
       duration: "1 hour",
       attendees: "100",
