@@ -22,6 +22,9 @@ const API_CONFIG = {
       GET_ALL: '/api/blogs',
       GET_BY_ID: '/api/blogs' // Append /:id to this endpoint
     },
+    EVENT: {
+      CREATE: '/api/admin/events/upcoming'
+    },
     CONTACT: '/api/contact', // New contact endpoint
     HEALTH: '/api/health' // Application health endpoint
   },

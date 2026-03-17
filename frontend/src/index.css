@@ -35,6 +35,14 @@
     background-repeat: no-repeat;
 }
 
+.res-bg {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/miniature.jpeg");
+	background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+	
+}
+
 .ai-bg {
 	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("/trees.jpg");
 	background-size: cover;

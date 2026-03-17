@@ -619,8 +619,14 @@ const AdNavbar = () => {
         </div>
                                           
         <div className="hidden md:flex items-center gap-4 mr-1">
+          <Link to="/acp" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Admin Home
+          </Link>
           <Link to="/cb" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Create Blog
+          </Link>
+          <Link to="/ce" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Manage Events
           </Link>
           <Link to="/gb" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Get all blogs
@@ -648,46 +654,39 @@ const AdNavbar = () => {
         <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-md">
           <div className="flex flex-col py-4 px-6 space-y-4">
             <Link 
-              to="/h" 
+              to="/acp"
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Home
+              Admin Home
             </Link>
             <Link 
-              to="/auh" 
+              to="/cb" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              About Us
+              Create Blog
             </Link>
             <Link 
-              to="/memberh" 
+              to="/ce" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Team
+              Manage Events
             </Link>
             <Link 
-              to="/blog" 
+              to="/gb" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              ALC Fenestra
+              Get All Blogs
             </Link>
             <Link 
-              to="/h" 
+              to="/gbi" 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Events
-            </Link>
-            <Link 
-              to="/contacth" 
-              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact Us
+              Get Blog by ID
             </Link>
           </div>
         </div>
