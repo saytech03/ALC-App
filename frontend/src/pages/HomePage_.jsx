@@ -223,14 +223,14 @@ const HomePage_ = () => {
         </div>
       </div>
 
-      {/* Simplistic Magnifying Glass Icon (Redirects to AI Chat) */}
+      {/* Simplistic Magnifying Glass Icon (Redirects to AI Chat) 
       <Link 
         to={`/${patronId}/ai/chat`}
         className="fixed bottom-8 right-8 bg-white/90 hover:bg-white text-black p-4 rounded-full shadow-lg transition-all duration-300 z-50 flex items-center justify-center border border-gray-200"
         title="Search Art Law AI"
       >
         <Search size={24} strokeWidth={2} />
-      </Link>
+      </Link>*/}
     </div>
   );
 };
