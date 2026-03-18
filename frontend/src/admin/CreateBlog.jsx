@@ -152,7 +152,8 @@ const CreateBlog = () => {
     <div className='min-h-screen w-full ai-bg'> {/* Same background as Blogspot */}
       <AdNavbar />
       
-      <div className="max-w-6xl mx-auto px-6 py-8 pt-20"> {/* Added pt-20 for navbar spacing */}
+      {/* Changed pt-20 to pt-32 to bring it down further */}
+      <div className="max-w-6xl mx-auto px-6 py-8 pt-32"> 
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8"> {/* Added transparency and blur */}
           {/* Header */}
           <div className="mb-8">
