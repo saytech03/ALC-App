@@ -19,8 +19,8 @@ const MembersPage_ = () => {
       id: 2,
       name: "Priyanshu Kar",
       position: "Founder",
-      info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Priyanshu Kar is a final year student of law at the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
+      info: "Incoming Associate at Nishith Desai Associates",
+      detailedInfo: "Priyanshu Kar is an alumnus of the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
     },
     {
@@ -33,14 +33,6 @@ const MembersPage_ = () => {
     },
     {
       id: 4,
-      name: "Auronisha Roy",
-      position: "Founding Member",
-      info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
-      detailedInfo: "Auronisha Roy is a second year student of law at the WB National University of Juridical Sciences. She belongs to a family of music lovers and is a student of Bharatnatyam dance. She believes that art is an inseparable part of any society and wants to use her legal education to work for the community that has influenced her life profoundly.",
-      image: "./member5.png"
-    },
-    {
-      id: 5,
       name: "Ishika Hazra",
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
@@ -48,7 +40,7 @@ const MembersPage_ = () => {
       image: "./member6.jpeg"
     },
     {
-      id: 6,
+      id: 5,
       name: "Kapu Vinuthna",
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
@@ -60,7 +52,7 @@ const MembersPage_ = () => {
   // === New Web Team Members (Placeholders) ===
   const webMembers = [
     {
-      id: 7,
+      id: 6,
       name: "Debdutta Basu",
       position: "Backend Developer",
       info: "Programmer Analyst Trainee at Cognizant",
@@ -68,7 +60,7 @@ const MembersPage_ = () => {
       image: "./webmember1.jpeg" 
     },
     {
-      id: 8,
+      id: 7,
       name: "Sayantan Pramanik",
       position: "Frontend Developer",
       info: "First year masters student in Computer Science & Engineering at Jadavpur University.",
@@ -101,12 +93,12 @@ const MembersPage_ = () => {
 
         {/* === Core Members Grid === */}
         <div className="space-y-12">
-          {/* Top Row - 4 cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {/* Top Row - 3 cards */}
+          <div className="grid grid-cols-6 gap-8 max-w-5xl mx-auto">
             {coreMembers.slice(0, 3).map((member) => (
               <div
                 key={member.id}
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer col-span-2"
                 onClick={() => setSelectedMember(member.id)}
               >
                 <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
@@ -125,12 +117,13 @@ const MembersPage_ = () => {
             ))}
           </div>
 
-          {/* Bottom Row - 3 cards, centered */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {coreMembers.slice(3, 6).map((member) => (
+          {/* Bottom Row - 2 cards, aligned between top row cards */}
+          <div className="grid grid-cols-6 gap-8 max-w-5xl mx-auto">
+            <div />
+            {coreMembers.slice(3, 5).map((member) => (
               <div
                 key={member.id}
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer col-span-2"
                 onClick={() => setSelectedMember(member.id)}
               >
                 <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
@@ -147,6 +140,7 @@ const MembersPage_ = () => {
                 </div>
               </div>
             ))}
+            <div />
           </div>
         </div>
 
