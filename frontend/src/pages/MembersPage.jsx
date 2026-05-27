@@ -20,7 +20,7 @@ const MembersPage = () => {
       name: "Priyanshu Kar",
       position: "Founder",
       info: "Incoming Associate at Nishith Desai Associates",
-      detailedInfo: "Priyanshu Kar is an alumnus of the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
+      detailedInfo: "Priyanshu Kar is an incoming associate at Nishith Desai Associates and an alumnus of the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
     },
     {
