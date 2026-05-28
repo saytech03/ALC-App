@@ -11,7 +11,7 @@ const useDocumentTitle = () => {
       : location.pathname;
 
     const pathToTitle = {
-      '/': 'ALC - Home',
+      '/': 'Art Law Communion',
       '/login': 'ALC - Login',
       '/signup': 'ALC - Sign Up',
       '/otp': 'ALC - OTP Verification',
@@ -28,7 +28,7 @@ const useDocumentTitle = () => {
       '/auh': 'ALC - About Us',
     };
 
-    document.title = pathToTitle[currentPath] || 'ALC-App';
+    document.title = pathToTitle[currentPath] || 'Art Law Communion';
   }, [location.pathname, location.hash]); // Track both to ensure updates
 };
 
