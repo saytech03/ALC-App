@@ -19,10 +19,7 @@ const HomePage = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [visibleCards, setVisibleCards] = useState(1);
-
-  const getAssetUrl = (imagePath) => {
-    return new URL(`/${imagePath.replace(/^\/+/, '')}`, import.meta.url).href;
-  };
+  const assetBase = import.meta.env.BASE_URL || '/';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -332,7 +329,7 @@ const HomePage = () => {
                         <div className="h-12 w-12 overflow-hidden rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-semibold text-base border border-white/30 flex-shrink-0">
                           {testimonial.image ? (
                             <img
-                              src={getAssetUrl(testimonial.image)}
+                              src={`${assetBase}${testimonial.image.replace(/^\//, '')}`}
                               alt={testimonial.name}
                               className="h-full w-full object-cover"
                             />
