@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music, Facebook, Instagram, Youtube } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music, Facebook, Instagram, Youtube } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { Link } from "react-router-dom";
 
@@ -17,6 +17,9 @@ const HomePage = () => {
   const [bgPosition, setBgPosition] = useState('');
   const audioRef = useRef(null);
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [visibleCards, setVisibleCards] = useState(1);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,23 +27,17 @@ const HomePage = () => {
     message: ''
   });
 
-  // Handle click outside to close sidebar
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showChatbot && chatSidebarRef.current && !chatSidebarRef.current.contains(event.target)) {
         setShowChatbot(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showChatbot]);
 
-  // Array of quotes that will rotate daily
-  const quotes = [
-    {
+  const quotes = [{
       text: "Art is perhaps the only territory that has kept hope alive. Because it is always about moving forward. Creativity never dies. Creativity looks forward, produces the future of hope.",
       author: "Gulmohammed Sheikh"
     },
@@ -163,6 +160,38 @@ const HomePage = () => {
     {
       text: "The artist must be not merely creator but also conjurer. Art, by its very nature, is illusion.",
       author: "Jessica Daraby"
+    } ];
+
+  const testimonials = [
+    {
+      name: "Debottam Bose",
+      title: "India's First Art Lawyer",
+      text: "Your collective initiative, ALC is timely and valuable - India's growing art market with jaw dropping auction prices in one hand and brazen fakes & forgeries market in another hand desperately need specialized legal expertise. You are filling a critical gap in the legal & cultural ecosystem.",
+      initial: "DB"
+    },
+    {
+      name: "Dr. (Prof). Somabha Bandopadhyay",
+      title: "Asst. Professor, Dept. of Law, NFSU, Delhi",
+      text: "ALC is an initiative that bridges the law and society. It is indeed a timely initiative at a juncture that very rarely has been explored in India. The best part about this initiative is that it is student led, which means that there is a lot of passion and zeal to work and contribute meaningfully.",
+      initial: "SB"
+    },
+    {
+      name: "Dr. Subha Majumdar",
+      title: "Superintending Archaeologist (ASI), Vadodara Circle",
+      text: "In search of objectivity, Art Law Communion emerges as a space of inquiry and dialogue. It approaches art, heritage and law not as rigid disciplines, but as evolving conversations shaped by ethics, context, and care. It is a rare initiative that invites thought before opinion.",
+      initial: "SM"
+    },
+    {
+      name: "Dr. Arshiya Sethi",
+      title: "Founder, Kri Foundation & Co-founder, Unmute.help",
+      text: "I am very happy to learn about this student led initiative - Art Law Communion that looks at the intersection of Law and Art in the Global South. I do believe that COVID-19 changed things around and made us realise that there is more to the arts than production, presentation and performance.",
+      initial: "AS"
+    },
+    {
+      name: "Mr. Chandril Chattopadhyay",
+      title: "Managing Partner, CPC Satya Inc. Law Chambers",
+      text: "It is with immense pleasure that I take this opportunity to congratulate Priyanshu and his team for bringing out this one of a kind newsletter. As Art Law navigates through the stage of nascent blooming to a global stage that commands a spotlight of its own, ALC's newsletter marks a path of its own.",
+      initial: "CC"
     }
   ];
 
@@ -173,16 +202,43 @@ const HomePage = () => {
     setDailyQuote(quotes[quoteIndex]);
   }, []);
 
+  // Handle responsive visible cards count
+  useEffect(() => {
+    const updateVisibleCards = () => {
+      if (window.innerWidth >= 1024) setVisibleCards(3);
+      else if (window.innerWidth >= 768) setVisibleCards(2);
+      else setVisibleCards(1);
+    };
+    updateVisibleCards();
+    window.addEventListener('resize', updateVisibleCards);
+    return () => window.removeEventListener('resize', updateVisibleCards);
+  }, []);
+
+  const totalDots = Math.max(1, testimonials.length - visibleCards + 1);
+
+  // Clamp currentSlide when visibleCards changes
+  useEffect(() => {
+    if (currentSlide >= totalDots) {
+      setCurrentSlide(totalDots - 1);
+    }
+  }, [totalDots, currentSlide]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % totalDots);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + totalDots) % totalDots);
+  };
+
   return (
-    <div 
-      className="min-h-screen py-20 px-8 relative home-bg" 
-    >
+    <div className="min-h-screen py-20 px-8 relative home-bg">
       <Navbar />
 
-      {/* Main Centered Content — Font Style 100% Preserved, Only Sizes Reduced */}
+      {/* Main Centered Content */}
       <div className="max-w-4xl mx-auto space-y-12 py-20 px-8 flex flex-col justify-center items-center text-center">
 
-        {/* Daily Quote — Same italic, font-light, tracking — just smaller */}
+        {/* Daily Quote */}
         <div className="px-4">
           <blockquote className="text-xl sm:text-2xl md:text-3xl lg:text-4xl italic font-serif text-white mb-6 leading-relaxed font-light tracking-wide">
             "{dailyQuote.text}"
@@ -191,20 +247,18 @@ const HomePage = () => {
             — {dailyQuote.author}
           </cite>
         </div>
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-        {/* Main Title — Same bold, tight tracking — just smaller */}
-        <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">
-          Empowering Artists Legally
-        </h1>
-
-        {/* Description — Same font-light, relaxed leading — just readable size */}
-        <p className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
-          Our mission is to provide a platform for building discourse on Art Law in India and the Global South for serving artists, lawyers, and students of both law and art disciplines, including art market professionals and members of the general public. Importantly, we will attempt to bridge the gap between the artistic and legal community.
-        </p>
+            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">
+              Empowering Artists Legally
+            </h1>
+            <p className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+              Our mission is to provide a platform for building discourse on Art Law in India and the Global South for serving artists, lawyers, and students of both law and art disciplines, including art market professionals and members of the general public. Importantly, we will attempt to bridge the gap between the artistic and legal community.
+            </p>
           </div>
         </div>
-        
+
         {/* CTA Buttons */}
         <div className="pt-8 flex flex-wrap justify-center gap-4">
           <Link
@@ -222,7 +276,120 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Chatbot Sidebar — Completely unchanged */}
+      {/* ===== Testimonials Section — Glass Transparent ===== */}
+      <div className="w-full py-16 md:py-20 relative overflow-hidden">
+        {/* Glass background */}
+        <div className="absolute inset-0 backdrop-blur-md bg-black/20"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Section Title */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
+              Words of Praise from Leaders
+            </h2>
+            <div className="h-1 w-20 bg-white/60 mx-auto rounded-full"></div>
+          </div>
+
+          <div className="relative">
+            {/* Carousel Container */}
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * (100 / visibleCards)}%)` }}
+              >
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className="flex-shrink-0 px-3"
+                    style={{ width: `${100 / visibleCards}%` }}
+                  >
+                    <div className="h-full backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-8 flex flex-col justify-between hover:bg-white/15 transition-all duration-300 shadow-lg shadow-black/10">
+                      <div>
+                        {/* Quote Icon */}
+                        <div className="text-white/50 mb-5">
+                          <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
+                          </svg>
+                        </div>
+
+                        {/* Testimonial Text */}
+                        <p className="text-white/90 text-sm md:text-base leading-relaxed mb-6 font-light">
+                          "{testimonial.text}"
+                        </p>
+                      </div>
+
+                      {/* Profile Section */}
+                      <div className="flex items-center gap-4 pt-5 border-t border-white/15">
+                        <div className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-semibold text-base border border-white/30 flex-shrink-0">
+                          {testimonial.initial}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-white font-semibold text-sm md:text-base line-clamp-2">
+                            {testimonial.name}
+                          </h4>
+                          <p className="text-white/60 text-xs md:text-sm line-clamp-3">
+                            {testimonial.title}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 backdrop-blur-sm bg-white/10 hover:bg-white/25 text-white p-3 rounded-full border border-white/20 transition-all duration-200 z-10 hidden md:flex items-center justify-center"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 backdrop-blur-sm bg-white/10 hover:bg-white/25 text-white p-3 rounded-full border border-white/20 transition-all duration-200 z-10 hidden md:flex items-center justify-center"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </div>
+
+          {/* Mobile Navigation Arrows */}
+          <div className="flex justify-center gap-4 mt-8 md:hidden">
+            <button
+              onClick={prevSlide}
+              className="backdrop-blur-sm bg-white/10 hover:bg-white/25 text-white p-3 rounded-full border border-white/20 transition-all duration-200"
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="backdrop-blur-sm bg-white/10 hover:bg-white/25 text-white p-3 rounded-full border border-white/20 transition-all duration-200"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </div>
+
+          {/* Dots Indicator — Correctly calculated */}
+          <div className="flex justify-center gap-2 mt-8">
+            {Array.from({ length: totalDots }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === currentSlide
+                    ? 'w-8 bg-white/80'
+                    : 'w-2 bg-white/30 hover:bg-white/50'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Chatbot Sidebar */}
       <div
         ref={chatSidebarRef}
         className={`fixed inset-y-0 right-0 w-full sm:w-80 md:w-96 bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showChatbot ? 'translate-x-0' : 'translate-x-full'} border-l border-gray-200`}
