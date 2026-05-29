@@ -107,11 +107,7 @@ const OtpVerify = () => {
             <header className='max-w-6xl mx-auto flex items-center justify-between p-4'>
                 <div className="flex items-center gap-4 ml-2">
                     <Link to={"/"}>
-<<<<<<< HEAD
                         <img src='/alc_logo.png' alt='Art Law Communion' className='w-24' />
-=======
-                        <img src='/alc_logo.png' alt='logo' className='w-24' />
->>>>>>> e6d3cc5c8e609568f5de75a75dd96201041b1f95
                     </Link>
                     <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
                         <div className="text-xl font-bold leading-tight">ART</div>
