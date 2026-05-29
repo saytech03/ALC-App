@@ -608,7 +608,7 @@ const AdNavbar = () => {
         <div className="flex items-center gap-2 md:gap-4 ml-2">
           <img
             src="/alc_logo.png"
-            alt="Art Law Communion Logo"
+            alt="Art Law Communion"
             className="w-16 h-16 md:w-23 md:h-22 rounded-lg shadow-lg"
           />
           <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>

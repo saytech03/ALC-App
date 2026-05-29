@@ -167,31 +167,36 @@ const HomePage = () => {
       name: "Debottam Bose",
       title: "India's First Art Lawyer",
       text: "Your collective initiative, ALC is timely and valuable - India's growing art market with jaw dropping auction prices in one hand and brazen fakes & forgeries market in another hand desperately need specialized legal expertise. You are filling a critical gap in the legal & cultural ecosystem.",
-      initial: "DB"
+      initial: "DB",
+      image: "/Debottam_test.jpeg" // replace with Debottam's image path
     },
     {
       name: "Dr. (Prof). Somabha Bandopadhyay",
       title: "Asst. Professor, Dept. of Law, NFSU, Delhi",
-      text: "ALC is an initiative that bridges the law and society. It is indeed a timely initiative at a juncture that very rarely has been explored in India. The best part about this initiative is that it is student led, which means that there is a lot of passion and zeal to work and contribute meaningfully.",
-      initial: "SB"
+      text: "ALC is an initiative that bridges the law and society. It is indeed a timely initiative at a juncture that very rarely has been explored in India. The best part about this initiative is that it is student led, which means that there is a lot of passion and zeal to work and contribute meaningfully. I sincerely hope that ALC has a wonderful journey connecting all different stakeholders of the legal and artistic fraternity and helps those at the grassroots and otherwise. I wish them all the very best in each of their endeavours.",
+      initial: "SB",
+      image: "/Somabha_test.jpeg" // replace with Somabha's image path
     },
     {
       name: "Dr. Subha Majumdar",
       title: "Superintending Archaeologist (ASI), Vadodara Circle",
       text: "In search of objectivity, Art Law Communion emerges as a space of inquiry and dialogue. It approaches art, heritage and law not as rigid disciplines, but as evolving conversations shaped by ethics, context, and care. It is a rare initiative that invites thought before opinion.",
-      initial: "SM"
+      initial: "SM",
+      image: "/Subha_test.jpeg" // replace with Subha's image path
     },
     {
       name: "Dr. Arshiya Sethi",
       title: "Founder, Kri Foundation & Co-founder, Unmute.help",
-      text: "I am very happy to learn about this student led initiative - Art Law Communion that looks at the intersection of Law and Art in the Global South. I do believe that COVID-19 changed things around and made us realise that there is more to the arts than production, presentation and performance.",
-      initial: "AS"
+      text: "I am very happy to learn about this student-led initiative, Art Law Communion, which looks at the intersection of Law and Art in the Global South. I do believe that COVID-19 changed things around and made us realise that there is more to the arts than production, presentation, and performance. I wish the founders the very best and look forward to inclusive articles that will help move the discourse in the right direction in our art- and culture-rich region.",
+      initial: "AS",
+      image: "/Arshiya_test.jpeg" // replace with Arshiya's image path
     },
     {
       name: "Mr. Chandril Chattopadhyay",
       title: "Managing Partner, CPC Satya Inc. Law Chambers",
-      text: "It is with immense pleasure that I take this opportunity to congratulate Priyanshu and his team for bringing out this one of a kind newsletter. As Art Law navigates through the stage of nascent blooming to a global stage that commands a spotlight of its own, ALC's newsletter marks a path of its own.",
-      initial: "CC"
+      text: "It is with immense pleasure that I take this opportunity to congratulate Priyanshu and his team for bringing out this one of a kind newsletter. As Art Law navigates through the stage of nascent blooming to a global stage that commands a spotlight of its own, ALC's newsletter marks a path of its own that shall help students to understand the various aspects of art law and keep the handful of practitioners in this space equipped with the developments. I wish them luck for bigger projects, collaborative practices across interdisciplinary medium of art, literature and law and I wish that the journey of ALC runs long, embedded and sublime like Mark Rothko's colour palette.",
+      initial: "CC",
+      image: "/Chandril_test.jpeg" // replace with Chandril's image path
     }
   ];
 
@@ -320,8 +325,16 @@ const HomePage = () => {
 
                       {/* Profile Section */}
                       <div className="flex items-center gap-4 pt-5 border-t border-white/15">
-                        <div className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-semibold text-base border border-white/30 flex-shrink-0">
-                          {testimonial.initial}
+                        <div className="h-12 w-12 overflow-hidden rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-semibold text-base border border-white/30 flex-shrink-0">
+                          {testimonial.image ? (
+                            <img
+                              src={testimonial.image}
+                              alt={testimonial.name}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <span>{testimonial.initial}</span>
+                          )}
                         </div>
                         <div className="min-w-0">
                           <h4 className="text-white font-semibold text-sm md:text-base line-clamp-2">
