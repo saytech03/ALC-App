@@ -82,11 +82,7 @@ const Navbar = () => {
         <div className="flex items-center ml-2">
           <img
             src="/alc_logo.png"
-<<<<<<< HEAD
             alt="Art Law Communion"
-=======
-            alt="Art Law Communion Logo"
->>>>>>> e6d3cc5c8e609568f5de75a75dd96201041b1f95
             className="w-16 h-16 md:w-23 md:h-22 rounded-lg shadow-lg"
           />
           <div className="text-white ml-2" style={{ fontFamily: 'Consolas, serif' }}>

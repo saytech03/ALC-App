@@ -697,53 +697,123 @@ const AltNavbar = () => {
     navigate(path);
   };
 
-	return (
-		<header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                isScrolled ? 'bg-black' : 'bg-transparent'
-              }`}>
-                <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
-                  {/* Logo - Far Left */}
-                  <div className="flex items-left ml-2">
-                    <img
-                      src="/ellip-logo1.png"
-                      alt="Art Law Communion Logo"
-                      className="w-14 h-12 rounded-lg shadow-lg"
-                    />
-                  </div>
-                  
-                  {/* Icons - Far Right */}
-                  <div className="flex items-center gap-3 mr-1">
-                    {/* Contact Us Icon */}
-                    <Link to="/contacth" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Contact Us
-                    </Link>
-                    
-                    <Link to="/h" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Home
-                    </Link>
-                    
-                    {/* Member Icon */}
-                    <Link to="/memberh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      About Us
-                    </Link>
-                    <Link to="/eventh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Events
-                    </Link>
-                    <Link to="/blogh" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-                      Blogspot
-                    </Link>
-                    {/* Logout Button */}
-                    <button 
-                      onClick={handleLogout}
-                      className="text-white hover:text-red-400 transition-colors p-2 hover:bg-gray-900 rounded-full flex items-center gap-1"
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              </header>
-	);
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-black' : 'bg-transparent'
+    }`}>
+      <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
+        <div className="flex items-center gap-2 md:gap-4 ml-2">
+          <img
+            src="/alc_logo.png"
+            alt="Art Law Communion"
+            className="w-16 h-16 md:w-23 md:h-22 rounded-lg shadow-lg"
+          />
+          <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
+            <div className="text-sm md:text-xl font-bold leading-tight">ART</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">LAW</div>
+            <div className="text-sm md:text-xl font-bold leading-tight">COMMUNION</div>
+          </div>
+        </div>
+                                          
+        <div className="hidden md:flex items-center gap-4 mr-1">
+          {/* UPDATED LINKS with dynamic patronId */}
+          <Link to={`/${patronId}/h`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Home
+          </Link>
+          <Link to={`/${patronId}/auh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            About Us
+          </Link>
+          <Link to={`/${patronId}/memberh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Team
+          </Link>
+          <Link to={`/${patronId}/blog`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            ALC Fenestra
+          </Link>
+          <Link to={`/${patronId}/eventsh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Events
+          </Link>
+          <Link to={`/${patronId}/newsh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Newsletter
+          </Link>
+          {/*<Link to={`/${patronId}/resh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+            Resources
+          </Link>*/}
+         {/* <Link to={`/${patronId}/contacth`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full ml-2">
+            Contact Us
+          </Link>*/}
+
+          <UserAvatarDropdown size={24} />
+        </div>
+
+        <div className="md:hidden flex items-center gap-2">
+          <UserAvatarDropdown size={20} />
+
+          <button
+            className="text-white hover:text-blue-400 p-2 hover:bg-gray-900 rounded-full transition-colors"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-md">
+          <div className="flex flex-col py-4 px-6 space-y-4">
+            <Link 
+              to={`/${patronId}/h`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              to={`/${patronId}/auh`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link 
+              to={`/${patronId}/memberh`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Team
+            </Link>
+            <Link 
+              to={`/${patronId}/blog`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              ALC Fenestra
+            </Link>
+            <Link 
+              to={`/${patronId}/eventsh`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Events
+            </Link>
+            <Link 
+              to={`/${patronId}/newsh`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"   
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Newsletter
+            </Link>
+           {/* <Link 
+              to={`/${patronId}/resh`} 
+              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Resources
+            </Link> */}
+          </div>
+        </div>
+      )}
+    </header>
+  );
 };
 
 export default AltNavbar;
