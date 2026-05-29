@@ -133,16 +133,9 @@ const SignUpPage = () => {
         <div className='h-screen w-full-stretch bg-no-repeat login-bg'>
             {/* Original Header */}
             <header className='max-w-6xl mx-auto flex items-center justify-between p-4'>
-                <div className="flex items-center gap-4 ml-2">
-                    <Link to={"/"}>
-                        <img src='/alc_logo.png' alt='Art Law Communion' className='w-24' />
-                    </Link>
-                    <div className="text-white" style={{ fontFamily: 'Consolas, serif' }}>
-                        <div className="text-xl font-bold leading-tight">ART</div>
-                        <div className="text-xl font-bold leading-tight">LAW</div>
-                        <div className="text-xl font-bold leading-tight">COMMUNION</div>
-                    </div>
-                </div>
+                <Link to={"/"}>
+                    <img src='/ellip-logo1.png' alt='logo' className='w-24' />
+                </Link>
             </header>
 
             <div className='flex-1 flex justify-center items-center mx-3 py-8'>
