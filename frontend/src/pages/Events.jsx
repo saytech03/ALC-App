@@ -266,7 +266,7 @@ const EventsPage = () => {
               <div className="flex items-center justify-center gap-4 mb-10">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent to-blue-500/50" />
                 <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center">
-                  ARCHIVED EVENTS
+                  OUR EVENTS
                 </h1>
                 <div className="h-px w-16 bg-gradient-to-l from-transparent to-blue-500/50" />
               </div>
