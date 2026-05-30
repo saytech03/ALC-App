@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Navbar from '../components/Navbar';
 
 function AboutPage() {
   const [imgLoading, setImgLoading] = useState(true);
+  // Use the public MP4 filename for the Founders Note
+  const VIDEO_URL = `${import.meta.env.BASE_URL}Founders.mp4`;
   
   return (
     <div className="relative">
@@ -119,6 +121,30 @@ function AboutPage() {
         </div>
       </div>
 
+      {/* Section 4 - Founders Note (Video) */}
+      <div className="relative min-h-screen flex items-center">
+        {/* Background for this section (replace image later) */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('./exhi.jpeg')",
+            filter: 'brightness(0.9) contrast(1.1)'
+          }}
+        />
+        <div className="absolute inset-0 bg-black/20 md:bg-black/30"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
+            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">FOUNDERS NOTE</h1>
+            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+              <div className="mt-6">
+                <VideoPreview videoUrl={VIDEO_URL} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Responsive CSS for background images */}
       <style jsx>{`
         @media (max-width: 768px) {
@@ -151,6 +177,58 @@ function AboutPage() {
           transition: background-image 0.3s ease-in-out;
         }
       `}</style>
+    </div>
+  );
+}
+
+function VideoPreview({ videoUrl }) {
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+
+  const handlePlay = async () => {
+    if (!videoRef.current) return;
+    try {
+      // attempt to play the video and enable controls
+      await videoRef.current.play();
+      videoRef.current.controls = true;
+      setPlaying(true);
+    } catch (e) {
+      // fallback: just set playing state to show controls
+      videoRef.current.controls = true;
+      setPlaying(true);
+    }
+  };
+
+  return (
+    <div className="relative w-full max-w-md mx-auto">
+      {videoUrl ? (
+        <div className="relative">
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            preload="metadata"
+            playsInline
+            className="w-full block object-contain rounded-3xl border border-white/20 bg-black"
+          />
+
+          {/* Overlay play button shown only before playback starts */}
+          {!playing && (
+            <button
+              type="button"
+              onClick={handlePlay}
+              className="absolute inset-0 m-auto flex items-center justify-center rounded-3xl bg-black/20 group"
+              aria-label="Play founders note"
+            >
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-black text-3xl shadow-lg transition group-hover:scale-105">▶</div>
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="rounded-3xl border border-white/20 bg-slate-900/90 p-6 text-white">
+          <p className="text-lg font-semibold">Video source not set yet.</p>
+          <p className="mt-2 text-sm text-slate-300">Add the MOV URL in the code to enable playback.</p>
+        </div>
+      )}
     </div>
   );
 }
