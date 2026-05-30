@@ -135,7 +135,7 @@ function AboutPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">FOUNDERS NOTE</h1>
+            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">OUR FOUNDERS NOTE</h1>
             <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
               <div className="mt-6">
                 <VideoPreview videoUrl={VIDEO_URL} />
