@@ -96,7 +96,7 @@ const Eventreg = () => {
                         <form className="space-y-5" onSubmit={handleSubmit}>
                             <div>
                                 <label htmlFor="name" className="text-sm font-medium text-gray-200">
-                                    Name
+                                    Name <span className="text-cyan-300">*</span>
                                 </label>
                                 <input
                                     id="name"
@@ -111,7 +111,7 @@ const Eventreg = () => {
 
                             <div>
                                 <label htmlFor="email" className="text-sm font-medium text-gray-200">
-                                    Email ID
+                                    Email ID <span className="text-cyan-300">*</span>
                                 </label>
                                 <input
                                     id="email"
@@ -126,7 +126,7 @@ const Eventreg = () => {
 
                             <div>
                                 <label htmlFor="contactNumber" className="text-sm font-medium text-gray-200">
-                                    Contact Number
+                                    Contact Number <span className="text-cyan-300">*</span>
                                 </label>
                                 <input
                                     id="contactNumber"
@@ -142,7 +142,7 @@ const Eventreg = () => {
 
                             <div>
                                 <label htmlFor="occupation" className="text-sm font-medium text-gray-200">
-                                    Occupation
+                                    Occupation <span className="text-cyan-300">*</span>
                                 </label>
                                 <input
                                     id="occupation"
@@ -157,7 +157,7 @@ const Eventreg = () => {
 
                             <div>
                                 <label htmlFor="institute" className="text-sm font-medium text-gray-200">
-                                    Institute / Organisation
+                                    Institute / Organisation <span className="text-cyan-300">*</span>
                                 </label>
                                 <input
                                     id="institute"
@@ -170,29 +170,32 @@ const Eventreg = () => {
                                 />
                             </div>
 
-                            <fieldset className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-                                <legend className="text-sm font-medium text-gray-200">
-                                    How did you get to know about the Art Law Communion?
+                             <legend className="mb-4 block text-sm font-medium text-gray-200">
+                                    How did you get to know about the Art Law Communion? <span className="text-cyan-300">*</span>
                                 </legend>
+                            <fieldset className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
+                               
 
-                                {[
-                                    "Social Media",
-                                    "Friends/ Colleagues",
-                                    "University/ Institute/ Organisation",
-                                    "Other"
-                                ].map((option) => (
-                                    <label key={option} className="flex items-center gap-3 text-gray-200">
-                                        <input
-                                            type="radio"
-                                            name="referralSource"
-                                            value={option}
-                                            checked={formData.referralSource === option}
-                                            onChange={handleChange}
-                                            className="h-4 w-4 accent-cyan-400"
-                                        />
-                                        <span>{option}</span>
-                                    </label>
-                                ))}
+                                <div className="space-y-3">
+                                    {[
+                                        "Social Media",
+                                        "Friends/ Colleagues",
+                                        "University/ Institute/ Organisation",
+                                        "Other"
+                                    ].map((option) => (
+                                        <label key={option} className="flex items-center gap-3 text-gray-200">
+                                            <input
+                                                type="radio"
+                                                name="referralSource"
+                                                value={option}
+                                                checked={formData.referralSource === option}
+                                                onChange={handleChange}
+                                                className="h-4 w-4 accent-cyan-400"
+                                            />
+                                            <span>{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
 
                                 {formData.referralSource === "Other" && (
                                     <input
@@ -202,7 +205,7 @@ const Eventreg = () => {
                                         onChange={handleChange}
                                         type="text"
                                         placeholder="Please specify"
-                                        className="mt-3 w-full rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 outline-none ring-1 ring-transparent transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30"
+                                        className="mt-3 w-full max-w-lg rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 outline-none ring-1 ring-transparent transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30"
                                     />
                                 )}
                             </fieldset>
@@ -229,16 +232,13 @@ const Eventreg = () => {
 
                         <div className="mt-8 text-sm text-gray-400">
                             <p>* Indicates required question.</p>
-                            <p className="mt-2">
-                                By submitting, you agree to receive event updates and the Google Meet invite at the email address provided.
-                            </p>
+                            
                         </div>
 
-                        <div className="mt-6 flex items-center justify-between text-sm text-gray-400">
-                            <Link to="/events" className="font-semibold text-cyan-300 hover:text-white">
-                                Back to events
+                        <div className="mt-6 flex items-center justify-center text-sm text-gray-400">
+                            <Link to="/" className="font-semibold text-cyan-300 hover:text-white">
+                                Home
                             </Link>
-                            <span className="text-gray-500">Never submit passwords through forms.</span>
                         </div>
                     </section>
                 </div>
