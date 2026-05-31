@@ -26,6 +26,7 @@ const useDocumentTitle = () => {
       '/blog': 'ALC - Blog',
       '/contacth': 'ALC - Contact Us',
       '/auh': 'ALC - About Us',
+      '/eventreg': 'ALC - Event Registration',
     };
 
     document.title = pathToTitle[currentPath] || 'Art Law Communion';

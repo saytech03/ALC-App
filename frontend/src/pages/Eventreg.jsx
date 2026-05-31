@@ -15,9 +15,6 @@ const Eventreg = () => {
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        document.title = "Art Law Communion | Event Registration";
-    }, []);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
