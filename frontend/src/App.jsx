@@ -28,6 +28,7 @@ import Event2 from "./pages/Event2";
 import Event3 from "./pages/Event3";
 import Newsletter from "./pages/Newslet"; 
 import Newsletter_ from "./pages/Newslet_";
+import Eventreg from "./pages/Eventreg";
 // --- NEW AI IMPORTS ---
 
 /*import AiHub from "./pages/AiHub";*/
@@ -186,7 +187,7 @@ function App() {
           <Route path='/events' element={<LogoutWrapper><EventsPage /></LogoutWrapper>} /> 
           <Route path='/newsletter' element={<LogoutWrapper><Newsletter /></LogoutWrapper>} />  
           <Route path='/res' element={<LogoutWrapper><Resources /></LogoutWrapper>} />
-          
+          <Route path='/eventreg' element={<LogoutWrapper><Eventreg /></LogoutWrapper>} />
           {/* Admin routes (Admin Login also clears regular user session) */}
           <Route path='/admin' element={<LogoutWrapper><AdminLoginPage /></LogoutWrapper>} />
           
