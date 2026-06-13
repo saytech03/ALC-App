@@ -5,12 +5,12 @@ const MembersPage_ = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [imgLoading, setImgLoading] = useState(true);
 
-  const coreMembers = [
+   const coreMembers = [
     // === Your 7 members (unchanged) ===
-     {
+    {
       id: 1,
       name: "Budhaditya Ghosh",
-      position: "Co-Founder",
+      position: "Co-Founder & Co-Chairperson",
       info: "Final year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Budhaditya Ghosh is a final-year law student at West Bengal National University of Juridical Sciences, Kolkata. A literature connoisseur, writer, and poet committed to protecting artistic expression, he's interested in environmentalism, public policy, political theory, and decolonial studies, publishing multiple blogs and papers.",
       image: "./member3.png"
@@ -18,7 +18,7 @@ const MembersPage_ = () => {
     {
       id: 2,
       name: "Priyanshu Kar",
-      position: "Founder",
+      position: "Founder & Chairperson",
       info: "Incoming Associate at Nishith Desai Associates",
       detailedInfo: "Priyanshu Kar is an incoming associate at Nishith Desai Associates and an alumnus of the WB National University of Juridical Sciences, Kolkata. He is a heritage and art enthusiast by passion and a lawyer by profession. His enthusiasm for studying the legal aspects of art and culture has prompted the foundation of the Art Law Communion.",
       image: "./member1.png"
@@ -26,7 +26,7 @@ const MembersPage_ = () => {
     {
       id: 3,
       name: "Aritro Banerjee",
-      position: "Co-Founder",
+      position: "Co-Founder & Co-Chairperson",
       info: "Fifth-year law student at St. Xavier's University, Kolkata",
       detailedInfo: "Aritro Banerjee is a fifth-year law student at St. Xavier's University, Kolkata, and member of the Art Law Communion. His passion for art and history drives his commitment to protecting artistic expression through legal advocacy. He believes law serves as a collective guardian of creativity and cultural heritage. Through the Art Law Communion, Aritro champions the principle that legal frameworks must shield and advocate for artistic freedom.",
       image: "./member2.png"
@@ -37,7 +37,7 @@ const MembersPage_ = () => {
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Ishika Hazra is a 2nd year law student at West Bengal National University of Juridical Sciences. She is an avid art enthusiast fascinated by the diverse stories that different artists tell through their creative expressions and believes such art forms are an invaluable part of any community.",
-      image: "./member6.jpeg"
+      image: "./member4.jpeg"
     },
     {
       id: 5,
@@ -45,7 +45,23 @@ const MembersPage_ = () => {
       position: "Founding Member",
       info: "Second year student of law at the WB National University of Juridical Sciences, Kolkata",
       detailedInfo: "Kapu Vinuthna is a second year student of law at the WB National University of Juridical Sciences. She engages in different forms of writing and has a great appreciation for the passion and work that goes into art. She is very enthusiastic about contributing to the artistic community using her legal education, for she believes art is what makes us human.",
-      image: "./member7.png"
+      image: "./member5.png"
+    },
+    {
+      id: 6,
+      name: "Abhishikta Das",
+      position: "Member",
+      info: "Law student at Jogesh Chandra Chaudhuri Law College, Kolkata",
+      detailedInfo: "Abhishikta Das is a law student with a deep passion for art and creativity. Beyond legal studies, she enjoys singing, dancing, drawing, making crafts, and discovering new music. Her fascination with the intersection of law and culture naturally drew her to the field of Art Law. She is enthusiastic about exploring the history of art, contemporary developments in the art world, and the legal issues surrounding them. She believes that creativity, culture, and a touch of legal drama make her imperfectly perfect.",
+      image: "./member6.jpeg"
+    },
+    {
+      id: 7,
+      name: "Vidhushi Pandey",
+      position: "Member",
+      info: "Second year law student at the National Forensic Sciences University, Delhi",
+      detailedInfo: "Vidushi Pandey is a second year law student at the National Forensic Sciences University, Delhi. Having pursued Kathak for several years, she has developed a deep appreciation for the cultural and creative value of the arts. She is particularly interested in exploring how law can engage with and support artistic and cultural spaces.",
+      image: "./member7.jpeg"
     }
   ];
 
@@ -93,54 +109,60 @@ const MembersPage_ = () => {
 
         {/* === Core Members Grid === */}
         <div className="space-y-12">
-          {/* Top Row - 3 cards */}
-          <div className="grid grid-cols-6 gap-8 max-w-5xl mx-auto">
-            {coreMembers.slice(0, 3).map((member) => (
-              <div
-                key={member.id}
-                className="relative group cursor-pointer col-span-2"
-                onClick={() => setSelectedMember(member.id)}
-              >
-                <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover grayscale-[80%]"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                    <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                    <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
-                    <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+          {/* Top Row - cards 1-3, aligned between the bottom row cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-3xl mx-auto">
+            {coreMembers.slice(0, 3).map((member, index) => {
+              const startClass = index === 0 ? 'lg:col-start-2' : index === 1 ? 'lg:col-start-4' : 'lg:col-start-6';
+              return (
+                <div
+                  key={member.id}
+                  className={`${startClass} lg:col-span-2 relative group cursor-pointer`}
+                  onClick={() => setSelectedMember(member.id)}
+                >
+                  <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover grayscale-[80%]"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                      <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+                      <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
+                      <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Bottom Row - 2 cards, aligned between top row cards */}
-          <div className="grid grid-cols-6 gap-8 max-w-5xl mx-auto">
-            <div />
-            {coreMembers.slice(3, 5).map((member) => (
-              <div
-                key={member.id}
-                className="relative group cursor-pointer col-span-2"
-                onClick={() => setSelectedMember(member.id)}
-              >
-                <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover grayscale-[80%]"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                    <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                    <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
-                    <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+          {/* Bottom Row - cards 4-7 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-3xl mx-auto">
+            {Array.from({ length: 4 }).map((_, index) => {
+              const member = coreMembers[3 + index];
+              return member ? (
+                <div
+                  key={member.id}
+                  className="relative group cursor-pointer lg:col-span-2"
+                  onClick={() => setSelectedMember(member.id)}
+                >
+                  <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover grayscale-[80%]"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                      <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+                      <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
+                      <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            <div />
+              ) : (
+                <div key={`empty-${index}`} className="hidden lg:block" />
+              );
+            })}
           </div>
         </div>
 
