@@ -68,7 +68,7 @@ const MembersPage_ = () => {
   // === New Web Team Members (Placeholders) ===
   const webMembers = [
     {
-      id: 6,
+      id: 8,
       name: "Debdutta Basu",
       position: "Backend Developer",
       info: "Programmer Analyst Trainee at Cognizant",
@@ -76,7 +76,7 @@ const MembersPage_ = () => {
       image: "./webmember1.jpeg" 
     },
     {
-      id: 7,
+      id: 9,
       name: "Sayantan Pramanik",
       position: "Frontend Developer",
       info: "First year masters student in Computer Science & Engineering at Jadavpur University.",
@@ -110,7 +110,7 @@ const MembersPage_ = () => {
         {/* === Core Members Grid === */}
         <div className="space-y-12">
           {/* Top Row - cards 1-3, aligned between the bottom row cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-[100rem] mx-auto">
             {coreMembers.slice(0, 3).map((member, index) => {
               const startClass = index === 0 ? 'lg:col-start-2' : index === 1 ? 'lg:col-start-4' : 'lg:col-start-6';
               return (
@@ -137,7 +137,7 @@ const MembersPage_ = () => {
           </div>
 
           {/* Bottom Row - cards 4-7 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-[100rem] mx-auto">
             {Array.from({ length: 4 }).map((_, index) => {
               const member = coreMembers[3 + index];
               return member ? (
@@ -173,31 +173,39 @@ const MembersPage_ = () => {
           </h1>
         </div>
 
-        {/* === Web Team Grid - 2 cards centered === */}
-        {/* Changed max-w-4xl to max-w-3xl to make cards smaller and comparable to the cards above */}
-        <div className="grid grid-cols-2 gap-8 max-w-3xl mx-auto pb-20">
-            {webMembers.map((member) => (
-              <div
-                key={member.id}
-                className="relative group cursor-pointer"
-                onClick={() => setSelectedMember(member.id)}
-              >
-                <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover grayscale-[80%]"
-                    // Stop loading when the last image (id 8) is loaded
-                    onLoad={() => member.id === 8 && setImgLoading(false)}
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                    <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                    <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
-                    <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
-                  </div>
-                </div>
+        {/* === Web Team Grid - 2 cards using same grid system as core members === */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-[100rem] mx-auto pb-20">
+          <div className="lg:col-start-3 lg:col-span-2 relative group cursor-pointer" onClick={() => setSelectedMember(webMembers[0].id)}>
+            <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+              <img
+                src={webMembers[0].image}
+                alt={webMembers[0].name}
+                className="w-full h-full object-cover grayscale-[80%]"
+                onLoad={() => webMembers[0].id === 9 && setImgLoading(false)}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                <h3 className="text-xl font-semibold mb-2">{webMembers[0].name}</h3>
+                <p className="text-sm text-gray-300 mb-3 font-medium">{webMembers[0].position}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{webMembers[0].info}</p>
               </div>
-            ))}
+            </div>
+          </div>
+          
+          <div className="lg:col-start-5 lg:col-span-2 relative group cursor-pointer" onClick={() => setSelectedMember(webMembers[1].id)}>
+            <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+              <img
+                src={webMembers[1].image}
+                alt={webMembers[1].name}
+                className="w-full h-full object-cover grayscale-[80%]"
+                onLoad={() => webMembers[1].id === 9 && setImgLoading(false)}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                <h3 className="text-xl font-semibold mb-2">{webMembers[1].name}</h3>
+                <p className="text-sm text-gray-300 mb-3 font-medium">{webMembers[1].position}</p>
+                <p className="text-xs text-gray-400 leading-relaxed">{webMembers[1].info}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
