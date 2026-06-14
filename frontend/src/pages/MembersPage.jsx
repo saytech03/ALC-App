@@ -79,8 +79,8 @@ const MembersPage = () => {
       id: 9,
       name: "Sayantan Pramanik",
       position: "Frontend Developer",
-      info: "First year masters student in Computer Science & Engineering at Jadavpur University.",
-      detailedInfo: "Sayantan Pramanik is currently pursuing his Master's degree at Jadavpur University, having completed his Bachelor's from the Heritage Institute of Technology. Deeply devoted to enriching his knowledge in Machine Learning, he is also a passionate application developer. For the Art Law Communion, he spearheaded the frontend development and managed the seamless integration of backend systems, bringing the digital platform to life.",
+      info: "First year masters student at Jadavpur University.",
+      detailedInfo: "Sayantan Pramanik is currently pursuing his Master's degree in Computer Science & Engineering at Jadavpur University, having completed his Bachelor's from the Heritage Institute of Technology. Deeply devoted to enriching his knowledge in Machine Learning, he is also a passionate application developer. For the Art Law Communion, he spearheaded the frontend development and managed the seamless integration of backend systems, bringing the digital platform to life.",
       image: "./webmember2.jpeg" // Placeholder image
     }
   ];
