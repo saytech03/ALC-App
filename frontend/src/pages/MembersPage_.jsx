@@ -57,7 +57,7 @@ const MembersPage_ = () => {
     },
     {
       id: 7,
-      name: "Vidhushi Pandey",
+      name: "Vidushi Pandey",
       position: "Member",
       info: "Second year law student at the National Forensic Sciences University, Delhi",
       detailedInfo: "Vidushi Pandey is a second year law student at the National Forensic Sciences University, Delhi. Having pursued Kathak for several years, she has developed a deep appreciation for the cultural and creative value of the arts. She is particularly interested in exploring how law can engage with and support artistic and cultural spaces.",
