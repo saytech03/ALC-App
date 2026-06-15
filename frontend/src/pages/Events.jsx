@@ -1,325 +1,205 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation } from "react-router-dom";
+import { ArrowRight, Calendar, Clock, MapPin, RefreshCw, Sparkles, User } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { Link, useNavigate } from "react-router-dom";
-import { Lock, Calendar, User, Clock, ArrowRight, Sparkles, MapPin, ExternalLink } from 'lucide-react';
+import AltNavbar from '../components/AltNavbar';
+import authService from '../store/authService';
 
-const EventsPage = () => {
-  const [imgLoading, setImgLoading] = useState(true);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const navigate = useNavigate();
+const formatDate = (value) => {
+  if (!value) return 'Date to be announced';
+  return new Date(value).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+};
 
-  // Upcoming events data with external links
-  /*const upcomingEvents = [
-    {
-      id: 3,
-      title: "HANDS ON: SEXUAL HARASSMENT IN THE CREATIVE INDUSTRY",
-      speaker: "DR. ARSHIYA SETHI",
-      date: "February 20, 2026",
-      venue: "Online",
-      description: "Our session on Sexual Harassment in the Creative Industry confronts hidden power dynamics, silences, and structural gaps shaping artistic spaces through an unflinching conversation with leading artivist Arshiya Sethi. Join us as we reimagine the arts as spaces of dignity, consent, and equity—where creativity can truly thrive without fear.",
-      image: "./Arshiya2.jpeg",
-      category: "ART, CREATIVE INDUSTRY",
-      requiresLogin: false,
-      registrationLink: "https://forms.gle/TApRVW6jAgH2H7a86",
-      learnMoreLink: "#"
-    }
-  ];*/
+const formatTime = (value) => (value ? String(value).slice(0, 5) : '');
 
-  // Archived events data
-  const archivedEvents = [
-    {
-      id: 1,
-      title: "PAPER TO PRACTICE: HERITAGE CONSERVATION IN THE TRENCHES",
-      speaker: "DR. SHUBHA MAJUMDAR",
-      date: "August 26, 2025",
-      description: "Dr. Shubha Majumdar, Superintending Archaeologist at ASI, provided an insider's view into heritage conservation challenges, legal protections, and ASI's role in safeguarding India's cultural legacy.",
-      image: "./event1_thumbn.jpg",
-      category: "HERITAGE PRESERVATION LAW",
-      duration: "1 hour",
-      attendees: "100",
-      requiresLogin: true
-    },
-    {
-      id: 2,
-      title: "PERFORMING ARTS AND THE LAW: BEHIND THE SPOTLIGHTS",
-      speaker: "DR. SOMABHA BANDOPADHYAY",
-      date: "November 2, 2025",
-      description: "Dr. Somabha Bandopadhyay, Assistant Professor at National Forensic Sciences University, Delhi campus, delved into the legal intricacies of performing arts in India, covering intellectual property rights, contracts, and censorship issues faced by artists.",
-      image: "./event2_thumbn.jpeg",
-      category: "ART PRESERVATION LAW",
-      duration: "1 hour",
-      attendees: "100",
-      requiresLogin: true
-    },
-    {
-      id: 3,
-      title: "HANDS ON: SEXUAL HARASSMENT IN THE CREATIVE INDUSTRY",
-      speaker: "DR. ARSHIYA SETHI",
-      date: "February 20, 2026",
-      description: "Dr. Arshiya Sethi, a leading artivist, confronted the hidden power dynamics and structural gaps surrounding sexual harassment in the creative industry, reimagining artistic spaces through the lenses of dignity, consent, and equity to ensure a professional environment where creativity thrives without fear.",
-      image: "./event3_thumb.jpeg",
-      category: "ART, CREATIVE INDUSTRY",
-      duration: "1 hour",
-      attendees: "100",
-      requiresLogin: true
-    }
-  ];
+const getStatus = (event) => event?.statusLabel?.replace('archieved', 'archived') || (event?.status ? 'upcoming' : 'archived');
 
-  // Function to handle archived event click
-  const handleArchivedEventClick = (event) => {
-    if (event.requiresLogin) {
-      setSelectedEvent(event);
-      setShowLoginModal(true);
-    } else {
-      navigate(`/event${event.id}`);
-    }
-  };
+const getRegistrationWindow = (event) => ({
+  from: event.registrationOpenFrom || event.registration_open_from || event.registration_open_from_time,
+  until: event.registrationOpenUntil || event.registration_open_until || event.registration_open_until_time,
+});
 
-  // Function to handle external link clicks
-  /*const handleExternalLink = (e, link) => {
-    e.stopPropagation();
-    if (link && link !== "#") {
-      window.open(link, '_blank', 'noopener,noreferrer');
-    }
-  };*/
+const parseServerDateTime = (value) => {
+  if (!value) return null;
+  if (/[zZ]|[+-]\d{2}:\d{2}$/.test(value)) return new Date(value).getTime();
+  return new Date(`${value}Z`).getTime();
+};
 
-  const handleLogin = () => {
-    navigate('/login');
-    setShowLoginModal(false);
-  };
+const getDisplayEvent = (event) => ({
+  id: event.eventId,
+  title: event.eventName || event.archievedEventName || 'Untitled event',
+  speaker: event.archievedEventSpeakerName || event.typeOfEvent || 'ArtLawCommunion',
+  speakerDesignation: event.archievedEventSpeakerDesignation || '',
+  date: event.archievedEventDate || event.eventDate,
+  image: event.image || event.image1 || './event1_thumbn.jpg',
+  category: event.typeOfEvent || 'Art Law Communion',
+  description: event.eventOverview || Object.values(event.archeivedEventDetails || {})[0] || event.eventSpeakerOverview || 'Event details will be updated soon.',
+  venue: event.eventType === false ? 'Offline' : 'Online',
+  startTime: formatTime(event.eventStartTime),
+  endTime: formatTime(event.eventEndTime),
+});
 
-  // Upcoming Event Card Component - Featured style
-  /*const UpcomingEventCard = ({ event }) => (
-    <div className="relative bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-2xl border border-amber-500/30 transition-all duration-300 hover:border-amber-400/50 hover:shadow-amber-500/20 group">
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
-        <Sparkles className="w-4 h-4" />
-        UPCOMING EVENT
-      </div>
+const RegistrationTimer = ({ event }) => {
+  const [now, setNow] = useState(Date.now());
+  const { from, until } = getRegistrationWindow(event);
 
-      <div className="flex flex-col lg:flex-row">
-        <div className="lg:w-2/5 relative overflow-hidden">
-          <img 
-            src={event.image} 
-            alt="Event thumbnail" 
-            className="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent lg:bg-gradient-to-r" />
-        </div>
-        
-        <div className="lg:w-3/5 p-6 lg:p-8">
-          <div className="flex items-center justify-between mb-4 mt-8 lg:mt-0">
-            <span className="bg-amber-600/20 text-amber-400 border border-amber-500/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide">
-              {event.category}
-            </span>
-          </div>
-          
-          <h2 className="text-white text-2xl lg:text-3xl font-semibold mb-4 leading-tight group-hover:text-amber-300 transition-colors">
-            {event.title}
-          </h2>
-          
-          <p className="text-amber-400 text-base mb-4 font-medium flex items-center">
-            <User className="w-5 h-5 mr-2" />
-            {event.speaker}
-          </p>
-          
-          <div className="flex flex-wrap gap-4 text-gray-300 text-sm mb-5 bg-gray-800/50 rounded-lg p-4">
-            <span className="flex items-center">
-              <Calendar className="w-4 h-4 mr-2 text-amber-400" />
-              {event.date}
-            </span>
-            <span className="flex items-center">
-              <MapPin className="w-4 h-4 mr-2 text-amber-400" />
-              {event.venue}
-            </span>
-          </div>
-          
-          <p className="text-gray-300 text-sm mb-6 leading-relaxed line-clamp-4">
-            {event.description}
-          </p>
-          
-          <div className="flex flex-wrap items-center gap-4">
-            <a 
-              href={event.registrationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center border border-amber-500/50 text-amber-400 hover:bg-amber-500/10 px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300"
-            >
-              <span>Register For Free</span>
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );*/
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-  // Archived Event Card Component
-  const ArchivedEventCard = ({ event }) => (
-    <div 
-      className="bg-gray-800/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-xl border border-gray-700/50 transition-all duration-300 hover:border-blue-500/30 hover:shadow-2xl cursor-pointer"
-      onClick={() => handleArchivedEventClick(event)}
-    >
+  if (!from || !until) {
+    return <span className="text-xs text-amber-200">Registration schedule will be updated soon.</span>;
+  }
+
+  const openFrom = parseServerDateTime(from);
+  const openUntil = parseServerDateTime(until);
+  if (!Number.isFinite(openFrom) || !Number.isFinite(openUntil)) {
+    return <span className="text-xs text-amber-200">Registration schedule will be updated soon.</span>;
+  }
+  const target = now < openFrom ? openFrom : openUntil;
+  const remaining = Math.max(0, target - now);
+  const days = Math.floor(remaining / 86400000);
+  const hours = Math.floor((remaining % 86400000) / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+
+  if (now > openUntil) return <span className="text-xs text-red-200">Registration closed.</span>;
+
+  return (
+    <span className="text-xs text-amber-100">
+      {now < openFrom ? 'Registration opens in ' : 'Registration closes in '}
+      <strong>{days}d {hours}h {minutes}m {seconds}s</strong>
+    </span>
+  );
+};
+
+const EventCard = ({ event, activeStatus }) => {
+  const display = getDisplayEvent(event);
+  const isUpcoming = activeStatus === 'upcoming';
+
+  return (
+    <div className={`overflow-hidden rounded-xl border shadow-2xl backdrop-blur-sm transition-all duration-300 ${isUpcoming ? 'border-amber-500/30 bg-gradient-to-br from-gray-800/90 to-gray-900/90 hover:border-amber-400/50' : 'border-gray-700/50 bg-gray-800/70 hover:border-blue-500/30'}`}>
       <div className="flex flex-col md:flex-row">
-        {/* Image Section */}
-        <div className="md:w-2/5 relative">
-          <img 
-            src={event.image} 
-            alt="Event thumbnail" 
-            className="w-full h-48 md:h-full object-cover"
-          />
+        <div className="md:w-2/5 relative overflow-hidden">
+          {isUpcoming && (
+            <div className="absolute left-4 top-4 z-20 flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 text-xs font-bold text-white shadow-lg">
+              <Sparkles className="h-4 w-4" />
+              UPCOMING EVENT
+            </div>
+          )}
+          <img src={display.image} alt={display.title} className="h-56 w-full object-cover md:h-full" />
         </div>
-        
-        {/* Text Content Section */}
+
         <div className="md:w-3/5 p-6">
-          <div className="flex items-center justify-between mb-3">
-            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-              {event.category}
-            </span>
-          </div>
-          
-          <h2 className="text-white text-xl md:text-2xl font-light mb-3 hover:text-blue-300 transition-colors">
-            {event.title}
+          <span className={`${isUpcoming ? 'border border-amber-500/30 bg-amber-600/20 text-amber-300' : 'bg-blue-600 text-white'} rounded-full px-3 py-1 text-xs font-semibold`}>
+            {display.category}
+          </span>
+
+          <h2 className={`mt-4 text-xl font-light leading-tight text-white md:text-2xl ${isUpcoming ? 'hover:text-amber-300' : 'hover:text-blue-300'} transition-colors`}>
+            {display.title}
           </h2>
-          
-          <p className="text-blue-300 text-sm mb-2 font-medium flex items-center">
-            <User className="w-4 h-4 mr-2" />
-            {event.speaker}
+
+          <p className={`${isUpcoming ? 'text-amber-300' : 'text-blue-300'} mt-3 flex items-center text-sm font-medium`}>
+            <User className="mr-2 h-4 w-4" />
+            {display.speaker}
           </p>
-          
-          <div className="flex flex-wrap gap-4 text-gray-400 text-xs mb-4">
-            <span className="flex items-center">
-              <Calendar className="w-3 h-3 mr-1" />
-              {event.date}
-            </span>
-            <span className="flex items-center">
-              <Clock className="w-3 h-3 mr-1" />
-              {event.duration}
-            </span>
-            <span className="flex items-center">
-              👥 {event.attendees}
-            </span>
+
+          <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-300">
+            <span className="flex items-center"><Calendar className="mr-1 h-3 w-3" />{formatDate(display.date)}</span>
+            {isUpcoming && <span className="flex items-center"><MapPin className="mr-1 h-3 w-3" />{display.venue}</span>}
+            {display.startTime && <span className="flex items-center"><Clock className="mr-1 h-3 w-3" />{display.startTime}{display.endTime ? ` - ${display.endTime}` : ''}</span>}
           </div>
-          
-          <p className="text-gray-200 text-sm mb-4 leading-relaxed">
-            {event.description}
-          </p>
-          
-          <div className="flex items-center justify-between">
-            <button className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors group">
+
+          <p className="mt-4 text-sm leading-relaxed text-gray-200 line-clamp-4">{display.description}</p>
+
+          {isUpcoming && (
+            <div className="mt-5 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3">
+              <RegistrationTimer event={event} />
+            </div>
+          )}
+
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <Link to={`/event/${display.id}`} state={{ event }} className={`inline-flex items-center text-sm font-medium transition-colors group ${isUpcoming ? 'text-amber-300 hover:text-amber-200' : 'text-blue-400 hover:text-blue-300'}`}>
               <span>View Event Details</span>
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            {isUpcoming && (
+              <Link to={`/eventreg?event_id=${encodeURIComponent(display.id)}`} state={{ event }} className="rounded-lg border border-amber-500/50 px-5 py-2 text-sm font-medium text-amber-300 transition hover:bg-amber-500/10">
+                Register
+              </Link>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+const EventsPage = () => {
+  const [activeStatus, setActiveStatus] = useState('upcoming');
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const location = useLocation();
+  const NavbarComponent = location.pathname.includes('eventsh') ? AltNavbar : Navbar;
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const statusQuery = activeStatus === 'archived' ? 'archieved' : 'upcoming';
+        const response = await authService.getPublicEvents(statusQuery);
+        setEvents(response.data || []);
+      } catch (loadError) {
+        setEvents([]);
+        setError(loadError.message || 'Unable to load events.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+  }, [activeStatus]);
+
+  const title = useMemo(() => activeStatus === 'upcoming' ? 'UPCOMING EVENTS' : 'ARCHIVED EVENTS', [activeStatus]);
 
   return (
     <div className="relative min-h-screen bg-gray-900">
-      {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-      )}
-      
-      {/* Navbar */}
-      <Navbar />
-      
-      {/* Minimalist background with subtle pattern */}
-      <div 
-        className="absolute inset-0 bg-gray-600 opacity-100 z-0"
-        style={{
-          backgroundImage: `url('./pillar.jpg')`,
-          filter: 'brightness(0.9) contrast(1.1)',
-        }}
-        onLoad={() => setImgLoading(false)}
-      />
-      
-      {/* Content */}
-      <div className="relative pt-28 min-h-screen z-10">
+      <NavbarComponent />
+      <div className="absolute inset-0 z-0 bg-gray-600 opacity-100" style={{ backgroundImage: `url('./pillar.jpg')`, filter: 'brightness(0.9) contrast(1.1)' }} />
+
+      <div className="relative z-10 min-h-screen pt-28">
         <div className="container mx-auto px-4 pb-16">
-          <div className="max-w-5xl mx-auto p-4">
-            
-            {/* Upcoming Events Section - COMMENTED OUT */}
-            {/*
-            <div className="mb-20">
-              <div className="flex items-center justify-center gap-4 mb-10">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-500/50" />
-                <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center flex items-center gap-3">
-                  <Sparkles className="w-8 h-8 text-amber-400" />
-                  UPCOMING EVENTS
-                </h1>
-                <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-500/50" />
-              </div>
-              
-              <div className="space-y-8">
-                {upcomingEvents.map((event) => (
-                  <UpcomingEventCard key={event.id} event={event} />
-                ))}
+          <div className="mx-auto max-w-5xl p-4">
+            <div className="mb-10 flex justify-center">
+              <div className="inline-flex rounded-full border border-white/15 bg-black/40 p-1 backdrop-blur">
+                <button onClick={() => setActiveStatus('upcoming')} className={`rounded-full px-5 py-2 text-sm font-semibold transition ${activeStatus === 'upcoming' ? 'bg-amber-500 text-white' : 'text-gray-300 hover:text-white'}`}>Upcoming</button>
+                <button onClick={() => setActiveStatus('archived')} className={`rounded-full px-5 py-2 text-sm font-semibold transition ${activeStatus === 'archived' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:text-white'}`}>Archived</button>
               </div>
             </div>
-            */}
-            
-            {/* Archived Events Section */}
-            <div>
-              <div className="flex items-center justify-center gap-4 mb-10">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent to-blue-500/50" />
-                <h1 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center">
-                  OUR EVENTS
-                </h1>
-                <div className="h-px w-16 bg-gradient-to-l from-transparent to-blue-500/50" />
-              </div>
-              
-              <div className="space-y-8">
-                {archivedEvents.map((event) => (
-                  <ArchivedEventCard key={event.id} event={event} />
-                ))}
-              </div>
+
+            <div className="mb-10 flex items-center justify-center gap-4">
+              <div className={`h-px w-16 bg-gradient-to-r from-transparent ${activeStatus === 'upcoming' ? 'to-amber-500/50' : 'to-blue-500/50'}`} />
+              <h1 className="text-center text-3xl font-light tracking-wide text-white md:text-4xl">{title}</h1>
+              <div className={`h-px w-16 bg-gradient-to-l from-transparent ${activeStatus === 'upcoming' ? 'to-amber-500/50' : 'to-blue-500/50'}`} />
             </div>
-            
+
+            {loading && <div className="flex items-center justify-center gap-2 rounded-xl bg-black/40 p-8 text-white"><RefreshCw className="h-5 w-5 animate-spin" /> Loading events...</div>}
+            {error && <div className="rounded-xl border border-red-400/30 bg-red-900/40 p-5 text-red-100">{error}</div>}
+            {!loading && !error && !events.length && <div className="rounded-xl border border-white/10 bg-black/40 p-8 text-center text-gray-200">No {activeStatus} events available right now.</div>}
+
+            <div className="space-y-8">
+              {events.map((event) => (
+                <EventCard key={event.eventId || event.id} event={event} activeStatus={activeStatus} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Login Modal */}
-      {showLoginModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                <Lock className="w-8 h-8 text-red-500" />
-              </div>
-            </div>
-            
-            <div className="text-center mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                We are glad you are interested to learn more!
-              </h2>
-              <p className="text-gray-600 mb-4">
-                Please login to access detailed event reports and exclusive content.
-              </p>
-            </div>
-            
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => setShowLoginModal(false)}
-                className="px-6 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleLogin}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
-}
+};
 
 export default EventsPage;

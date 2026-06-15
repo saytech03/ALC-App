@@ -116,6 +116,223 @@ class AuthService {
     }).then(response => response.json());
   }
 
+  getRequiredAdminToken(adminToken) {
+    const token = adminToken || this.getAdminToken();
+    if (!token) {
+      throw new Error('Admin authentication required. Please login again.');
+    }
+    return token;
+  }
+
+  async parseEventResponse(response) {
+    const responseText = await response.text();
+    let responseData = {};
+    try {
+      responseData = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      responseData = { message: responseText };
+    }
+
+    if (!response.ok) {
+      const error = new Error(responseData.message || responseData.detail || `Request failed with status ${response.status}`);
+      error.status = response.status;
+      error.data = responseData;
+      throw error;
+    }
+
+    return responseData;
+  }
+
+  createEventFormData(eventData, includeEmpty = false) {
+    const formData = new FormData();
+    Object.entries(eventData).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === '') {
+        if (includeEmpty) formData.append(key, value ?? '');
+        return;
+      }
+      formData.append(key, value);
+    });
+    return formData;
+  }
+
+  async createUpcomingEvent(eventData, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const formData = this.createEventFormData(eventData);
+
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.UPCOMING}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async updateUpcomingEvent(eventId, eventData, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const formData = this.createEventFormData(eventData);
+
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.UPCOMING}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async archiveEvent(eventId, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.ARCHIVE_STATUS}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async updateArchivedEvent(eventId, eventData, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const formData = this.createEventFormData(eventData);
+
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.ARCHIVED}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async searchEvents(filters = {}, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const params = new URLSearchParams();
+    if (filters.eventId) params.set('event_id', filters.eventId);
+    if (filters.status && filters.status !== 'all') params.set('status', filters.status);
+
+    const query = params.toString() ? `?${params.toString()}` : '';
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.SEARCH}${query}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      },
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async getEventParticipants(eventId, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.PARTICIPANTS}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      },
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  formatDateTimeForBackend(date) {
+    const pad = (value) => String(value).padStart(2, '0');
+    return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}T${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:00`;
+  }
+
+  convertIstInputToServerDateTime(value) {
+    if (!value) return value;
+    const [datePart, timePart = '00:00'] = value.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute] = timePart.split(':').map(Number);
+    const istAsUtcMs = Date.UTC(year, month - 1, day, hour, minute || 0) - (5.5 * 60 * 60 * 1000);
+    return this.formatDateTimeForBackend(new Date(istAsUtcMs));
+  }
+
+  async updateEventRegistrationWindow(eventId, windowData, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const normalizedWindowData = {
+      registration_open_from: this.convertIstInputToServerDateTime(windowData.registration_open_from),
+      registration_open_until: this.convertIstInputToServerDateTime(windowData.registration_open_until),
+    };
+
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.REGISTRATION_WINDOW}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(normalizedWindowData),
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async notifyEventParticipants(eventId, notificationData, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.NOTIFY_PARTICIPANTS}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(notificationData),
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async deleteEvent(eventId, adminToken) {
+    const token = this.getRequiredAdminToken(adminToken);
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.DELETE}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      },
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async getPublicEvents(status) {
+    const params = new URLSearchParams();
+    if (status) params.set('status', status);
+    const query = params.toString() ? `?${params.toString()}` : '';
+
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.PUBLIC}${query}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    return this.parseEventResponse(response);
+  }
+
+  async registerForEvent(eventId, participantData) {
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.REGISTER_PUBLIC}?event_id=${encodeURIComponent(eventId)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(participantData),
+    });
+
+    return this.parseEventResponse(response);
+  }
+
   async resendOTP(emailData) {
   return await this.request(API_CONFIG.ENDPOINTS.AUTH.RESEND_OTP, {
     method: 'POST',
