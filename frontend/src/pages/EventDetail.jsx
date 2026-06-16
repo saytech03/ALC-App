@@ -10,6 +10,30 @@ const formatDate = (value) => {
 
 const eventStatus = (event) => event?.statusLabel?.replace('archieved', 'archived') || (event?.status ? 'upcoming' : 'archived');
 
+const getRegistrationWindow = (event) => ({
+  from: event?.registrationOpenFrom || event?.registration_open_from || event?.registration_open_from_time,
+  until: event?.registrationOpenUntil || event?.registration_open_until || event?.registration_open_until_time,
+});
+
+const parseServerDateTime = (value) => {
+  if (!value) return null;
+  if (/[zZ]|[+-]\d{2}:\d{2}$/.test(value)) return new Date(value).getTime();
+  return new Date(`${value}Z`).getTime();
+};
+
+const getRegistrationState = (event, now = Date.now()) => {
+  const { from, until } = getRegistrationWindow(event);
+  const openFrom = parseServerDateTime(from);
+  const openUntil = parseServerDateTime(until);
+
+  if (!Number.isFinite(openFrom) || !Number.isFinite(openUntil)) {
+    return { isOpen: false, label: 'Registration unavailable' };
+  }
+  if (now < openFrom) return { isOpen: false, label: 'Registration not open yet' };
+  if (now > openUntil) return { isOpen: false, label: 'Registration closed' };
+  return { isOpen: true, label: 'Register for Event' };
+};
+
 const getBackPath = () => {
   try {
     const storedUser = localStorage.getItem('currentUser');
@@ -65,6 +89,7 @@ const EventDetail = () => {
   const secondaryImage = isArchived ? event?.image2 : null;
   const detailEntries = Object.entries(event?.archeivedEventDetails || {});
   const takeaways = event?.archievedEventKeyTakeaways || [];
+  const registrationState = getRegistrationState(event);
 
   return (
     <div className="relative min-h-screen bg-black">
@@ -131,9 +156,15 @@ const EventDetail = () => {
 
             {status === 'upcoming' && (
               <div className="mt-10 text-center">
-                <Link to={`/eventreg?event_id=${encodeURIComponent(event.eventId)}`} state={{ event }} className="inline-block rounded-lg bg-amber-600 px-8 py-4 text-lg font-medium text-white transition-colors duration-200 hover:bg-amber-700">
-                  Register for Event
-                </Link>
+                {registrationState.isOpen ? (
+                  <Link to={`/eventreg?event_id=${encodeURIComponent(event.eventId)}`} state={{ event }} className="inline-block rounded-lg bg-amber-600 px-8 py-4 text-lg font-medium text-white transition-colors duration-200 hover:bg-amber-700">
+                    Register for Event
+                  </Link>
+                ) : (
+                  <button type="button" disabled className="inline-block cursor-not-allowed rounded-lg bg-gray-500 px-8 py-4 text-lg font-medium text-white opacity-70">
+                    {registrationState.label}
+                  </button>
+                )}
               </div>
             )}
 

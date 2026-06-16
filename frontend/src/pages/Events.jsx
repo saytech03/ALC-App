@@ -25,6 +25,26 @@ const parseServerDateTime = (value) => {
   return new Date(`${value}Z`).getTime();
 };
 
+const getRegistrationState = (event, now = Date.now()) => {
+  const { from, until } = getRegistrationWindow(event);
+  const openFrom = parseServerDateTime(from);
+  const openUntil = parseServerDateTime(until);
+
+  if (!Number.isFinite(openFrom) || !Number.isFinite(openUntil)) {
+    return { status: 'unavailable', isOpen: false, label: 'Registration unavailable' };
+  }
+
+  if (now < openFrom) {
+    return { status: 'not_open', isOpen: false, label: 'Registration not open yet', target: openFrom };
+  }
+
+  if (now > openUntil) {
+    return { status: 'closed', isOpen: false, label: 'Registration closed', target: openUntil };
+  }
+
+  return { status: 'open', isOpen: true, label: 'Register', target: openUntil };
+};
+
 const getDisplayEvent = (event) => ({
   id: event.eventId,
   title: event.eventName || event.archievedEventName || 'Untitled event',
@@ -39,36 +59,24 @@ const getDisplayEvent = (event) => ({
   endTime: formatTime(event.eventEndTime),
 });
 
-const RegistrationTimer = ({ event }) => {
-  const [now, setNow] = useState(Date.now());
-  const { from, until } = getRegistrationWindow(event);
+const RegistrationTimer = ({ event, now }) => {
+  const registrationState = getRegistrationState(event, now);
 
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  if (!from || !until) {
+  if (registrationState.status === 'unavailable') {
     return <span className="text-xs text-amber-200">Registration schedule will be updated soon.</span>;
   }
+  if (registrationState.status === 'closed') return <span className="text-xs text-red-200">Registration closed.</span>;
 
-  const openFrom = parseServerDateTime(from);
-  const openUntil = parseServerDateTime(until);
-  if (!Number.isFinite(openFrom) || !Number.isFinite(openUntil)) {
-    return <span className="text-xs text-amber-200">Registration schedule will be updated soon.</span>;
-  }
-  const target = now < openFrom ? openFrom : openUntil;
+  const target = registrationState.target;
   const remaining = Math.max(0, target - now);
   const days = Math.floor(remaining / 86400000);
   const hours = Math.floor((remaining % 86400000) / 3600000);
   const minutes = Math.floor((remaining % 3600000) / 60000);
   const seconds = Math.floor((remaining % 60000) / 1000);
 
-  if (now > openUntil) return <span className="text-xs text-red-200">Registration closed.</span>;
-
   return (
     <span className="text-xs text-amber-100">
-      {now < openFrom ? 'Registration opens in ' : 'Registration closes in '}
+      {registrationState.status === 'not_open' ? 'Registration opens in ' : 'Registration closes in '}
       <strong>{days}d {hours}h {minutes}m {seconds}s</strong>
     </span>
   );
@@ -77,6 +85,14 @@ const RegistrationTimer = ({ event }) => {
 const EventCard = ({ event, activeStatus }) => {
   const display = getDisplayEvent(event);
   const isUpcoming = activeStatus === 'upcoming';
+  const [now, setNow] = useState(Date.now());
+  const registrationState = getRegistrationState(event, now);
+
+  useEffect(() => {
+    if (!isUpcoming) return undefined;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [isUpcoming]);
 
   return (
     <div className={`overflow-hidden rounded-xl border shadow-2xl backdrop-blur-sm transition-all duration-300 ${isUpcoming ? 'border-amber-500/30 bg-gradient-to-br from-gray-800/90 to-gray-900/90 hover:border-amber-400/50' : 'border-gray-700/50 bg-gray-800/70 hover:border-blue-500/30'}`}>
@@ -115,7 +131,7 @@ const EventCard = ({ event, activeStatus }) => {
 
           {isUpcoming && (
             <div className="mt-5 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3">
-              <RegistrationTimer event={event} />
+              <RegistrationTimer event={event} now={now} />
             </div>
           )}
 
@@ -125,9 +141,15 @@ const EventCard = ({ event, activeStatus }) => {
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             {isUpcoming && (
-              <Link to={`/eventreg?event_id=${encodeURIComponent(display.id)}`} state={{ event }} className="rounded-lg border border-amber-500/50 px-5 py-2 text-sm font-medium text-amber-300 transition hover:bg-amber-500/10">
-                Register
-              </Link>
+              registrationState.isOpen ? (
+                <Link to={`/eventreg?event_id=${encodeURIComponent(display.id)}`} state={{ event }} className="rounded-lg border border-amber-500/50 px-5 py-2 text-sm font-medium text-amber-300 transition hover:bg-amber-500/10">
+                  Register
+                </Link>
+              ) : (
+                <button type="button" disabled className="cursor-not-allowed rounded-lg border border-gray-500/40 px-5 py-2 text-sm font-medium text-gray-400 opacity-70">
+                  {registrationState.label}
+                </button>
+              )
             )}
           </div>
         </div>
