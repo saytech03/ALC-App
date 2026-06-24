@@ -1,8 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import authService from "../store/authService";
+
+const referralOptions = [
+    { label: "Social Media", value: "social_media" },
+    { label: "Friends/ Colleagues", value: "friends" },
+    { label: "University/ Institute/ Organisation", value: "university" },
+    { label: "Other", value: "other" }
+];
 
 const Eventreg = () => {
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
+    const event = location.state?.event;
+    const eventId = searchParams.get("event_id") || event?.eventId || "";
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -14,6 +26,7 @@ const Eventreg = () => {
     });
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
 
     const handleChange = (event) => {
@@ -31,21 +44,48 @@ const Eventreg = () => {
         if (!formData.occupation.trim()) return "Please tell us your occupation.";
         if (!formData.institute.trim()) return "Please enter your institute or organisation.";
         if (!formData.referralSource.trim()) return "Please tell us how you heard about the Art Law Communion.";
-        if (formData.referralSource === "Other" && !formData.referralOther.trim()) return "Please specify how you heard about us.";
+        if (formData.referralSource === "other" && !formData.referralOther.trim()) return "Please specify how you heard about us.";
         return "";
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = async (eventSubmit) => {
+        eventSubmit.preventDefault();
         const validationError = validateForm();
         if (validationError) {
             setError(validationError);
             setSubmitted(false);
             return;
         }
+        if (!eventId) {
+            setError("Event ID is missing. Please open registration from the event page.");
+            setSubmitted(false);
+            return;
+        }
+
         setError("");
-        setSubmitted(true);
-        console.log("Event registration submitted", formData);
+        setLoading(true);
+        try {
+            const payload = {
+                name: formData.name.trim(),
+                email_id: formData.email.trim(),
+                contact_number: formData.contactNumber.trim(),
+                occupation: formData.occupation.trim(),
+                institute: formData.institute.trim(),
+                reason: formData.referralSource
+            };
+
+            if (formData.referralSource === "other") {
+                payload.other_reason = formData.referralOther.trim();
+            }
+
+            await authService.registerForEvent(eventId, payload);
+            setSubmitted(true);
+        } catch (submitError) {
+            setSubmitted(false);
+            setError(submitError.message || "Registration failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -68,6 +108,15 @@ const Eventreg = () => {
                             <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                              Register now
                             </h1>
+                            {event ? (
+                                <div className="mt-6 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+                                    <p className="text-sm uppercase tracking-[0.24em] text-gray-300">Event</p>
+                                    <p className="mt-3 text-xl font-semibold text-white">{event.eventName || event.archievedEventName}</p>
+                                    <p className="mt-2 text-sm text-gray-300">Event ID: {eventId}</p>
+                                </div>
+                            ) : eventId ? (
+                                <p className="mt-4 text-sm text-gray-300">Event ID: {eventId}</p>
+                            ) : null}
                           </div>
                        {/* <div className="mb-8">
                             <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
@@ -177,27 +226,22 @@ const Eventreg = () => {
                                
 
                                 <div className="space-y-3">
-                                    {[
-                                        "Social Media",
-                                        "Friends/ Colleagues",
-                                        "University/ Institute/ Organisation",
-                                        "Other"
-                                    ].map((option) => (
-                                        <label key={option} className="flex items-center gap-3 text-gray-200">
+                                    {referralOptions.map((option) => (
+                                        <label key={option.value} className="flex items-center gap-3 text-gray-200">
                                             <input
                                                 type="radio"
                                                 name="referralSource"
-                                                value={option}
-                                                checked={formData.referralSource === option}
+                                                value={option.value}
+                                                checked={formData.referralSource === option.value}
                                                 onChange={handleChange}
                                                 className="h-4 w-4 accent-cyan-400"
                                             />
-                                            <span>{option}</span>
+                                            <span>{option.label}</span>
                                         </label>
                                     ))}
                                 </div>
 
-                                {formData.referralSource === "Other" && (
+                                {formData.referralSource === "other" && (
                                     <input
                                         id="referralOther"
                                         name="referralOther"
@@ -224,9 +268,10 @@ const Eventreg = () => {
 
                             <button
                                 type="submit"
-                                className="w-full rounded-3xl bg-cyan-500 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/70"
+                                disabled={loading}
+                                className="w-full rounded-3xl bg-cyan-500 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300/70 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                Submit Registration
+                                {loading ? "Submitting..." : "Submit Registration"}
                             </button>
                         </form>
 
@@ -236,8 +281,8 @@ const Eventreg = () => {
                         </div>
 
                         <div className="mt-6 flex items-center justify-center text-sm text-gray-400">
-                            <Link to="/" className="font-semibold text-cyan-300 hover:text-white">
-                                Home
+                            <Link to="/events" className="font-semibold text-cyan-300 hover:text-white">
+                                Back to Events
                             </Link>
                         </div>
                     </section>

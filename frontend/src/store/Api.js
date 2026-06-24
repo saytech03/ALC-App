@@ -23,7 +23,16 @@ const API_CONFIG = {
       GET_BY_ID: '/api/blogs' // Append /:id to this endpoint
     },
     EVENT: {
-      CREATE: '/api/admin/events/upcoming'
+      PUBLIC: '/api/events',
+      REGISTER_PUBLIC: '/api/events/register',
+      UPCOMING: '/api/admin/events/upcoming',
+      ARCHIVED: '/api/admin/events/archived',
+      ARCHIVE_STATUS: '/api/admin/events/archive-status',
+      SEARCH: '/api/admin/events/search',
+      PARTICIPANTS: '/api/admin/events/participants',
+      REGISTRATION_WINDOW: '/api/admin/events/registration-window',
+      NOTIFY_PARTICIPANTS: '/api/admin/events/participants/notify',
+      DELETE: '/api/admin/events'
     },
     CONTACT: '/api/contact', // New contact endpoint
     HEALTH: '/api/health' // Application health endpoint
