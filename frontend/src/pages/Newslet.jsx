@@ -66,6 +66,11 @@ const Newsletter = () => {
       {/* Content */}
       <div className="relative pt-28 min-h-screen z-10">
         <div className="container mx-auto px-4 pb-16">
+          <div className="mb-10 rounded-3xl border border-amber-400/30 bg-amber-500/10 p-5 text-amber-100 shadow-lg">
+            <p className="text-sm sm:text-base font-medium text-amber-100">
+              DISCLAIMER: Nothing contained in this newsletter should be interpreted as legal advice; it is published solely for informational and educational purposes.
+            </p>
+          </div>
           
           {/* ============================================= */}
           {/* HERO SECTION - Newsletter Info (Reduced Size) */}
