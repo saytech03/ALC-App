@@ -11,7 +11,7 @@ const Newsletter = () => {
     editionNumber: "Edition 01",
     editionDate: "February",
     coverImage: "./edition1_cover.jpg", // PLACEHOLDER: Add your image path
-    description: "Welcome to the very first edition of our bimonthly newsletter, where we dive into the urgent questions of authorship, AI, and copyright reshaping the contemporary art world. Alongside these conversations, we spotlight key developments in art law from India and across the globe, keeping you connected to a rapidly evolving field. This founding edition also features thoughtful testimonials from distinguished voices in the Indian art market, marking the beginning of a space dedicated to law, culture, and creative futures.",
+    description: "Welcome to the very first edition of our quarterly newsletter, where we dive into the urgent questions of authorship, AI, and copyright reshaping the contemporary art world. Alongside these conversations, we spotlight key developments in art law from India and across the globe, keeping you connected to a rapidly evolving field. This founding edition also features thoughtful testimonials from distinguished voices in the Indian art market, marking the beginning of a space dedicated to law, culture, and creative futures.",
     pdfLink: "/The_Newsletter_ArtLawCommunion_February_issue.pdf" // FIXED: Changed from "./" to "/" for absolute path
   };
 
@@ -79,7 +79,7 @@ const Newsletter = () => {
                 {/* Frequency Badge */}
                 <div className="inline-flex items-center gap-2 bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-full text-sm font-medium mb-6">
                   <Calendar className="w-4 h-4" />
-                  Bimonthly newsletter
+                  Quarterly newsletter
                 </div>
                 
                 {/* Title (H1) */}
