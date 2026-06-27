@@ -1,10 +1,5 @@
 fastapi
-uvicorn
-mangum
-langchain
-langchain-google-genai
-pydantic
+python-dotenv
 python-multipart
 PyPDF2
 python-docx
-python-dotenv
