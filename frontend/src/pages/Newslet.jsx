@@ -8,12 +8,42 @@ const Newsletter = () => {
 
   // Current Edition data - PLACEHOLDER: Update with actual content
   const currentEdition = {
-    editionNumber: "Edition 01",
-    editionDate: "February",
-    coverImage: "./edition1_cover.jpg", // PLACEHOLDER: Add your image path
-    description: "Welcome to the very first edition of our quarterly newsletter, where we dive into the urgent questions of authorship, AI, and copyright reshaping the contemporary art world. Alongside these conversations, we spotlight key developments in art law from India and across the globe, keeping you connected to a rapidly evolving field. This founding edition also features thoughtful testimonials from distinguished voices in the Indian art market, marking the beginning of a space dedicated to law, culture, and creative futures.",
-    pdfLink: "/The_Newsletter_ArtLawCommunion_February_issue.pdf" // FIXED: Changed from "./" to "/" for absolute path
+    editionNumber: "Edition 02",
+    editionDate: "June",
+    coverImage: "./Newslet_ED2.jpeg", // PLACEHOLDER: Update with the June cover image path
+    description: [
+      "Dear Readers,",
+      "",
+      "The great German painter Max Liebermann once said that \"The art of drawing is the art of omission\". Profound words, perhaps, but unfortunately, a newsletter does not have that luxury. But it is well that we quote him, for just as Liebermann introduced French Impressionism to Germany, so too does the Art Law Communion take the opportunity this quarter to pay homage to the unique aesthetics of Impressionism.",
+      "",
+      "At the same time, however, one cannot forget that, as Hegel famously postulated, life is nothing but an ever-present sequence of dialectics. Thus, we offer in our pages a contradiction: the fleeting sensory perception of the outside world captured by Impressionism, vis-à-vis the dense, tortured inner world of its most vociferous critic, German Expressionism. One can, after all, always trust the Germans to be contrarian.",
+      "",
+      "Thankfully, this newsletter also brings much more to the table besides philosophical grandstanding. In line with the clashing ideologies of our visual theme, we explore emergent conflicts in the field of art law: the repatriation of cultural heritage and the rise of artificial intelligence-mediated artistic compositions. So different on the surface, and yet, at their core lie the same enduring questions: whose art is it, who gets to own it, and why?",
+      "",
+      "These debates have continued to propel the field of art law forward, and this quarter, we explore its dimensions through a juxtaposition between the distant past and the emerging future.",
+      "",
+      "While we try to work out the kinks and arrive at an answer that is only mildly unsatisfactory (as all good scholarship is), all of us in the team hope the artist within you finds something you can take away from these pages to inflict on others. Start discussions, make relatives uncomfortable at dinner parties, and talk until everyone around you is rolling their eyes. After all, what better proof of life exists than the judgment of others?",
+      "",
+      "The Expressionists, I feel, would be inclined to agree.",
+      "",
+      "Regards,",
+      "Budhaditya",
+      "Co-founder",
+      "o.b.o.",
+      "The Art Law Communion"
+    ],
+    pdfLink: "/ALC Newsletter_Edition II_June.pdf" // PLACEHOLDER: Update with the June issue PDF link
   };
+
+  const archivedEditions = [
+    {
+      editionNumber: "Edition 01",
+      editionDate: "February",
+      coverImage: "./Newslet_ED1.png",
+      description: "Welcome to the very first edition of our quarterly newsletter, where we dive into the urgent questions of authorship, AI, and copyright reshaping the contemporary art world. Alongside these conversations, we spotlight key developments in art law from India and across the globe, keeping you connected to a rapidly evolving field. This founding edition also features thoughtful testimonials from distinguished voices in the Indian art market, marking the beginning of a space dedicated to law, culture, and creative futures.",
+      pdfLink: "/The_Newsletter_ArtLawCommunion_February_issue.pdf"
+    }
+  ];
 
   // Past Editions data - PLACEHOLDER: Add past editions when available
   /*const pastEditions = [
@@ -173,11 +203,11 @@ const Newsletter = () => {
               <div className="flex flex-col lg:flex-row">
                 
                 {/* Left Side - Edition Cover Image */}
-                <div className="lg:w-2/5 relative group overflow-hidden">
+                <div className="lg:w-2/5 relative group overflow-hidden bg-black">
                   <img 
-                    src='./Newslet_ED1.png'
+                    src={currentEdition.coverImage}
                     alt={`${currentEdition.editionNumber} Cover`}
-                    className="w-full h-full min-h-[400px] lg:min-h-[500px] object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full min-h-[400px] lg:min-h-[500px] object-fill object-center transition-all duration-500"
                   />
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-indigo-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -204,9 +234,13 @@ const Newsletter = () => {
                   <div className="w-24 h-1 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full mb-6" />
                   
                   {/* Edition Description */}
-                  <p className="text-gray-300 text-base lg:text-lg leading-relaxed mb-8">
-                    {currentEdition.description}
-                  </p>
+                  <div className="space-y-4 text-gray-300 text-sm lg:text-base leading-relaxed font-light mb-8">
+                    {currentEdition.description.map((paragraph, index) => (
+                      <p key={index} className={paragraph === "" ? "mt-4" : undefined}>
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
                   
                   {/* Download Button - CHANGED TO GOLDEN */}
                   <div className="flex flex-wrap items-center gap-4">
@@ -227,20 +261,19 @@ const Newsletter = () => {
           </section>
 
           {/* ============================================= */}
-          {/* PAST EDITIONS SECTION - PLACEHOLDER */}
+          {/* ARCHIVED EDITIONS SECTION */}
           {/* ============================================= */}
-          {/*
           <section className="max-w-7xl mx-auto mb-24">
             <div className="flex items-center justify-center gap-4 mb-12">
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-gray-500/50" />
               <h2 className="text-white font-light text-3xl md:text-4xl tracking-wide text-center">
-                PAST EDITIONS
+                ARCHIVED EDITIONS
               </h2>
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-gray-500/50" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {pastEditions.map((edition, index) => (
+              {archivedEditions.map((edition, index) => (
                 <div 
                   key={index}
                   className="bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700/50 hover:border-indigo-500/30 transition-all duration-300 group"
@@ -259,6 +292,9 @@ const Newsletter = () => {
                     <p className="text-gray-400 text-sm mb-4">
                       {edition.editionDate}
                     </p>
+                    <p className="text-gray-300 text-sm leading-relaxed mb-6">
+                      {edition.description}
+                    </p>
                     <a
                       href={edition.pdfLink}
                       download
@@ -273,7 +309,6 @@ const Newsletter = () => {
               ))}
             </div>
           </section>
-          */}
 
         </div>
       </div>
