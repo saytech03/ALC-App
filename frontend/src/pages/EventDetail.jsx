@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import AltNavbar from '../components/AltNavbar';
 import authService from '../store/authService';
 
 const formatDate = (value) => {
@@ -97,7 +98,7 @@ const EventDetail = () => {
         <div className="absolute inset-0 bg-gray-600 opacity-100 z-0" style={{ backgroundImage: `url('/shrine.jpg')`, filter: 'brightness(0.9) contrast(1.1)' }} />
       </div>
 
-      <Navbar />
+      {backPath.includes('/eventsh') ? <AltNavbar /> : <Navbar />}
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 pb-16 pt-24">
         {loading && <div className="rounded-xl bg-white/90 p-8 text-center text-gray-800">Loading event details...</div>}
