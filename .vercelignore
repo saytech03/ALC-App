@@ -6,6 +6,11 @@ node_modules/
 __pycache__/
 *.pyc
 
+# Ignore nested frontend API and static frontend function config
+frontend/api/
+frontend/requirements.txt
+frontend/vercel.json
+
 # Exclude unnecessary large assets/data files
 *.tar.gz
 *.zip
