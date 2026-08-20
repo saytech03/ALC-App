@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff, X } from "lucide-react";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
@@ -18,6 +18,8 @@ const LoginPage = () => {
 
     const { login, loginWithPatron, forgotPassword } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || null;
 
     // Email validation regex
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -80,11 +82,14 @@ const LoginPage = () => {
                     token: response.token
                 }));
                 
-                // Redirect to home page after successful login
-                // UPDATED: Dynamically construct path using patron ID
+                // Redirect back to origin page if set, otherwise go to dashboard
                 setTimeout(() => {
-                    const redirectId = response.membershipId || response.alc_patronid || 'user';
-                    navigate(`/${redirectId}/h`, { replace: true });
+                    if (from) {
+                        navigate(from, { replace: true });
+                    } else {
+                        const redirectId = response.membershipId || response.alc_patronid || 'user';
+                        navigate(`/${redirectId}/h`, { replace: true });
+                    }
                 }, 1000);
             } else {
                 setError(response?.message || 'Login failed');

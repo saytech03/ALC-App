@@ -12,6 +12,7 @@ const OtpVerify = () => {
     const { verifyOTP } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const from = location.state?.from || null;
 
     // Initialize email from location state or URL params
     useEffect(() => {
@@ -53,7 +54,7 @@ const OtpVerify = () => {
                 },
             });
             setTimeout(() => {
-                navigate('/login', { replace: true });
+                navigate('/login', { replace: true, state: { from } });
             }, 5000);
         } catch (error) {
             console.error('Verification error:', error);
@@ -69,7 +70,7 @@ const OtpVerify = () => {
                     },
                 });
                 setTimeout(() => {
-                    navigate('/login', { replace: true });
+                    navigate('/login', { replace: true, state: { from } });
                 }, 5000);
                 return; // Exit early, treat as success
             }
