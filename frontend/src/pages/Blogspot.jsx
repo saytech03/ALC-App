@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Repeat, ArrowRight, Calendar, User, Clock, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Calendar, User, Clock, Repeat, Heart, MessageCircle, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
 
 const Blogspot = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
   const [imgLoading, setImgLoading] = useState(true);
 
-  // Reduced blog data to 7 posts
   const blogPosts = [
     {
       id: 1,
@@ -35,52 +33,52 @@ const Blogspot = () => {
       ]
     },
     {
-        id: 2,
-        title: "Suppression of Vice: The Tussle Between Artistic Freedom and Moral Policing",
-        author: "Aritro Banerjee",
-        introduction: "From colonial courtrooms to today's digital platforms, the battle between artistic freedom and moral policing rages on. This examination of censorship's evolution reveals how laws designed to protect 'public morality' have consistently been weaponized against creative expression, from the trials of Ismat Chughtai and Saadat Hasan Manto to modern content moderation policies.",
-        category: "ART LAW",
-        date: "July 9, 2025",
-        readTime: "18 min read",
-        reposts: "1",
-        comments: 0,
-        reactions: 3,
-        likes: 3,
-        popularity: 98,
-        featured: false,
-        realUrl: "https://open.substack.com/pub/artlawcommunion/p/suppression-of-vice?utm_source=share&utm_medium=android&r=5s5n5l",
-        image: "./tree_blog.png",
-        subheadings: [
-            "The Myth of Virtuosity: Chughtai and Manto on Trial",
-            "The Mark of Obscenity: 300 Years of Legal Battles",
-            "From Hicklin to Miller: The Evolution of Obscenity Tests",
-            "India's Colonial Legacy in Censorship",
-            "Landmark Cases: Udeshi, Bandit Queen, and Beyond"
-        ]
+      id: 2,
+      title: "Suppression of Vice: The Tussle Between Artistic Freedom and Moral Policing",
+      author: "Aritro Banerjee",
+      introduction: "From colonial courtrooms to today's digital platforms, the battle between artistic freedom and moral policing rages on. This examination of censorship's evolution reveals how laws designed to protect 'public morality' have consistently been weaponized against creative expression, from the trials of Ismat Chughtai and Saadat Hasan Manto to modern content moderation policies.",
+      category: "ART LAW",
+      date: "July 9, 2025",
+      readTime: "18 min read",
+      reposts: "1",
+      comments: 0,
+      reactions: 3,
+      likes: 3,
+      popularity: 98,
+      featured: false,
+      realUrl: "https://open.substack.com/pub/artlawcommunion/p/suppression-of-vice?utm_source=share&utm_medium=android&r=5s5n5l",
+      image: "./tree_blog.png",
+      subheadings: [
+        "The Myth of Virtuosity: Chughtai and Manto on Trial",
+        "The Mark of Obscenity: 300 Years of Legal Battles",
+        "From Hicklin to Miller: The Evolution of Obscenity Tests",
+        "India's Colonial Legacy in Censorship",
+        "Landmark Cases: Udeshi, Bandit Queen, and Beyond"
+      ]
     },
-     {
-        id: 3,
-        title: "The House That Clive Did Not Build",
-        author: "Priyanshu Kar",
-        introduction: "The Clive House in London stands as a testament to colonial wealth, but its true origins reveal a more complex story of appropriation and legal maneuvering that challenges traditional notions of ownership and cultural heritage in art and architecture.",
-        category: "ART LAW",
-        date: "August 3, 2025",
-        readTime: "15 min read",
-        reposts: "1",
-        comments: 0,
-        reactions: 1,
-        likes: 1,
-        popularity: 96,
-        featured: false,
-        realUrl: "https://open.substack.com/pub/artlawcommunion/p/the-house-that-clive-did-not-build?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
-        image: "./clivehouse.png",
-        subheadings: [
-          "The Illusion of Creation: Clive's 'Architectural Vision'",
-          "Deconstructing the Provenance: Tracing the True Builders",
-          "Legal Alchemy: How Plunder Became Property",
-          "The Silent Witnesses: Artifacts That Tell Another Story",
-          "Contemporary Reckonings: The House in Modern Legal Context"
-        ]
+    {
+      id: 3,
+      title: "The House That Clive Did Not Build",
+      author: "Priyanshu Kar",
+      introduction: "The Clive House in London stands as a testament to colonial wealth, but its true origins reveal a more complex story of appropriation and legal maneuvering that challenges traditional notions of ownership and cultural heritage in art and architecture.",
+      category: "ART LAW",
+      date: "August 3, 2025",
+      readTime: "15 min read",
+      reposts: "1",
+      comments: 0,
+      reactions: 1,
+      likes: 1,
+      popularity: 96,
+      featured: false,
+      realUrl: "https://open.substack.com/pub/artlawcommunion/p/the-house-that-clive-did-not-build?r=5s5n5l&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true",
+      image: "./clivehouse.png",
+      subheadings: [
+        "The Illusion of Creation: Clive's 'Architectural Vision'",
+        "Deconstructing the Provenance: Tracing the True Builders",
+        "Legal Alchemy: How Plunder Became Property",
+        "The Silent Witnesses: Artifacts That Tell Another Story",
+        "Contemporary Reckonings: The House in Modern Legal Context"
+      ]
     },
     {
       id: 4,
@@ -106,8 +104,8 @@ const Blogspot = () => {
         "Navigating Consent in Traditional Dance Settings",
         "Way Forward: Beyond Mechanical Legislation"
       ]
-  },
-  {
+    },
+    {
       id: 5,
       title: "Digitising Tribal Art Archives in India: Consent, Ownership, and the Problem of Data Colonialism",
       author: "Divija Manaktala",
@@ -122,7 +120,7 @@ const Blogspot = () => {
       popularity: 92,
       featured: false,
       realUrl: "https://substack.com/@artlawcommunion/note/c-209218438?r=5s5n5l",
-      image: "./thaler.webp", 
+      image: "./thaler.webp",
       subheadings: [
         "Data Colonialism in the Digitisation of Indigenous Art",
         "The Absence of Community Consent and Benefit-Sharing",
@@ -132,214 +130,187 @@ const Blogspot = () => {
     }
   ];
 
-  const categories = ['All', 'ART LAW', 'TRIBAL RIGHTS' ];
-  
-  // Get featured article (highest popularity)
+  const categories = ['All', 'ART LAW', 'TRIBAL RIGHTS'];
+
   const featuredArticle = blogPosts.find(post => post.featured) || blogPosts[0];
-  
-  // Get popular articles sorted by popularity (top 4 for slider)
+
+  // Top 4 non-featured articles sorted by popularity for the slider
   const popularArticles = blogPosts
     .filter(post => !post.featured)
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, 4);
 
-  // Filter articles by category
-  const filteredArticles = selectedCategory === 'All' 
+  // Articles filtered by selected category, excluding the featured article
+  const filteredArticles = selectedCategory === 'All'
     ? blogPosts.filter(post => !post.featured)
     : blogPosts.filter(post => post.category === selectedCategory && !post.featured);
 
-  // Scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const formatNumber = (num) => {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toString();
   };
 
-  // Function to handle article click
+  // Logged-in: open article directly, no login prompt needed
   const handleArticleClick = (article) => {
     if (article.realUrl) {
       window.open(article.realUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      // Handle internal article navigation here if needed
-      console.log('Navigate to internal article:', article.id);
     }
   };
 
-  // Slider navigation functions (updated for 4 articles)
+  // Safely wraps slide index regardless of article count
+  const maxSlideIndex = Math.max(0, popularArticles.length - 2);
+
   const nextSlide = () => {
-    setPopularSlideIndex((prevIndex) => 
-      prevIndex >= popularArticles.length - 2 ? 0 : prevIndex + 1
-    );
+    setPopularSlideIndex(prev => (prev >= maxSlideIndex ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setPopularSlideIndex((prevIndex) => 
-      prevIndex <= 0 ? popularArticles.length - 2 : prevIndex - 1
-    );
+    setPopularSlideIndex(prev => (prev <= 0 ? maxSlideIndex : prev - 1));
   };
 
   return (
-    <div className='min-h-screen w-full ai-bg'>
+    <div className="relative">
       {imgLoading && (
-					<div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-				)}
-      {/* Navigation Header */}
+        <div className='fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-50' />
+      )}
+      <img
+        src={featuredArticle.image}
+        alt=""
+        className="hidden"
+        onLoad={() => setImgLoading(false)}
+      />
+
       <AltNavbar />
-      
-      {/* Hero Section with Featured Article */}
-      <section className="pt-20 pb-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Featured Article Banner */}
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-16 mt-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-              {/* Content Side */}
-              <div className="p-8 lg:p-12 flex flex-col justify-center">
-                <div className="flex items-center space-x-3 mb-6">
-                  <span className="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-bold tracking-wide">
-                    FEATURED
-                  </span>
-                {/* <div className="flex items-center space-x-2 text-orange-600">
-                    <TrendingUp className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Trending Now</span>
-                  </div>*/}
-                </div>
-                
-                <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                  {featuredArticle.title}
-                </h1>
-                
-                <div className="flex items-center space-x-2 mb-4">
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
-                    {featuredArticle.category}
-                  </span>
-                  <div className="flex items-center space-x-1">
-                    {[...Array(4)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                    <span className="text-sm text-gray-600 ml-2">
-                      Popularity: {featuredArticle.popularity}%
-                    </span>
-                  </div>
-                </div>
-                
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  {featuredArticle.introduction}
-                </p>
-                
-                {/* Author and Meta Info */}
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-8">
-                  <div className="flex items-center space-x-2">
-                    <User className="w-4 h-4" />
-                    <span className="font-semibold">{featuredArticle.author}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{featuredArticle.date}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-4 h-4" />
-                    <span>{featuredArticle.readTime}</span>
-                  </div>
-                </div>
-                
-                {/* Engagement Stats */}
-                <div className="flex items-center space-x-6 mb-8 p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <Repeat className="w-5 h-5 text-blue-600" />
-                    <span className="font-semibold">{featuredArticle.reposts}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <MessageCircle className="w-5 h-5 text-green-600" />
-                    <span className="font-semibold">{featuredArticle.comments}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Heart className="w-5 h-5 text-red-600" />
-                    <span className="font-semibold">{featuredArticle.likes}</span>
-                  </div>
-                </div>
-                
-                <button 
-                  onClick={() => handleArticleClick(featuredArticle)}
-                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-fit cursor-pointer"
-                >
-                  <span>READ FULL ARTICLE</span>
-                  {featuredArticle.realUrl ? (
-                    <ExternalLink className="w-5 h-5" />
-                  ) : (
-                    <ArrowRight className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-              
-              {/* Image Side */}
-              <div className="relative h-64 lg:h-auto">
-                <img
-                  src={featuredArticle.image}
-                  alt={featuredArticle.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                
-                {/* Floating Popularity Badge */}
-                <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-bold text-gray-900">
-                      {featuredArticle.popularity}% Popular
-                    </span>
-                  </div>
-                </div>
+
+      {/* ── Featured Article Hero ── */}
+      <div className="relative min-h-screen flex items-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-section-image"
+          style={{
+            backgroundImage: `url('${featuredArticle.image}')`,
+            filter: 'brightness(0.9) contrast(1.1)'
+          }}
+        />
+        <div className="absolute inset-0 bg-black/50 md:bg-black/55"></div>
+
+        <div className="container mx-auto px-4 relative z-10 pt-20">
+          <div className="max-w-3xl mx-auto text-center backdrop-blur-sm bg-black/30 border border-white/10 p-6 md:p-10 rounded-lg">
+            <span className="inline-block bg-blue-500/20 border border-blue-300/30 text-blue-200 px-4 py-2 rounded-full text-xs font-bold tracking-widest mb-6">
+              FEATURED
+            </span>
+
+            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6">
+              {featuredArticle.title}
+            </h1>
+
+            <div className="flex items-center justify-center flex-wrap gap-3 mb-6">
+              <span className="bg-white/10 border border-white/20 text-blue-100 px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                {featuredArticle.category}
+              </span>
+              <div className="flex items-center space-x-1">
+                {[...Array(4)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-sm text-white/70 ml-2">
+                  {featuredArticle.popularity}% popularity
+                </span>
               </div>
             </div>
-          </div>
 
-          {/* Popular Articles Horizontal Slider */}
-          <div className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-white flex items-center space-x-3">
-               {/*} <TrendingUp className="w-8 h-8 text-orange-600" />*/}
-                <span>Most Popular This Week</span>
+            <p className="text-base md:text-lg text-white/90 leading-relaxed mb-8">
+              {featuredArticle.introduction}
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/70 mb-8">
+              <div className="flex items-center space-x-2">
+                <User className="w-4 h-4" />
+                <span className="font-semibold text-white/90">{featuredArticle.author}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4" />
+                <span>{featuredArticle.date}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
+                <span>{featuredArticle.readTime}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center space-x-6 mb-8 text-white/70 text-sm">
+              <div className="flex items-center space-x-2">
+                <Repeat className="w-4 h-4 text-blue-300" />
+                <span className="font-semibold">{featuredArticle.reposts}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MessageCircle className="w-4 h-4 text-blue-300" />
+                <span className="font-semibold">{featuredArticle.comments}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Heart className="w-4 h-4 text-blue-300" />
+                <span className="font-semibold">{featuredArticle.likes}</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleArticleClick(featuredArticle)}
+              className="inline-flex items-center space-x-3 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-full font-semibold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              <span>READ FULL ARTICLE</span>
+              {featuredArticle.realUrl ? (
+                <ExternalLink className="w-5 h-5" />
+              ) : (
+                <ArrowRight className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Most Popular This Week ── */}
+      <div className="relative min-h-screen flex items-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-section-image"
+          style={{
+            backgroundImage: "url('./artgallery.jpeg')",
+            filter: 'brightness(0.9) contrast(1.1)'
+          }}
+        />
+        <div className="absolute inset-0 bg-black/60 md:bg-black/65"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-4">
+                MOST POPULAR THIS WEEK
               </h2>
-              
-              {/* Slider Navigation */}
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-center space-x-3">
                 <button
                   onClick={prevSlide}
-                  className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50"
+                  className="p-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
                 >
-                  <ChevronLeft className="w-6 h-6 text-gray-600" />
+                  <ChevronLeft className="w-5 h-5 text-white" />
                 </button>
-                <span className="text-sm text-gray-600 font-medium">
+                <span className="text-sm text-white/70 font-medium">
                   {popularSlideIndex + 1} - {Math.min(popularSlideIndex + 2, popularArticles.length)} of {popularArticles.length}
                 </span>
                 <button
                   onClick={nextSlide}
-                  className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50"
+                  className="p-2.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
                 >
-                  <ChevronRight className="w-6 h-6 text-gray-600" />
+                  <ChevronRight className="w-5 h-5 text-white" />
                 </button>
               </div>
             </div>
-            
-            {/* Slider Container */}
+
             <div className="relative overflow-hidden">
-              <div 
+              <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${popularSlideIndex * 50}%)` }}
               >
                 {popularArticles.map((article, index) => (
-                  <div key={article.id} className="w-1/2 flex-shrink-0 px-4">
-                    <div 
-                      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden h-full cursor-pointer"
+                  <div key={article.id} className="w-1/2 flex-shrink-0 px-3">
+                    <div
+                      className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl hover:bg-white/15 hover:border-white/25 transition-all duration-300 transform hover:-translate-y-2 overflow-hidden h-full cursor-pointer"
                       onClick={() => handleArticleClick(article)}
                     >
                       <div className="relative h-48">
@@ -348,42 +319,43 @@ const Blogspot = () => {
                           alt={article.title}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-4 left-4 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute top-4 left-4 bg-blue-500/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-bold">
                           #{index + 1} POPULAR
                         </div>
-                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
-                          <span className="text-xs font-bold text-gray-900">{article.popularity}%</span>
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1">
+                          <span className="text-xs font-bold text-white">{article.popularity}%</span>
                         </div>
                         {article.realUrl && (
-                          <div className="absolute bottom-4 right-4 bg-blue-600 text-white rounded-full p-2">
+                          <div className="absolute bottom-4 right-4 bg-blue-600/90 text-white rounded-full p-2">
                             <ExternalLink className="w-4 h-4" />
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="p-6">
                         <div className="flex items-center space-x-2 mb-3">
-                          <Tag className="w-4 h-4 text-blue-600" />
-                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
+                          <Tag className="w-4 h-4 text-blue-300" />
+                          <span className="bg-white/10 border border-white/20 text-blue-100 px-2 py-1 rounded-full text-xs font-semibold">
                             {article.category}
                           </span>
                         </div>
-                        
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
+
+                        <h3 className="text-lg font-medium text-white mb-3 line-clamp-2">
                           {article.title}
                         </h3>
-                        
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+
+                        <p className="text-white/60 text-sm mb-4 line-clamp-2">
                           {article.introduction}
                         </p>
-                        
-                        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                          <span className="font-semibold">{article.author}</span>
+
+                        <div className="flex items-center justify-between text-xs text-white/50 mb-4">
+                          <span className="font-semibold text-white/70">{article.author}</span>
                           <span>{article.readTime}</span>
                         </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4 text-xs">
+
+                        <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                          <div className="flex items-center space-x-4 text-xs text-white/50">
                             <span className="flex items-center space-x-1">
                               <Repeat className="w-3 h-3" />
                               <span>{formatNumber(parseInt(article.reposts))}</span>
@@ -397,11 +369,11 @@ const Blogspot = () => {
                               <span>{article.likes}</span>
                             </span>
                           </div>
-                          
+
                           {article.realUrl ? (
-                            <ExternalLink className="w-5 h-5 text-blue-600" />
+                            <ExternalLink className="w-5 h-5 text-blue-300" />
                           ) : (
-                            <ChevronRight className="w-5 h-5 text-blue-600" />
+                            <ArrowRight className="w-5 h-5 text-blue-300" />
                           )}
                         </div>
                       </div>
@@ -411,124 +383,150 @@ const Blogspot = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* === SUBMISSION GUIDELINES SECTION === */}
-          <div className="mb-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-blue-900 p-6 flex items-center justify-between">
+      {/* ── Write For Us ── */}
+      <div className="relative min-h-screen flex items-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-section-image"
+          style={{
+            backgroundImage: "url('./lib.png')",
+            filter: 'brightness(0.9) contrast(1.1)'
+          }}
+        />
+        <div className="absolute inset-0 bg-black/55 md:bg-black/60"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-4xl mx-auto backdrop-blur-sm bg-black/30 border border-white/10 rounded-lg p-6 md:p-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
               <div className="flex items-center space-x-3">
-                <FileText className="w-8 h-8 text-blue-300" />
-                <h2 className="text-2xl font-bold text-white">Submission Guidelines</h2>
+                <FileText className="w-7 h-7 text-blue-300" />
+                <h2 className="text-white text-2xl md:text-3xl font-light tracking-wide">WRITE FOR US</h2>
               </div>
-              <span className="bg-blue-800 text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+              <span className="bg-white/10 border border-white/20 text-blue-100 px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
                 Rolling Basis
               </span>
             </div>
-            
-            <div className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                    Key Requirements
-                  </h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">1.</div>
-                      <span>Word count: 1,000 - 1,500 words (flexible subject to approval).</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">2.</div>
-                      <span>Topic must relate to Art & Cultural Heritage Law.</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">3.</div>
-                      <span>Original and unpublished manuscripts only.</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">4.</div>
-                      <span>Co-authorship allowed (max 2 authors).</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">5.</div>
-                      <span>Include at least 3 relevant images with clear sources.</span>
-                    </li>
-                  </ul>
-                </div>
 
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <FileText className="w-5 h-5 text-blue-600 mr-2" />
-                    Formatting & Policy
-                  </h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">6.</div>
-                      <span>Font: Garamond, Size 12.</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">7.</div>
-                      <span>Mandatory citations (footnotes + hyperlinks). Uniform style.</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">8.</div>
-                      <span>Strict no-plagiarism policy. Rejection without review if violated.</span>
-                    </li>
-                    <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">9.</div>
-                      <span>Authors are responsible for facts and views stated.</span>
-                    </li>
-                  </ul>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-base font-semibold text-white mb-4 flex items-center">
+                  <CheckCircle className="w-5 h-5 text-blue-300 mr-2" />
+                  Key Requirements
+                </h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">1.</div>
+                    <span>Word count: 1,000 - 1,500 words (flexible subject to approval).</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">2.</div>
+                    <span>Topic must relate to Art &amp; Cultural Heritage Law.</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">3.</div>
+                    <span>Original and unpublished manuscripts only.</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">4.</div>
+                    <span>Co-authorship allowed (max 2 authors).</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">5.</div>
+                    <span>Include at least 3 relevant images with clear sources.</span>
+                  </li>
+                </ul>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-lg">
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  Non-adherence leads to rejection without review.
-                </div>
-                
-                <a 
-                  href="https://forms.gle/AdNb8uAFJDxmzvk27" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
-                >
-                  Submit via Google Form
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                </a>
+              <div>
+                <h3 className="text-base font-semibold text-white mb-4 flex items-center">
+                  <FileText className="w-5 h-5 text-blue-300 mr-2" />
+                  Formatting &amp; Policy
+                </h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">6.</div>
+                    <span>Font: Garamond, Size 12.</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">7.</div>
+                    <span>Mandatory citations (footnotes + hyperlinks). Uniform style.</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">8.</div>
+                    <span>Strict no-plagiarism policy. Rejection without review if violated.</span>
+                  </li>
+                  <li className="flex items-start text-sm text-white/80">
+                    <div className="min-w-6 font-bold text-blue-300">9.</div>
+                    <span>Authors are responsible for facts and views stated.</span>
+                  </li>
+                </ul>
               </div>
             </div>
-          </div>
-          {/* === END SUBMISSION GUIDELINES SECTION === */}
 
-          {/* Category Filter */}
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-3">
+            <div className="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center text-red-200 text-sm font-medium bg-red-500/15 border border-red-400/30 px-4 py-2 rounded-lg">
+                <AlertCircle className="w-4 h-4 mr-2" />
+                Non-adherence leads to rejection without review.
+              </div>
+
+              <a
+                href="https://forms.gle/AdNb8uAFJDxmzvk27"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+              >
+                Submit via Google Form
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── All Articles ── */}
+      <div className="relative py-24 md:py-32">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-section-image"
+          style={{
+            backgroundImage: "url('./ajanta.jpeg')",
+            filter: 'brightness(0.85) contrast(1.1)'
+          }}
+        />
+        <div className="absolute inset-0 bg-black/70 md:bg-black/75"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-10">
+            <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide">ALL ARTICLES</h2>
+          </div>
+
+          <div className="mb-10 flex justify-center">
+            <div className="flex flex-wrap justify-center gap-3">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 border ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-50 shadow-md hover:shadow-lg'
+                      ? 'bg-blue-600 border-blue-600 text-white shadow-lg'
+                      : 'bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm'
                   }`}
                 >
                   {category}
                   <span className="ml-2 text-xs opacity-75">
-                    ({blogPosts.filter(post => category === 'All' || post.category === category).length})
+                    ({blogPosts.filter(post => (category === 'All' || post.category === category) && !post.featured).length})
                   </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* All Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredArticles.map((article) => (
-              <article 
-                key={article.id} 
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden cursor-pointer"
+              <article
+                key={article.id}
+                className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl hover:bg-white/15 hover:border-white/25 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden cursor-pointer"
                 onClick={() => handleArticleClick(article)}
               >
                 <div className="relative h-48">
@@ -537,58 +535,57 @@ const Blogspot = () => {
                     alt={article.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
-                    <span className="text-xs font-bold text-gray-900">{article.category}</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+                    <span className="text-xs font-bold text-white">{article.category}</span>
                   </div>
-                  <div className="absolute top-4 right-4 bg-green-100 text-green-800 rounded-full px-2 py-1">
-                    <span className="text-xs font-bold">{article.popularity}%</span>
+                  <div className="absolute top-4 right-4 bg-blue-500/80 backdrop-blur-sm rounded-full px-2 py-1">
+                    <span className="text-xs font-bold text-white">{article.popularity}%</span>
                   </div>
                   {article.realUrl && (
-                    <div className="absolute bottom-4 right-4 bg-blue-600 text-white rounded-full p-2">
+                    <div className="absolute bottom-4 right-4 bg-blue-600/90 text-white rounded-full p-2">
                       <ExternalLink className="w-4 h-4" />
                     </div>
                   )}
                 </div>
-                
+
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
+                  <h3 className="text-xl font-medium text-white mb-3 hover:text-blue-300 transition-colors">
                     {article.title}
                   </h3>
-                  
-                  <div className="flex items-center space-x-2 mb-3 text-sm text-gray-600">
+
+                  <div className="flex items-center space-x-2 mb-3 text-sm text-white/60">
                     <User className="w-4 h-4" />
-                    <span className="font-semibold">{article.author}</span>
+                    <span className="font-semibold text-white/80">{article.author}</span>
                     <span>•</span>
                     <span>{article.date}</span>
                   </div>
-                  
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+
+                  <p className="text-white/60 text-sm mb-4 line-clamp-3">
                     {article.introduction}
                   </p>
-                  
-                  {/* Subheadings Preview */}
+
                   <div className="mb-4">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                    <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wide mb-2">
                       What You'll Learn:
                     </h4>
-                    <ul className="text-xs text-gray-600 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       {article.subheadings.slice(0, 2).map((heading, index) => (
                         <li key={index} className="flex items-start space-x-2">
-                          <span className="text-blue-600 mt-1">•</span>
+                          <span className="text-blue-300 mt-1">•</span>
                           <span>{heading}</span>
                         </li>
                       ))}
                       {article.subheadings.length > 2 && (
-                        <li className="text-blue-600 font-semibold">
+                        <li className="text-blue-300 font-semibold">
                           +{article.subheadings.length - 2} more topics
                         </li>
                       )}
                     </ul>
                   </div>
-                  
-                  <div className="flex items-center justify-between border-t pt-4">
-                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+
+                  <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                    <div className="flex items-center space-x-4 text-xs text-white/50">
                       <span className="flex items-center space-x-1">
                         <Repeat className="w-3 h-3" />
                         <span>{formatNumber(parseInt(article.reposts))}</span>
@@ -602,8 +599,8 @@ const Blogspot = () => {
                         <span>{article.likes}</span>
                       </span>
                     </div>
-                    
-                    <button className="inline-flex items-center space-x-1 text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+
+                    <button className="inline-flex items-center space-x-1 text-blue-300 font-semibold hover:text-blue-200 transition-colors">
                       <span className="text-sm">Read</span>
                       {article.realUrl ? (
                         <ExternalLink className="w-4 h-4" />
@@ -617,7 +614,20 @@ const Blogspot = () => {
             ))}
           </div>
         </div>
-      </section>
+      </div>
+
+      <style jsx>{`
+        .bg-section-image {
+          transition: background-image 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+          .bg-section-image {
+            background-attachment: scroll;
+            background-size: cover;
+            background-position: center center;
+          }
+        }
+      `}</style>
     </div>
   );
 };

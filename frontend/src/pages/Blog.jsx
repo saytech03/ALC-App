@@ -178,7 +178,7 @@ const Blog = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/login', { state: { from: '/blog' } });
     setShowLoginModal(false);
   };
 
@@ -666,7 +666,7 @@ const Blog = () => {
             <div className="text-center text-gray-400 text-sm">
               Don't have an account?{' '}
               <button
-                onClick={() => { navigate('/signup'); setShowLoginModal(false); }}
+                onClick={() => { navigate('/signup', { state: { from: '/blog' } }); setShowLoginModal(false); }}
                 className="text-blue-500 hover:underline"
               >
                 Register Now
