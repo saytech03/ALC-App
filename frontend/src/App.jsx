@@ -207,6 +207,18 @@ function App() {
             </RequireAdminAuth>
           } />
 
+          <Route path='/gb' element={
+            <RequireAdminAuth>
+              <CreateBlog />
+            </RequireAdminAuth>
+          } />
+
+          <Route path='/gbi' element={
+            <RequireAdminAuth>
+              <CreateBlog />
+            </RequireAdminAuth>
+          } />
+
           <Route path='/ce' element={
             <RequireAdminAuth>
               <CreateEvent />

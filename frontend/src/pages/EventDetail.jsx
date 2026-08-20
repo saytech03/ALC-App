@@ -119,7 +119,15 @@ const EventDetail = () => {
 
             {primaryImage && (
               <div className="mb-8 flex items-center justify-center overflow-hidden rounded-lg bg-gray-200">
-                <img src={primaryImage} alt={title} className="h-auto w-full object-contain" />
+                <img 
+                  src={primaryImage} 
+                  alt={title} 
+                  className="h-auto w-full object-contain" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://picsum.photos/800/600';
+                  }}
+                />
               </div>
             )}
 
@@ -136,7 +144,15 @@ const EventDetail = () => {
 
               {secondaryImage && (
                 <div className="my-8 flex w-full items-center justify-center overflow-hidden rounded-lg bg-gray-200">
-                  <img src={secondaryImage} alt={`${title} gallery`} className="h-auto w-full object-contain" />
+                  <img 
+                    src={secondaryImage} 
+                    alt={`${title} gallery`} 
+                    className="h-auto w-full object-contain" 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://picsum.photos/800/600';
+                    }}
+                  />
                 </div>
               )}
             </div>

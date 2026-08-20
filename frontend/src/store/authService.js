@@ -74,46 +74,139 @@ class AuthService {
   };
 }
 
-  // NEW: Create Blog API (Admin Only)
-  async createBlog(blogData, adminToken) {
+  // Helper to build FormData from blog object
+  buildBlogFormData(blogData) {
+    if (blogData instanceof FormData) {
+      return blogData;
+    }
+
     const formData = new FormData();
+    formData.append('title', blogData.title || '');
+    formData.append('author', blogData.author || '');
     
-    // Add basic fields
-    formData.append('title', blogData.title);
-    formData.append('author', blogData.author);
+    if (Array.isArray(blogData.sections)) {
+      blogData.sections.forEach((section, index) => {
+        formData.append(`sections[${index}].heading`, section.heading || '');
+        if (section.subHeading) {
+          formData.append(`sections[${index}].subHeading`, section.subHeading);
+        }
+        if (section.body) {
+          formData.append(`sections[${index}].body`, section.body);
+        }
+        
+        if (Array.isArray(section.images)) {
+          section.images.forEach((image) => {
+            if (image instanceof File) {
+              formData.append(`sections[${index}].images`, image);
+            }
+          });
+        }
+        
+        if (Array.isArray(section.references)) {
+          section.references.forEach((reference, refIndex) => {
+            if (reference && reference.trim()) {
+              formData.append(`sections[${index}].references[${refIndex}]`, reference.trim());
+            }
+          });
+        }
+      });
+    }
+    return formData;
+  }
+
+  // Create Blog API (Admin Only)
+  async createBlog(blogData, adminToken) {
+    const token = adminToken || this.getAdminToken();
+    const formData = this.buildBlogFormData(blogData);
     
-    // Add sections with their content
-    blogData.sections.forEach((section, index) => {
-      formData.append(`sections[${index}].heading`, section.heading);
-      if (section.subHeading) {
-        formData.append(`sections[${index}].subHeading`, section.subHeading);
-      }
-      if (section.body) {
-        formData.append(`sections[${index}].body`, section.body);
-      }
-      
-      // Add images for this section
-      if (section.images && section.images.length > 0) {
-        section.images.forEach((image, imgIndex) => {
-          formData.append(`sections[${index}].images`, image);
-        });
-      }
-      
-      // Add references for this section
-      if (section.references && section.references.length > 0) {
-        section.references.forEach((reference, refIndex) => {
-          formData.append(`sections[${index}].references[${refIndex}]`, reference);
-        });
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.CREATE}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error(responseData.message || `Blog creation failed with status ${response.status}`);
+    }
+    return responseData;
+  }
+
+  // Update Blog API (Admin Only)
+  async updateBlog(id, blogData, adminToken) {
+    const token = adminToken || this.getAdminToken();
+    const formData = this.buildBlogFormData(blogData);
+    
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.UPDATE}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error(responseData.message || `Blog update failed with status ${response.status}`);
+    }
+    return responseData;
+  }
+
+  // Delete Blog API (Admin Only)
+  async deleteBlog(id, adminToken) {
+    const token = adminToken || this.getAdminToken();
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.DELETE}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
     });
 
-    return await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.CREATE}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${adminToken}`,
-      },
-      body: formData,
-    }).then(response => response.json());
+    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error(responseData.message || `Blog deletion failed with status ${response.status}`);
+    }
+    return responseData;
+  }
+
+  // Get All Blogs API
+  async getAllBlogs(adminToken) {
+    const token = adminToken || this.getAdminToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.GET_ALL}`, {
+      method: 'GET',
+      headers
+    });
+
+    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error(responseData.message || `Failed to fetch blogs (${response.status})`);
+    }
+    return responseData;
+  }
+
+  // Get Blog By ID API
+  async getBlogById(id, adminToken) {
+    const token = adminToken || this.getAdminToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.BLOG.GET_BY_ID}/${id}`, {
+      method: 'GET',
+      headers
+    });
+
+    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error(responseData.message || `Failed to fetch blog (${response.status})`);
+    }
+    return responseData;
   }
 
   getRequiredAdminToken(adminToken) {
@@ -213,31 +306,31 @@ class AuthService {
   }
 
   async searchEvents(filters = {}, adminToken) {
-    const token = this.getRequiredAdminToken(adminToken);
+    const token = adminToken || this.getAdminToken();
     const params = new URLSearchParams();
     if (filters.eventId) params.set('event_id', filters.eventId);
     if (filters.status && filters.status !== 'all') params.set('status', filters.status);
 
     const query = params.toString() ? `?${params.toString()}` : '';
+    const headers = { 'Accept': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.SEARCH}${query}`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      },
+      headers,
     });
 
     return this.parseEventResponse(response);
   }
 
   async getEventParticipants(eventId, adminToken) {
-    const token = this.getRequiredAdminToken(adminToken);
+    const token = adminToken || this.getAdminToken();
+    const headers = { 'Accept': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.PARTICIPANTS}?event_id=${encodeURIComponent(eventId)}`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      },
+      headers,
     });
 
     return this.parseEventResponse(response);
@@ -258,19 +351,18 @@ class AuthService {
   }
 
   async updateEventRegistrationWindow(eventId, windowData, adminToken) {
-    const token = this.getRequiredAdminToken(adminToken);
+    const token = adminToken || this.getAdminToken();
     const normalizedWindowData = {
       registration_open_from: this.convertIstInputToServerDateTime(windowData.registration_open_from),
       registration_open_until: this.convertIstInputToServerDateTime(windowData.registration_open_until),
     };
 
+    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.REGISTRATION_WINDOW}?event_id=${encodeURIComponent(eventId)}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+      headers,
       body: JSON.stringify(normalizedWindowData),
     });
 
@@ -278,14 +370,13 @@ class AuthService {
   }
 
   async notifyEventParticipants(eventId, notificationData, adminToken) {
-    const token = this.getRequiredAdminToken(adminToken);
+    const token = adminToken || this.getAdminToken();
+    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.NOTIFY_PARTICIPANTS}?event_id=${encodeURIComponent(eventId)}`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+      headers,
       body: JSON.stringify(notificationData),
     });
 
@@ -293,13 +384,13 @@ class AuthService {
   }
 
   async deleteEvent(eventId, adminToken) {
-    const token = this.getRequiredAdminToken(adminToken);
+    const token = adminToken || this.getAdminToken();
+    const headers = { 'Accept': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.DELETE}?event_id=${encodeURIComponent(eventId)}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      },
+      headers,
     });
 
     return this.parseEventResponse(response);
@@ -307,7 +398,7 @@ class AuthService {
 
   async getPublicEvents(status) {
     const params = new URLSearchParams();
-    if (status) params.set('status', status);
+    if (status && status !== 'all') params.set('status', status);
     const query = params.toString() ? `?${params.toString()}` : '';
 
     const response = await fetch(`${this.baseURL}${API_CONFIG.ENDPOINTS.EVENT.PUBLIC}${query}`, {
@@ -340,22 +431,7 @@ class AuthService {
   });
 }
 
-  // NEW: Get all blogs API
-  async getAllBlogs() {
-    return await this.request(API_CONFIG.ENDPOINTS.BLOG.GET_ALL, {
-      method: 'GET',
-    });
-  }
 
-  // NEW: Get a blog using blog_id (Admin Only)
-  async getBlogById(blogId, adminToken) {
-    return await this.request(`${API_CONFIG.ENDPOINTS.BLOG.GET_BY_ID}/${blogId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${adminToken}`,
-      },
-    });
-  }
 
   // NEW: Application Health API
   async checkHealth() {
@@ -681,7 +757,6 @@ async submitContactForm(contactData) {
     localStorage.removeItem('registration_pending');
   }
 
-  // NEW: Admin logout
   adminLogout() {
     localStorage.removeItem('adminToken');
   }

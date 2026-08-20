@@ -1,124 +1,159 @@
-import { useState, useEffect, useRef } from 'react'; 
-import { ChevronRight, Users, BookOpen, FileText, MessageCircle, Scale, Palette, Shield, Globe, Search, Music } from 'lucide-react'; 
+import { useState, useEffect } from 'react';
+import { 
+  FileText, 
+  Calendar, 
+  Globe, 
+  ShieldCheck, 
+  Terminal, 
+  ExternalLink,
+  Cpu,
+  Database,
+  ArrowUpRight,
+  RefreshCw,
+  Sliders
+} from 'lucide-react';
 import AdNavbar from '../components/AdNavbar';
 import { Link } from "react-router-dom";
+import { useAuth } from '../store/AuthContext';
 
 const Adcontrol = () => {
-  const [email, setEmail] = useState('');
-  const [imgLoading, setImgLoading] = useState(true);
-  const [dailyQuote, setDailyQuote] = useState({ text: '', author: '' });
-  const [showChatbot, setShowChatbot] = useState(false);
-  const chatSidebarRef = useRef(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [songs, setSongs] = useState([]);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [bgPosition, setBgPosition] = useState('');
-  const audioRef = useRef(null);
-     
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+  const [blogCount, setBlogCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const { getAllBlogs } = useAuth();
 
-  // Handle click outside to close sidebar
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (showChatbot && chatSidebarRef.current && !chatSidebarRef.current.contains(event.target)) {
-        setShowChatbot(false);
+    fetchQuickData();
+  }, []);
+
+  const fetchQuickData = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllBlogs();
+      if (Array.isArray(data)) {
+        setBlogCount(data.length);
+      } else if (data && Array.isArray(data.data)) {
+        setBlogCount(data.data.length);
       }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showChatbot]);
-
-
-  // Get daily quote based on current dat
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log('Email submitted:', email);
-  };
-
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    console.log('Contact form submitted:', formData);
-  };
-
-  // Music player functions
-  const searchSongs = async () => {
-    if (!searchQuery.trim()) return;
-    
-    // In a real implementation, you would call an API here
-    console.log(`Searching for: ${searchQuery}`);
-    
-    // Mock data - replace with actual API call
-    setSongs([
-      { id: 1, title: `${searchQuery} Song 1`, artist: 'Artist 1', url: 'https://example.com/song1.mp3' },
-      { id: 2, title: `${searchQuery} Song 2`, artist: 'Artist 2', url: 'https://example.com/song2.mp3' },
-      { id: 3, title: `${searchQuery} Song 3`, artist: 'Artist 3', url: 'https://example.com/song3.mp3' },
-    ]);
-  };
-  
-  const playSong = (song) => {
-    setCurrentSong(song);
-    setIsPlaying(true);
-    // In a real implementation, you would set the audio source here
-    // audioRef.current.src = song.url;
-    // audioRef.current.play().catch(e => console.error("Playback failed:", e));
-  };
-  
-  const togglePlayPause = () => {
-    if (isPlaying) {
-      // audioRef.current.pause();
-    } else {
-      // audioRef.current.play().catch(e => console.error("Playback failed:", e));
+    } catch (e) {
+      console.warn('Admin quick data fetch error:', e);
+    } finally {
+      setLoading(false);
     }
-    setIsPlaying(!isPlaying);
   };
-    
+
   return (
-    <div className="relative bg-white min-h-screen" style={{fontFamily: 'Helvetica Neue, sans-serif'}}>
-      {/* Navbar */}
-      {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-      )}
-      <AdNavbar/>
-      
-      {/* COOL OPTIMIZATION HACK FOR IMAGES */}
-      {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-      )}
+    <div className="min-h-screen w-full ai-bg text-gray-100 font-sans">
+      <AdNavbar />
 
-      {/* Hero Section */}
-      <div 
-          className={`relative flex flex-col items-center justify-center text-center py-20 pt-32 min-h-screen bg-cover bg-no-repeat ${bgPosition}`}
-          style={{
-            backgroundImage: `url('./collage.jpeg')`,
-            filter: 'brightness(0.9) contrast(1.1)'
-          }}
-        >
-            
-        {/* Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-4">
-          {/* Quote Section */}
-
-          {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Text Content */}
+      <div className="max-w-6xl mx-auto px-6 py-8 pt-32 space-y-8">
         
+        {/* DEVELOPER HEADER */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-mono font-semibold text-blue-400 mb-1">
+              <Terminal className="w-4 h-4" />
+              <span>DEVELOPER ADMIN CONSOLE</span>
+            </div>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight">
+              Platform Control Panel
+            </h1>
+          </div>
 
-            {/* Right Side - 3D Animated Cube */}
-        
+          <div className="flex items-center gap-3">
+            <button
+              onClick={fetchQuickData}
+              disabled={loading}
+              className="flex items-center gap-2 px-3.5 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-mono text-gray-300 transition-colors"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              <span>Sync</span>
+            </button>
+            <Link
+              to="/"
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition-colors"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>View Main Site</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
-      </div>
 
+        {/* CORE MANAGEMENT DIRECTORY */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Card 1: Blog Management */}
+          <div className="bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-blue-500/40 transition-colors">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">Blog Manager</h2>
+                    <p className="text-xs text-gray-400">CRUD operations & Markdown editor</p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 bg-blue-950/60 text-blue-300 border border-blue-800/40 rounded-md">
+                  {blogCount} Posts
+                </span>
+              </div>
+              <p className="text-sm text-gray-300">
+                Create new articles, edit existing blog entries, manage section images, and update references.
+              </p>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+              <span className="text-xs font-mono text-gray-500">Route: /cb</span>
+              <Link
+                to="/cb"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors"
+              >
+                <span>Manage Blogs</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Card 2: Event Management */}
+          <div className="bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col justify-between hover:border-indigo-500/40 transition-colors">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                    <Calendar className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white">Event Manager</h2>
+                    <p className="text-xs text-gray-400">Upcoming & archived event controls</p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 bg-indigo-950/60 text-indigo-300 border border-indigo-800/40 rounded-md">
+                  Events API
+                </span>
+              </div>
+              <p className="text-sm text-gray-300">
+                Configure upcoming events, manage speaker bios, update registration windows, and view participant lists.
+              </p>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+              <span className="text-xs font-mono text-gray-500">Route: /ce</span>
+              <Link
+                to="/ce"
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition-colors"
+              >
+                <span>Manage Events</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   );
 };

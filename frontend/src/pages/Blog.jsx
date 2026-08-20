@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowRight, Calendar, User, Clock, Repeat, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, Lock, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../store/AuthContext';
 
 const Blog = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -9,7 +10,41 @@ const Blog = () => {
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
   const [imgLoading, setImgLoading] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [apiBlogs, setApiBlogs] = useState([]);
+  const { getAllBlogs } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchApiBlogs = async () => {
+      try {
+        const data = await getAllBlogs();
+        if (Array.isArray(data) && data.length > 0) {
+          const formatted = data.map((b, idx) => ({
+            id: b.id || b.blogId || `db-${idx}`,
+            title: b.title,
+            author: b.author,
+            introduction: b.sections && b.sections.length > 0 ? b.sections[0].body : '',
+            category: "ART LAW",
+            date: b.createdAt ? new Date(b.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "Recent",
+            readTime: "8 min read",
+            reposts: "0",
+            comments: 0,
+            reactions: 1,
+            likes: 1,
+            popularity: 90,
+            featured: idx === 0,
+            realUrl: b.sections && b.sections[0]?.references?.[0] ? b.sections[0].references[0] : null,
+            image: b.sections && b.sections[0]?.images?.[0] ? b.sections[0].images[0] : "./birlawabs.png",
+            sections: b.sections
+          }));
+          setApiBlogs(formatted);
+        }
+      } catch (err) {
+        console.warn('Could not fetch API blogs:', err);
+      }
+    };
+    fetchApiBlogs();
+  }, []);
 
   // Blog data (same as Blogspot)
   const blogPosts = [
@@ -137,19 +172,21 @@ const Blog = () => {
 
   const categories = ['All', 'ART LAW', 'TRIBAL RIGHTS' ];
   
+  const allBlogPosts = apiBlogs.length > 0 ? [...apiBlogs, ...blogPosts] : blogPosts;
+
   // Get featured article (highest popularity)
-  const featuredArticle = blogPosts.find(post => post.featured) || blogPosts[0];
+  const featuredArticle = allBlogPosts.find(post => post.featured) || allBlogPosts[0];
   
   // Get popular articles sorted by popularity (top 4 for slider)
-  const popularArticles = blogPosts
+  const popularArticles = allBlogPosts
     .filter(post => !post.featured)
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, 4);
 
   // Filter articles by category
   const filteredArticles = selectedCategory === 'All' 
-    ? blogPosts.filter(post => !post.featured)
-    : blogPosts.filter(post => post.category === selectedCategory && !post.featured);
+    ? allBlogPosts.filter(post => !post.featured)
+    : allBlogPosts.filter(post => post.category === selectedCategory && !post.featured);
 
   // Scroll effect
   useEffect(() => {
