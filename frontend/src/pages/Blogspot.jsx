@@ -1,12 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Repeat, ArrowRight, Calendar, User, Clock, Heart, MessageCircle, TrendingUp, Star, ChevronRight, Tag, ChevronLeft, ExternalLink, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import AltNavbar from '../components/AltNavbar';
+import { useAuth } from '../store/AuthContext';
 
 const Blogspot = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [popularSlideIndex, setPopularSlideIndex] = useState(0);
   const [imgLoading, setImgLoading] = useState(true);
+  const [apiBlogs, setApiBlogs] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const { getAllBlogs } = useAuth();
+
+  useEffect(() => {
+    const fetchApiBlogs = async () => {
+      try {
+        const data = await getAllBlogs();
+        if (Array.isArray(data) && data.length > 0) {
+          const formatted = data.map((b, idx) => ({
+            id: b.id || b.blogId || `db-${idx}`,
+            title: b.title,
+            author: b.author,
+            introduction: b.sections && b.sections.length > 0 ? b.sections[0].body : '',
+            category: "ART LAW",
+            date: b.createdAt ? new Date(b.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "Recent",
+            readTime: "8 min read",
+            reposts: "0",
+            comments: 0,
+            reactions: 1,
+            likes: 1,
+            popularity: 90,
+            featured: idx === 0,
+            realUrl: b.sections && b.sections[0]?.references?.[0] ? b.sections[0].references[0] : null,
+            image: b.sections && b.sections[0]?.images?.[0] ? b.sections[0].images[0] : "./birlawabs.png",
+            subheadings: b.sections ? b.sections.map(s => s.heading || s.subHeading || 'Overview').filter(Boolean) : ["Overview"],
+            sections: b.sections
+          }));
+          setApiBlogs(formatted);
+        }
+      } catch (err) {
+        console.warn('Could not fetch API blogs:', err);
+      }
+    };
+    fetchApiBlogs();
+  }, []);
 
   // Reduced blog data to 7 posts
   const blogPosts = [
@@ -134,19 +171,21 @@ const Blogspot = () => {
 
   const categories = ['All', 'ART LAW', 'TRIBAL RIGHTS' ];
   
+  const allBlogPosts = apiBlogs.length > 0 ? [...apiBlogs, ...blogPosts] : blogPosts;
+
   // Get featured article (highest popularity)
-  const featuredArticle = blogPosts.find(post => post.featured) || blogPosts[0];
+  const featuredArticle = allBlogPosts.find(post => post.featured) || allBlogPosts[0];
   
   // Get popular articles sorted by popularity (top 4 for slider)
-  const popularArticles = blogPosts
+  const popularArticles = allBlogPosts
     .filter(post => !post.featured)
     .sort((a, b) => b.popularity - a.popularity)
     .slice(0, 4);
 
   // Filter articles by category
   const filteredArticles = selectedCategory === 'All' 
-    ? blogPosts.filter(post => !post.featured)
-    : blogPosts.filter(post => post.category === selectedCategory && !post.featured);
+    ? allBlogPosts.filter(post => !post.featured)
+    : allBlogPosts.filter(post => post.category === selectedCategory && !post.featured);
 
   // Scroll effect
   useEffect(() => {
@@ -169,8 +208,7 @@ const Blogspot = () => {
     if (article.realUrl) {
       window.open(article.realUrl, '_blank', 'noopener,noreferrer');
     } else {
-      // Handle internal article navigation here if needed
-      console.log('Navigate to internal article:', article.id);
+      setSelectedArticle(article);
     }
   };
 
@@ -516,7 +554,7 @@ const Blogspot = () => {
                 >
                   {category}
                   <span className="ml-2 text-xs opacity-75">
-                    ({blogPosts.filter(post => category === 'All' || post.category === category).length})
+                    ({allBlogPosts.filter(post => category === 'All' || post.category === category).length})
                   </span>
                 </button>
               ))}
@@ -618,6 +656,90 @@ const Blogspot = () => {
           </div>
         </div>
       </section>
+
+      {/* Blog Detail Reader Modal */}
+      {selectedArticle && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 relative">
+            <button 
+              onClick={() => setSelectedArticle(null)}
+              className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors"
+            >
+              ✕
+            </button>
+            
+            <div className="mb-4 flex items-center space-x-3">
+              <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
+                {selectedArticle.category || 'ART LAW'}
+              </span>
+              <span className="text-xs text-gray-500">{selectedArticle.date}</span>
+            </div>
+            
+            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+              {selectedArticle.title}
+            </h2>
+            <p className="text-sm font-semibold text-gray-600 mb-6">
+              By {selectedArticle.author}
+            </p>
+            
+            {selectedArticle.image && (
+              <img 
+                src={selectedArticle.image} 
+                alt={selectedArticle.title}
+                className="w-full h-64 md:h-80 object-cover rounded-2xl mb-6 shadow-md"
+              />
+            )}
+            
+            <div className="prose max-w-none text-gray-700 space-y-6">
+              {selectedArticle.introduction && (
+                <p className="text-base font-medium leading-relaxed italic text-gray-800 border-l-4 border-blue-600 pl-4 py-1">
+                  {selectedArticle.introduction}
+                </p>
+              )}
+              
+              {selectedArticle.sections && selectedArticle.sections.length > 0 ? (
+                selectedArticle.sections.map((sec, idx) => (
+                  <div key={idx} className="space-y-3 pt-4 border-t border-gray-100">
+                    {sec.heading && <h3 className="text-xl font-bold text-gray-900">{sec.heading}</h3>}
+                    {sec.subHeading && <h4 className="text-md font-semibold text-gray-700">{sec.subHeading}</h4>}
+                    {sec.body && <p className="leading-relaxed whitespace-pre-line text-sm md:text-base">{sec.body}</p>}
+                    {sec.images && sec.images.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                        {sec.images.map((imgUrl, i) => (
+                          <img key={i} src={imgUrl} alt={`Section image ${i+1}`} className="rounded-xl object-cover w-full h-48 shadow-sm" />
+                        ))}
+                      </div>
+                    )}
+                    {sec.references && sec.references.length > 0 && (
+                      <div className="bg-gray-50 p-4 rounded-xl text-xs space-y-1">
+                        <span className="font-bold text-gray-700">References / Links:</span>
+                        {sec.references.map((ref, rIdx) => (
+                          <div key={rIdx}>
+                            <a href={ref} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                              {ref}
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="leading-relaxed">{selectedArticle.introduction}</p>
+              )}
+            </div>
+            
+            <div className="mt-8 pt-4 border-t flex justify-end">
+              <button 
+                onClick={() => setSelectedArticle(null)}
+                className="bg-blue-600 text-white font-bold px-6 py-2 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

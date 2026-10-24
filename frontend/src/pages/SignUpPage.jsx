@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../store/AuthContext";
 import { toast } from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
@@ -15,6 +15,8 @@ const SignUpPage = () => {
 
     const { register } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || null;
 
     // Get email from URL params on component mount
     useEffect(() => {
@@ -79,7 +81,8 @@ const SignUpPage = () => {
             navigate('/otp', { 
                 state: { 
                     email: email.trim().toLowerCase(),
-                    registrationData: registrationData
+                    registrationData: registrationData,
+                    from: from
                 } 
             });
             toast.success('OTP sent to your email. Please verify to activate your account.');
