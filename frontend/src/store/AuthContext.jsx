@@ -177,12 +177,17 @@ export const AuthProvider = ({ children }) => {
 };
 
   // NEW: Create blog
+  const getEffectiveAdminToken = () => {
+    return adminToken || localStorage.getItem('adminToken');
+  };
+
   const createBlog = async (blogData) => {
     try {
-      if (!adminToken) {
-        throw new Error('Admin authentication required');
+      const token = getEffectiveAdminToken();
+      if (!token) {
+        throw new Error('Admin authentication required. Please login again as admin.');
       }
-      const response = await authService.createBlog(blogData, adminToken);
+      const response = await authService.createBlog(blogData, token);
       return response;
     } catch (error) {
       throw error;
@@ -192,7 +197,8 @@ export const AuthProvider = ({ children }) => {
   // NEW: Get all blogs
   const getAllBlogs = async () => {
     try {
-      const response = await authService.getAllBlogs();
+      const token = getEffectiveAdminToken();
+      const response = await authService.getAllBlogs(token);
       return response;
     } catch (error) {
       throw error;
@@ -202,10 +208,36 @@ export const AuthProvider = ({ children }) => {
   // NEW: Get blog by ID
   const getBlogById = async (blogId) => {
     try {
-      if (!adminToken) {
-        throw new Error('Admin authentication required');
+      const token = getEffectiveAdminToken();
+      const response = await authService.getBlogById(blogId, token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // NEW: Update blog
+  const updateBlog = async (blogId, blogData) => {
+    try {
+      const token = getEffectiveAdminToken();
+      if (!token) {
+        throw new Error('Admin authentication required. Please login again as admin.');
       }
-      const response = await authService.getBlogById(blogId, adminToken);
+      const response = await authService.updateBlog(blogId, blogData, token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // NEW: Delete blog
+  const deleteBlog = async (blogId) => {
+    try {
+      const token = getEffectiveAdminToken();
+      if (!token) {
+        throw new Error('Admin authentication required. Please login again as admin.');
+      }
+      const response = await authService.deleteBlog(blogId, token);
       return response;
     } catch (error) {
       throw error;
@@ -312,6 +344,8 @@ const sendContactForm = async (contactData) => {
     createBlog, // NEW: Added create blog
     getAllBlogs, // NEW: Added get all blogs
     getBlogById, // NEW: Added get blog by ID
+    updateBlog, // NEW: Added update blog
+    deleteBlog, // NEW: Added delete blog
     checkHealth, // NEW: Added health check
     updatePassword, // NEW: Added password update
     getUserDetails,

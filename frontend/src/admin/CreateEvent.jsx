@@ -191,17 +191,9 @@ const CreateEvent = () => {
   }, [filters.eventId, filters.status]);
 
   useEffect(() => {
-    const eventId = filters.eventId.trim();
-    if (!eventId && filters.status === 'all') {
-      setEvents([]);
-      setSelectedEvent(null);
-      setSearchError('');
-      return;
-    }
-
     const searchTimer = setTimeout(() => {
       searchEvents();
-    }, 450);
+    }, 300);
 
     return () => clearTimeout(searchTimer);
   }, [filters.eventId, filters.status, searchEvents]);

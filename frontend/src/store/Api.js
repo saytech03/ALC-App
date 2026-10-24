@@ -1,6 +1,8 @@
-// src/config/api.js
+const isLocalhost = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 const API_CONFIG = {
-  BASE_URL: 'https://alc-backend.onrender.com',
+  BASE_URL: isLocalhost ? 'http://localhost:8055' : 'https://alc-backend.onrender.com',
   ENDPOINTS: {
     AUTH: {
       REGISTER: '/api/auth/register',
@@ -20,7 +22,9 @@ const API_CONFIG = {
     BLOG: {
       CREATE: '/api/blogs',
       GET_ALL: '/api/blogs',
-      GET_BY_ID: '/api/blogs' // Append /:id to this endpoint
+      GET_BY_ID: '/api/blogs', // Append /:id to this endpoint
+      UPDATE: '/api/blogs',   // Append /:id to this endpoint
+      DELETE: '/api/blogs'    // Append /:id to this endpoint
     },
     EVENT: {
       PUBLIC: '/api/events',

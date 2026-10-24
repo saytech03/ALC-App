@@ -623,16 +623,10 @@ const AdNavbar = () => {
             Admin Home
           </Link>
           <Link to="/cb" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-            Create Blog
+            Blog Studio
           </Link>
           <Link to="/ce" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Manage Events
-          </Link>
-          <Link to="/gb" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-            Get all blogs
-          </Link>
-          <Link to="/gbi" className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
-            Get all blogs by id
           </Link>
 
           <UserAvatarDropdown size={24} />
@@ -665,7 +659,7 @@ const AdNavbar = () => {
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Create Blog
+              Blog Studio
             </Link>
             <Link 
               to="/ce" 
@@ -673,20 +667,6 @@ const AdNavbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Manage Events
-            </Link>
-            <Link 
-              to="/gb" 
-              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Get All Blogs
-            </Link>
-            <Link 
-              to="/gbi" 
-              className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Get Blog by ID
             </Link>
           </div>
         </div>

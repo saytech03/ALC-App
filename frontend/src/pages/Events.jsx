@@ -104,7 +104,15 @@ const EventCard = ({ event, activeStatus }) => {
               UPCOMING EVENT
             </div>
           )}
-          <img src={display.image} alt={display.title} className="h-56 w-full object-cover md:h-full" />
+          <img 
+            src={display.image || 'https://picsum.photos/800/600'} 
+            alt={display.title} 
+            className="h-56 w-full object-cover md:h-full"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://picsum.photos/800/600';
+            }} 
+          />
         </div>
 
         <div className="md:w-3/5 p-6">
