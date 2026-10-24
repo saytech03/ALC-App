@@ -191,7 +191,7 @@ function App() {
           <Route path='/event/:eventId' element={<EventDetail />} />
           <Route path='/eventreg' element={<Eventreg />} />
           {/* Admin routes (Admin Login also clears regular user session) */}
-          <Route path='/admin' element={<LogoutWrapper><AdminLoginPage /></LogoutWrapper>} />
+          <Route path='/admin-75321' element={<LogoutWrapper><AdminLoginPage /></LogoutWrapper>} />
           
           {/* Admin Protected Routes */}
           <Route path='/acp' element={

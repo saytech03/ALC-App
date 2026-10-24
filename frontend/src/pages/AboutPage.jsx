@@ -7,38 +7,40 @@ function AboutPage() {
   const VIDEO_URL = `${import.meta.env.BASE_URL}Founders.mp4`;
   
   return (
-    <div className="relative">
+    <div className="relative bg-[#0b1020] text-white">
       {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
+        <div className="absolute inset-0 z-0 flex h-full w-full items-center justify-center bg-black/70 shimmer" />
       )}
-      {/* Navbar */}
+
       <Navbar />
-      
-      {/* Section 1 - Our Vision */}
-      <div className="relative pt-20 min-h-screen flex items-center">
-        {/* Responsive Background Image */}
-        <div 
+
+      <section className="relative flex min-h-screen items-center overflow-hidden pt-20">
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('./monum.jpg')",
-            filter: 'brightness(0.9) contrast(1.1)'
+            filter: 'brightness(0.8) contrast(1.08)'
           }}
           onLoad={() => setImgLoading(false)}
         />
-        {/* Mobile-optimized background overlay */}
-        <div className="absolute inset-0 bg-black/20 md:bg-black/30"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">OUR VISION</h1>
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
-              <p className="text-lg md:text-xl italic">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/20" />
+
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-10">
+            <div className="mb-5 inline-flex items-center rounded-full border border-amber-200/30 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-amber-100/90">
+              Our vision
+            </div>
+            <h1 className="mb-6 text-3xl font-light tracking-[0.18em] text-white md:text-4xl lg:text-5xl">
+              OUR VISION
+            </h1>
+            <div className="space-y-5 text-base leading-relaxed text-slate-100/90 md:text-lg">
+              <p className="text-lg italic text-white/90 md:text-xl">
                 The secret of getting ahead is getting started.
-                <br/>~ Mark Twain
+                <br />~ Mark Twain
               </p>
               <p>
                 The Art Law Communion is an initiative started by students of law with the passion for arts for promoting interdisciplinary learning and discourse on the intersection of arts and the law in India and the Global South.
-                We aim to promote deeper understanding of art law through academic exploration, advocacy and collaboration, while empowering the public to engage with critical legal issues impacting artists, collectors, cultural institutions and the global art market. This is a space for deliberation and knowledge sharing to equip the next generation of legal professionals with the expertise and insight to navigate and shape the evolving landscape of art law in India, where context-specific legal challenges to the same remain underrepresented in mainstream discourse. 
+                We aim to promote deeper understanding of art law through academic exploration, advocacy and collaboration, while empowering the public to engage with critical legal issues impacting artists, collectors, cultural institutions and the global art market. This is a space for deliberation and knowledge sharing to equip the next generation of legal professionals with the expertise and insight to navigate and shape the evolving landscape of art law in India, where context-specific legal challenges to the same remain underrepresented in mainstream discourse.
               </p>
               <p>
                 We seek to combine legal scholarship with grassroots level empowerment. Our approach blends rigorous research with on-the-ground interaction with art communities: from gallery owners to street performers ensuring that legal access, awareness, and advocacy reach all corners of the creative economy.
@@ -46,27 +48,29 @@ function AboutPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Section 2 - What We Mean By Art */}
-      <div className="relative min-h-screen flex items-center">
-        {/* Responsive Background Image */}
-        <div 
+      <section className="relative flex min-h-screen items-center overflow-hidden">
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('./photo_mem.jpg')",
-            filter: 'brightness(0.9) contrast(1.1)'
+            filter: 'brightness(0.8) contrast(1.08)'
           }}
         />
-        {/* Mobile-optimized background overlay */}
-        <div className="absolute inset-0 bg-black/20 md:bg-black/30"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">WHAT WE MEAN BY ART?</h1>
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/20" />
+
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-10">
+            <div className="mb-5 inline-flex items-center rounded-full border border-amber-200/30 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-amber-100/90">
+              The meaning of art
+            </div>
+            <h1 className="mb-6 text-3xl font-light tracking-[0.18em] text-white md:text-4xl lg:text-5xl">
+              WHAT WE MEAN BY ART?
+            </h1>
+            <div className="space-y-5 text-base leading-relaxed text-slate-100/90 md:text-lg">
               <p>
-               We believe, Art is both expression and resistance, heritage and innovation. From a legal standpoint, Art includes inter alia artistic, literary, musical and dramatic work. It thus entails a wide spectrum of human expression, from folk songs to classical compositions, from ephemeral street performances to enduring sculptures, from indigenous crafts to NFTs, from paintings to AI Generated content, and from sacred rituals to rebellious graffiti. Our understanding of art includes both contemporary creative practices and historical cultural heritage[ Cultural Heritage, an integral part of 'Art' includes both the tangible and intangible aspects that connect us to our past, defines our present and informs our future. It includes traditional knowledge systems, ceremonial practices, oral traditions, historical monuments including the historical artifacts. ] recognizing the legal challenges unique to each while acknowledging their interconnection in shaping India's cultural landscape.
+                We believe, Art is both expression and resistance, heritage and innovation. From a legal standpoint, Art includes inter alia artistic, literary, musical and dramatic work. It thus entails a wide spectrum of human expression, from folk songs to classical compositions, from ephemeral street performances to enduring sculptures, from indigenous crafts to NFTs, from paintings to AI Generated content, and from sacred rituals to rebellious graffiti. Our understanding of art includes both contemporary creative practices and historical cultural heritage[ Cultural Heritage, an integral part of 'Art' includes both the tangible and intangible aspects that connect us to our past, defines our present and informs our future. It includes traditional knowledge systems, ceremonial practices, oral traditions, historical monuments including the historical artifacts. ] recognizing the legal challenges unique to each while acknowledging their interconnection in shaping India's cultural landscape.
               </p>
               <p>
                 Art, we believe transcends canvas and stage. It encompasses the living traditions, gestures, objects, performances, and digital expressions through which individuals and communities shape meaning, identity, and memory. Embracing this plurality, The Art Law Communion recognizes all forms of artistic and cultural expression as worthy of legal attention, critical discourse, and institutional support.
@@ -74,109 +78,70 @@ function AboutPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Section 3 - Our Target Stakeholders */}
-      <div className="relative min-h-screen flex items-center">
-        {/* Responsive Background Image */}
-        <div 
+      <section className="relative flex min-h-screen items-center overflow-hidden">
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('./durga_puja.jpg')",
-            filter: 'brightness(0.9) contrast(1.1)'
+            filter: 'brightness(0.8) contrast(1.08)'
           }}
         />
-        {/* Mobile-optimized background overlay */}
-        <div className="absolute inset-0 bg-black/20 md:bg-black/30"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">OUR TARGET STAKEHOLDERS</h1>
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/20" />
+
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-10">
+            <div className="mb-5 inline-flex items-center rounded-full border border-amber-200/30 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-amber-100/90">
+              Stakeholders
+            </div>
+            <h1 className="mb-6 text-3xl font-light tracking-[0.18em] text-white md:text-4xl lg:text-5xl">
+              OUR TARGET STAKEHOLDERS
+            </h1>
+            <div className="space-y-5 text-base leading-relaxed text-slate-100/90 md:text-lg">
               <p>
                 The Art Law Communion seeks to engage a diverse and intersectional range of stakeholders including and not limited to:
               </p>
-              <div className="text-left space-y-3 md:space-y-4">
-                <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]"></span>
-                  <span className="ml-2">
-                    <strong>Performers:</strong> includes actors, singers, musicians, dancers, acrobats, jugglers, conjurers, snake charmers, or any other person who makes a performance.
-                  </span>
+              <div className="space-y-3 text-left text-slate-100/95 md:space-y-4">
+                <p className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <strong>Performers:</strong> includes actors, singers, musicians, dancers, acrobats, jugglers, conjurers, snake charmers, or any other person who makes a performance.
                 </p>
-                <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]"></span>
-                  <span className="ml-2">
-                    <strong>Artists:</strong> includes painters, sculptors, photographers, or any other person who creates art.
-                  </span>
+                <p className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <strong>Artists:</strong> includes painters, sculptors, photographers, or any other person who creates art.
                 </p>
-                <p className="flex items-start">
-                  <span className="font-bold min-w-[2rem]"></span>
-                  <span className="ml-2">
-                    <strong>Other stakeholders:</strong> includes dealers, collectors, museums, and trustees.
-                  </span>
+                <p className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <strong>Other stakeholders:</strong> includes dealers, collectors, museums, and trustees.
                 </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Section 4 - Founders Note (Video) */}
-      <div className="relative min-h-screen flex items-center">
-        {/* Background for this section (replace image later) */}
-        <div 
+      <section className="relative flex min-h-screen items-center overflow-hidden">
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('./exhi.jpeg')",
-            filter: 'brightness(0.9) contrast(1.1)'
+            filter: 'brightness(0.8) contrast(1.08)'
           }}
         />
-        <div className="absolute inset-0 bg-black/20 md:bg-black/30"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/10 to-black/20" />
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">OUR FOUNDERS NOTE</h1>
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
-              <div className="mt-6">
-                <VideoPreview videoUrl={VIDEO_URL} />
-              </div>
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-10">
+            <div className="mb-5 inline-flex items-center rounded-full border border-amber-200/30 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-amber-100/90">
+              Founders note
+            </div>
+            <h1 className="mb-6 text-3xl font-light tracking-[0.18em] text-white md:text-4xl lg:text-5xl">
+              OUR FOUNDERS NOTE
+            </h1>
+            <div className="mt-6">
+              <VideoPreview videoUrl={VIDEO_URL} />
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Responsive CSS for background images */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          /* Optimize background images for mobile */
-          .relative.min-h-screen .absolute.inset-0 {
-            background-attachment: scroll;
-            background-size: cover;
-            background-position: center center;
-          }
-        }
-        
-        @media (min-width: 769px) and (max-width: 1024px) {
-          /* Tablet optimizations */
-          .relative.min-h-screen .absolute.inset-0 {
-            background-size: cover;
-            background-position: center center;
-          }
-        }
-        
-        @media (min-width: 1025px) {
-          /* Desktop optimizations */
-          .relative.min-h-screen .absolute.inset-0 {
-            background-size: cover;
-            background-position: center center;
-          }
-        }
-        
-        /* Ensure proper image loading and fallback */
-        .relative.min-h-screen .absolute.inset-0 {
-          transition: background-image 0.3s ease-in-out;
-        }
-      `}</style>
+      </section>
     </div>
   );
 }
@@ -200,31 +165,32 @@ function VideoPreview({ videoUrl }) {
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
+    <div className="relative mx-auto w-full max-w-2xl">
       {videoUrl ? (
-        <div className="relative">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
           <video
             ref={videoRef}
             src={videoUrl}
             preload="metadata"
             playsInline
-            className="w-full block object-contain rounded-3xl border border-white/20 bg-black"
+            className="block w-full object-contain"
           />
 
-          {/* Overlay play button shown only before playback starts */}
           {!playing && (
             <button
               type="button"
               onClick={handlePlay}
-              className="absolute inset-0 m-auto flex items-center justify-center rounded-3xl bg-black/20 group"
+              className="group absolute inset-0 flex items-center justify-center bg-black/20 transition hover:bg-black/30"
               aria-label="Play founders note"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-black text-3xl shadow-lg transition group-hover:scale-105">▶</div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 text-3xl text-black shadow-[0_10px_30px_rgba(255,255,255,0.35)] transition duration-200 group-hover:scale-105">
+                ▶
+              </div>
             </button>
           )}
         </div>
       ) : (
-        <div className="rounded-3xl border border-white/20 bg-slate-900/90 p-6 text-white">
+        <div className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 text-white shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
           <p className="text-lg font-semibold">Video source not set yet.</p>
           <p className="mt-2 text-sm text-slate-300">Add the MOV URL in the code to enable playback.</p>
         </div>

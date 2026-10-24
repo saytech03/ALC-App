@@ -238,62 +238,64 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen py-20 px-8 relative home-bg">
-      <Navbar />
+    <div className="relative min-h-screen overflow-hidden bg-[#0b1020] text-white">
+      <div className="absolute inset-0 bg-[url('/membw.jpg')] bg-cover bg-center opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b1020]/30 via-[#0b1020]/30 to-[#0b1020]/55" />
 
-      {/* Main Centered Content */}
-      <div className="max-w-4xl mx-auto space-y-12 py-20 px-8 flex flex-col justify-center items-center text-center">
+      <div className="relative z-10">
+        <Navbar />
 
-        {/* Daily Quote */}
-        <div className="px-4">
-          <blockquote className="text-xl sm:text-2xl md:text-3xl lg:text-4xl italic font-serif text-white mb-6 leading-relaxed font-light tracking-wide">
-            "{dailyQuote.text}"
-          </blockquote>
-          <cite className="block text-lg sm:text-xl md:text-2xl font-serif text-white font-medium tracking-wide">
-            — {dailyQuote.author}
-          </cite>
-        </div>
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center space-y-10 px-6 py-20 text-center md:py-24">
+          <div className="w-full rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-10">
+            <div className="px-2">
+              <blockquote className="mb-6 text-xl font-light italic leading-relaxed tracking-wide text-white sm:text-2xl md:text-3xl lg:text-4xl">
+                "{dailyQuote.text}"
+              </blockquote>
+              <cite className="block text-lg font-medium tracking-wide text-slate-200 sm:text-xl md:text-2xl">
+                — {dailyQuote.author}
+              </cite>
+            </div>
+          </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center backdrop-blur-sm bg-black/30 p-6 md:p-8 rounded-lg">
-            <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-light tracking-wide mb-6 md:mb-8">
+          <div className="w-full rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-8">
+            <h1 className="mb-6 text-3xl font-light tracking-[0.18em] text-white md:text-4xl lg:text-5xl">
               Empowering Artists Legally
             </h1>
-            <p className="space-y-4 md:space-y-6 text-base md:text-lg text-white">
+            <p className="text-base leading-relaxed text-slate-100/90 md:text-lg">
               Our mission is to provide a platform for building discourse on Art Law in India and the Global South for serving artists, lawyers, and students of both law and art disciplines, including art market professionals and members of the general public. Importantly, we will attempt to bridge the gap between the artistic and legal community.
             </p>
           </div>
-        </div>
 
-        {/* CTA Buttons */}
-        <div className="pt-8 flex flex-wrap justify-center gap-4">
-          <Link
-            to="https://forms.gle/sU34TSnJWsmNNM3E8"
-            className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
-          >
-            Write To Us
-          </Link>
-          <Link
-            to="/bl"
-            className="inline-block bg-gray-800 hover:bg-black text-white px-8 py-4 text-lg font-medium rounded-lg transition-colors duration-200"
-          >
-            Contribute to our Blog - ALC Fenestra
-          </Link>
+          <div className="flex flex-wrap justify-center gap-4 pt-2">
+            <Link
+              to="https://forms.gle/sU34TSnJWsmNNM3E8"
+              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/8 px-7 py-3.5 text-base font-medium text-white transition hover:bg-white/12"
+            >
+              Write To Us
+            </Link>
+            <Link
+              to="/bl"
+              className="inline-flex items-center justify-center rounded-full border border-amber-200/30 bg-amber-500/10 px-7 py-3.5 text-base font-medium text-amber-100 transition hover:bg-amber-500/15"
+            >
+              Contribute to our Blog - ALC Fenestra
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* ===== Testimonials Section — Glass Transparent ===== */}
-      <div className="w-full py-16 md:py-20 relative overflow-hidden">
-        {/* Glass background */}
-        <div className="absolute inset-0 backdrop-blur-md bg-black/20"></div>
+      <div className="relative w-full overflow-hidden py-16 md:py-20">
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-md" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Section Title */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-              Words of Praise from Leaders
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-slate-200">
+              Testimonials
+            </div>
+            <h2 className="mb-4 text-3xl font-light tracking-[0.15em] text-white md:text-4xl">
+              WORDS OF PRAISE FROM LEADERS
             </h2>
-            <div className="h-1 w-20 bg-white/60 mx-auto rounded-full"></div>
+            <div className="mx-auto h-1 w-20 rounded-full bg-amber-300/80" />
           </div>
 
           <div className="relative">

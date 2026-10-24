@@ -90,19 +90,21 @@ const MembersPage = () => {
   const selectedMemberData = allMembers.find(m => m.id === selectedMember);
 
   return (
-    <div className="min-h-screen py-20 px-8 relative rainbow-bg">
-       {imgLoading && (
-        <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
-      )}
-      <Navbar/>
+    <div className="relative min-h-screen overflow-hidden bg-[#0b1020] px-8 py-20 text-white">
+      <div className="absolute inset-0 bg-[url('/building.jpg')] bg-cover bg-center opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b1020]/25 via-[#0b1020]/25 to-[#0b1020]/40" />
+
       {imgLoading && (
         <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
       )}
+      <Navbar/>
 
-      <div className="max-w-7xl mx-auto">
-        {/* === Header: The Team === */}
+      <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-14 mt-20">
-          <h1 className="text-white text-5xl md:text-6xl font-light tracking-wide">
+          <div className="mb-4 inline-flex items-center rounded-full border border-amber-200/30 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-amber-100/90">
+            Team
+          </div>
+          <h1 className="text-5xl font-light tracking-[0.14em] text-white md:text-6xl">
             The Team
           </h1>
         </div>
@@ -119,16 +121,16 @@ const MembersPage = () => {
                   className={`${startClass} lg:col-span-2 relative group cursor-pointer`}
                   onClick={() => setSelectedMember(member.id)}
                 >
-                  <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-white/10 bg-gray-800 shadow-[0_18px_50px_rgba(0,0,0,0.25)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
                     <img
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-full object-cover grayscale-[80%]"
+                      className="h-full w-full object-cover grayscale-[80%]"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                      <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                      <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
-                      <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+                    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 to-transparent p-6 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <h3 className="mb-2 text-xl font-semibold">{member.name}</h3>
+                      <p className="mb-3 text-sm font-medium text-slate-200">{member.position}</p>
+                      <p className="text-xs leading-relaxed text-slate-300">{member.info}</p>
                     </div>
                   </div>
                 </div>
@@ -146,16 +148,16 @@ const MembersPage = () => {
                   className="relative group cursor-pointer lg:col-span-2"
                   onClick={() => setSelectedMember(member.id)}
                 >
-                  <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-white/10 bg-gray-800 shadow-[0_18px_50px_rgba(0,0,0,0.25)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
                     <img
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-full object-cover grayscale-[80%]"
+                      className="h-full w-full object-cover grayscale-[80%]"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                      <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                      <p className="text-sm text-gray-300 mb-3 font-medium">{member.position}</p>
-                      <p className="text-xs text-gray-400 leading-relaxed">{member.info}</p>
+                    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 to-transparent p-6 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <h3 className="mb-2 text-xl font-semibold">{member.name}</h3>
+                      <p className="mb-3 text-sm font-medium text-slate-200">{member.position}</p>
+                      <p className="text-xs leading-relaxed text-slate-300">{member.info}</p>
                     </div>
                   </div>
                 </div>
@@ -168,7 +170,10 @@ const MembersPage = () => {
 
         {/* === Header: The Web Team === */}
         <div className="mb-14 mt-20">
-          <h1 className="text-white text-5xl md:text-6xl font-light tracking-wide">
+          <div className="mb-4 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-slate-200">
+            Developers
+          </div>
+          <h1 className="text-5xl font-light tracking-[0.14em] text-white md:text-6xl">
             The Web Team
           </h1>
         </div>
@@ -176,33 +181,33 @@ const MembersPage = () => {
         {/* === Web Team Grid - 2 cards using same grid system as core members === */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-8 max-w-[100rem] mx-auto pb-20">
           <div className="lg:col-start-3 lg:col-span-2 relative group cursor-pointer" onClick={() => setSelectedMember(webMembers[0].id)}>
-            <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-white/10 bg-gray-800 shadow-[0_18px_50px_rgba(0,0,0,0.25)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
               <img
                 src={webMembers[0].image}
                 alt={webMembers[0].name}
-                className="w-full h-full object-cover grayscale-[80%]"
+                className="h-full w-full object-cover grayscale-[80%]"
                 onLoad={() => webMembers[0].id === 9 && setImgLoading(false)}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">{webMembers[0].name}</h3>
-                <p className="text-sm text-gray-300 mb-3 font-medium">{webMembers[0].position}</p>
-                <p className="text-xs text-gray-400 leading-relaxed">{webMembers[0].info}</p>
+              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 to-transparent p-6 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <h3 className="mb-2 text-xl font-semibold">{webMembers[0].name}</h3>
+                <p className="mb-3 text-sm font-medium text-slate-200">{webMembers[0].position}</p>
+                <p className="text-xs leading-relaxed text-slate-300">{webMembers[0].info}</p>
               </div>
             </div>
           </div>
           
           <div className="lg:col-start-5 lg:col-span-2 relative group cursor-pointer" onClick={() => setSelectedMember(webMembers[1].id)}>
-            <div className="relative overflow-hidden bg-gray-800 aspect-[3/4] rounded-lg transition-transform duration-300 group-hover:scale-105">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-white/10 bg-gray-800 shadow-[0_18px_50px_rgba(0,0,0,0.25)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
               <img
                 src={webMembers[1].image}
                 alt={webMembers[1].name}
-                className="w-full h-full object-cover grayscale-[80%]"
+                className="h-full w-full object-cover grayscale-[80%]"
                 onLoad={() => webMembers[1].id === 9 && setImgLoading(false)}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">{webMembers[1].name}</h3>
-                <p className="text-sm text-gray-300 mb-3 font-medium">{webMembers[1].position}</p>
-                <p className="text-xs text-gray-400 leading-relaxed">{webMembers[1].info}</p>
+              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/35 to-transparent p-6 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <h3 className="mb-2 text-xl font-semibold">{webMembers[1].name}</h3>
+                <p className="mb-3 text-sm font-medium text-slate-200">{webMembers[1].position}</p>
+                <p className="text-xs leading-relaxed text-slate-300">{webMembers[1].info}</p>
               </div>
             </div>
           </div>

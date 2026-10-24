@@ -64,28 +64,15 @@ const Newsletter = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-900">
+    <div className="relative min-h-screen bg-[#0b1020] text-white">
+      <div className="absolute inset-0 bg-[url('./Newsletter.jpg')] bg-cover bg-center opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b1020]/35 via-[#0b1020]/30 to-[#0b1020]/50" />
+
       {imgLoading && (
         <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
       )}
       
-      {/* Navbar */}
       <Navbar />
-      
-      {/* Background Image - PLACEHOLDER: Update with your image */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url('./Newsletter.jpg')`, // PLACEHOLDER: Add your background image path
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        {/* Dark Overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
 
       {/* Optional: Decorative Elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -105,8 +92,8 @@ const Newsletter = () => {
           {/* ============================================= */}
           {/* HERO SECTION - Newsletter Info (Reduced Size) */}
           {/* ============================================= */}
-          <section className="max-w-4xl mx-auto mb-16">
-            <div className="bg-gradient-to-br from-indigo-900/40 to-purple-900/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-indigo-500/20 shadow-2xl">
+          <section className="max-w-5xl mx-auto mb-16">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md">
               
               {/* Newsletter Info - Centered */}
               <div className="p-8 lg:p-10 text-center">
@@ -199,7 +186,7 @@ const Newsletter = () => {
             </div>
 
             {/* Current Edition Card - Two Column Layout */}
-            <div className="bg-gradient-to-br from-gray-800/70 to-gray-900/70 backdrop-blur-sm rounded-2xl overflow-hidden border border-indigo-500/30 shadow-2xl hover:border-indigo-400/50 transition-all duration-300">
+            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all duration-300 hover:border-white/15">
               <div className="flex flex-col lg:flex-row">
                 
                 {/* Left Side - Edition Cover Image */}

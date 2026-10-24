@@ -479,51 +479,46 @@ const Resources = () => {
   };
 
   return (
-    <div className="relative min-h-screen pb-20">
-      
-      {/* Background Layer - Grayscale applied ONLY here */}
-      <div 
-        className="fixed inset-0 res-bg bg-yellow-200 grayscale-[80%] bg-cover bg-center -z-20 pointer-events-none" 
-      />
+    <div className="relative min-h-screen pb-20 bg-[#120d0a] text-white">
+      <div className="fixed inset-0 res-bg bg-yellow-200 grayscale-[78%] bg-cover bg-center opacity-75 -z-20 pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-b from-[#120d0a]/80 via-[#120d0a]/70 to-[#120d0a] -z-10" />
 
-      {/* Loading Overlay */}
       {imgLoading && (
         <div className='absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10' />
       )}
 
       <Navbar />
 
-      {/* Main Container */}
-      <div className="max-w-5xl mx-auto px-6 pt-32 pb-12">
-        <h1 className="text-4xl md:text-5xl font-serif text-white mb-6">
-         Evolution of Indian Painting
-        </h1>
-         <h1 className="text-2xl md:text-2xl font-serif italic text-white mb-3">
-         From Pre-Modern to Modern India
-        </h1>
-        
-        <p className="text-lg text-white leading-relaxed max-w-4xl mb-5 text-justify"> 
-          India has a long and fairly continuous history of painting, right from the earliest days of civilization. From the cave paintings of Bhimbetka, to painted pottery of the Harappan
-          civilization, to the impressive murals of Ajanta, the use of the brush and paint had evolved steadily over the centuries. In this segment, we take you through the various painting traditions that were popular during the 17th century, through the 18th century, until Independence in 1947.
-        </p>
+      <div className="mx-auto max-w-5xl px-6 pb-12 pt-32">
+        <div className="rounded-[2rem] border border-white/10 bg-black/25 p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-md md:p-8">
+          <h1 className="mb-3 text-4xl font-light tracking-[0.12em] text-white md:text-5xl">
+            Evolution of Indian Painting
+          </h1>
+          <h2 className="mb-4 text-2xl font-light italic text-amber-100 md:text-3xl">
+            From Pre-Modern to Modern India
+          </h2>
 
-        {/* Buttons - Right Aligned */}
-        <div className="flex flex-col md:flex-row md:items-center justify-end border-t border-gray-200/30 pt-4">
-          <div className="flex space-x-6 text-sm font-medium text-white">
-            <button 
-              onClick={openAll}
-              className="flex items-center hover:text-black transition-colors"
-            >
-              <ChevronsUpDown className="w-4 h-4 mr-1" />
-              OPEN ALL
-            </button>
-            <button 
-              onClick={collapseAll}
-              className="flex items-center hover:text-black transition-colors"
-            >
-              <X className="w-4 h-4 mr-1" />
-              COLLAPSE ALL
-            </button>
+          <p className="mb-5 max-w-4xl text-justify text-base leading-relaxed text-slate-100/90 md:text-lg">
+            India has a long and fairly continuous history of painting, right from the earliest days of civilization. From the cave paintings of Bhimbetka, to painted pottery of the Harappan civilization, to the impressive murals of Ajanta, the use of the brush and paint had evolved steadily over the centuries. In this segment, we take you through the various painting traditions that were popular during the 17th century, through the 18th century, until Independence in 1947.
+          </p>
+
+          <div className="flex flex-col justify-end border-t border-white/10 pt-4 md:flex-row md:items-center">
+            <div className="flex flex-wrap gap-4 text-sm font-medium text-white">
+              <button 
+                onClick={openAll}
+                className="flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:bg-white/10"
+              >
+                <ChevronsUpDown className="mr-1 h-4 w-4" />
+                OPEN ALL
+              </button>
+              <button 
+                onClick={collapseAll}
+                className="flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:bg-white/10"
+              >
+                <X className="mr-1 h-4 w-4" />
+                COLLAPSE ALL
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -577,9 +572,9 @@ const Resources = () => {
                 <div 
                     className="overflow-hidden shadow-inner"
                     style={{
-                        backgroundColor: '#fdf6e3', // Old paper color
-                        backgroundImage: `url("https://www.transparenttextures.com/patterns/aged-paper.png")`, // Subtle texture pattern (reliable CDN)
-                        boxShadow: 'inset 0 0 60px rgba(160, 82, 45, 0.15)' // Burnt edges vignette
+                        backgroundColor: 'rgba(253, 246, 227, 0.96)',
+                        backgroundImage: `url("https://www.transparenttextures.com/patterns/aged-paper.png")`,
+                        boxShadow: 'inset 0 0 60px rgba(160, 82, 45, 0.15)'
                     }}
                 >
                   <div className="max-w-5xl mx-auto px-6 md:px-12 py-10 md:py-14">
