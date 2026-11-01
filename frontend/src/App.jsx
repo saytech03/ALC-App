@@ -2,8 +2,8 @@ import { Route, Routes, Navigate, useNavigate, useLocation, useParams } from "re
 import HomePage from "./pages/HomePage";
 import HomePage_ from "./pages/HomePage_";
 import LoginPage from "./pages/LoginPage";
-import AdminLoginPage from "./admin/adminLoginPage";
-import Adcontrol from "./admin/adminControlPage"; 
+import AdminLoginPage from "./admin/AdminLoginPage";
+import Adcontrol from "./admin/AdminControlPage";
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
 import { Toaster, toast } from "react-hot-toast";
