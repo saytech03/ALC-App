@@ -2,8 +2,8 @@ import { Route, Routes, Navigate, useNavigate, useLocation, useParams } from "re
 import HomePage from "./pages/HomePage";
 import HomePage_ from "./pages/HomePage_";
 import LoginPage from "./pages/LoginPage";
-import AdminLoginPage from "./admin/AdminLoginPage";
-import Adcontrol from "./admin/AdminControlPage"; 
+import AdminLoginPage from "./admin-75321/adminLoginPage";
+import Adcontrol from "./admin-75321/adminControlPage"; 
 import SignUpPage from "./pages/SignUpPage";
 import NotFoundPage from "./pages/404";
 import { Toaster, toast } from "react-hot-toast";
@@ -19,7 +19,7 @@ import AboutPage from "./pages/AboutPage";
 import AboutPage_ from "./pages/AboutPage_";
 import { AuthProvider } from "./store/AuthContext";
 import OtpVerify from "./pages/OtpVerify";
-import CreateBlog from "./admin/CreateBlog";
+import CreateBlog from "./admin-75321/CreateBlog";
 import useDocumentTitle from './hooks/useDocumentTitle';
 import EventsPage from "./pages/Events";
 import EventsPage_ from "./pages/Events_";
@@ -37,7 +37,7 @@ import ContractScanner from "./pages/ContractScanner";
 import AiChat from "./pages/AiChat";
 import Resources from "./pages/Res";
 import Resources_ from "./pages/Res_";
-import CreateEvent from "./admin/CreateEvent";
+import CreateEvent from "./admin-75321/CreateEvent";
 
 // --- Helper: Scroll To Top ---
 const ScrollToTop = () => {
@@ -95,7 +95,7 @@ const RequireAuth = ({ children }) => {
 const RequireAdminAuth = ({ children }) => {
   const user1 = localStorage.getItem('adminUser');
   if (!user1) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/admin-75321" replace />;
   }
   return children;
 };

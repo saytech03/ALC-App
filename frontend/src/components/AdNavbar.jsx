@@ -235,7 +235,7 @@ const UserAvatarDropdown = ({ size = 27 }) => {
       localStorage.removeItem('userAvatar');
       localStorage.removeItem('currentUser');
       toast.success('Logged out successfully!');
-      navigate('/admin', { replace: true });
+      navigate('/admin-75321', { replace: true });
     } catch (error) {
       console.error('Logout error:', error);
       toast.error('Failed to logout. Please try again.');
