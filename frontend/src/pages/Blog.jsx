@@ -35,9 +35,6 @@ const Blog = () => {
             featured: idx === 0,
             realUrl: b.sections && b.sections[0]?.references?.[0] ? b.sections[0].references[0] : null,
             image: b.sections && b.sections[0]?.images?.[0] ? b.sections[0].images[0] : "./birlawabs.png",
-            subheadings: Array.isArray(b.sections)
-              ? b.sections.map(section => section?.heading || section?.subHeading || 'Overview').filter(Boolean)
-              : ['Overview'],
             sections: b.sections
           }));
           setApiBlogs(formatted);
