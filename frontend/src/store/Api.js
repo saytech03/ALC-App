@@ -2,7 +2,7 @@ const isLocalhost = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
 const API_CONFIG = {
-  BASE_URL: isLocalhost ? 'http://localhost:8055' : 'https://alc-backend.onrender.com',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL || (isLocalhost ? 'http://localhost:8055' : 'https://alc-backend.onrender.com'),
   ENDPOINTS: {
     AUTH: {
       REGISTER: '/api/auth/register',
