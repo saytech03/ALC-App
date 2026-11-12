@@ -201,10 +201,12 @@ const Blog = () => {
   }, []);
 
   const formatNumber = (num) => {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
+    const n = Number(num);
+    if (isNaN(n)) return '0';
+    if (n >= 1000) {
+      return (n / 1000).toFixed(1) + 'K';
     }
-    return num.toString();
+    return n.toString();
   };
 
   // Function to handle article click
@@ -226,7 +228,7 @@ const Blog = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/login', { state: { from: '/bl' } });
     setShowLoginModal(false);
   };
 
@@ -595,24 +597,26 @@ const Blog = () => {
                   </p>
                   
                   {/* Subheadings Preview */}
-                  <div className="mb-4">
-                    <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                      What You'll Learn:
-                    </h4>
-                    <ul className="text-xs text-gray-600 space-y-1">
-                      {article.subheadings.slice(0, 2).map((heading, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <span className="text-blue-600 mt-1">•</span>
-                          <span>{heading}</span>
-                        </li>
-                      ))}
-                      {article.subheadings.length > 2 && (
-                        <li className="text-blue-600 font-semibold">
-                          +{article.subheadings.length - 2} more topics
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                  {Array.isArray(article.subheadings) && article.subheadings.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                        What You'll Learn:
+                      </h4>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        {article.subheadings.slice(0, 2).map((heading, index) => (
+                          <li key={index} className="flex items-start space-x-2">
+                            <span className="text-blue-600 mt-1">•</span>
+                            <span>{heading}</span>
+                          </li>
+                        ))}
+                        {article.subheadings.length > 2 && (
+                          <li className="text-blue-600 font-semibold">
+                            +{article.subheadings.length - 2} more topics
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                   
                   <div className="flex items-center justify-between border-t pt-4">
                     <div className="flex items-center space-x-4 text-xs text-gray-500">
