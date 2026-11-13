@@ -241,12 +241,12 @@ const Blogspot = () => {
       <section className="pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Featured Article Banner */}
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-16 mt-12">
+          <div className="mb-16 mt-12 overflow-hidden rounded-2xl border border-white/60 bg-[#fffdf8] shadow-xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               {/* Content Side */}
               <div className="p-8 lg:p-12 flex flex-col justify-center">
                 <div className="flex items-center space-x-3 mb-6">
-                  <span className="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-bold tracking-wide">
+                  <span className="rounded-full bg-[#fff0e8] px-4 py-2 text-sm font-bold tracking-wide text-[#c94d16]">
                     FEATURED
                   </span>
                 {/* <div className="flex items-center space-x-2 text-orange-600">
@@ -255,33 +255,33 @@ const Blogspot = () => {
                   </div>*/}
                 </div>
                 
-                <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                <h1 className="mb-6 font-serif text-3xl font-semibold leading-tight tracking-tight text-[#211d1a] lg:text-5xl">
                   {featuredArticle.title}
                 </h1>
                 
                 <div className="flex items-center space-x-2 mb-4">
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="rounded-full bg-[#fff0e8] px-3 py-1 text-xs font-semibold text-[#c94d16]">
                     {featuredArticle.category}
                   </span>
                   <div className="flex items-center space-x-1">
                     {[...Array(4)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-4 h-4 fill-[#ff6719] text-[#ff6719]" />
                     ))}
-                    <span className="text-sm text-gray-600 ml-2">
+                    <span className="ml-2 text-sm text-stone-500">
                       Popularity: {featuredArticle.popularity}%
                     </span>
                   </div>
                 </div>
                 
-                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                <p className="mb-6 text-lg leading-relaxed text-stone-700">
                   {featuredArticle.introduction}
                 </p>
                 
                 {/* Author and Meta Info */}
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-8">
+                <div className="mb-8 flex flex-wrap items-center gap-4 text-sm text-stone-500">
                   <div className="flex items-center space-x-2">
                     <User className="w-4 h-4" />
-                    <span className="font-semibold">{featuredArticle.author}</span>
+                    <span className="font-semibold text-stone-700">{featuredArticle.author}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-4 h-4" />
@@ -294,24 +294,24 @@ const Blogspot = () => {
                 </div>
                 
                 {/* Engagement Stats */}
-                <div className="flex items-center space-x-6 mb-8 p-4 bg-gray-50 rounded-lg">
+                <div className="mb-8 flex items-center space-x-6 rounded-xl border border-stone-100 bg-[#f8f6f1] p-4 text-stone-700">
                   <div className="flex items-center space-x-2">
-                    <Repeat className="w-5 h-5 text-blue-600" />
+                    <Repeat className="w-5 h-5 text-[#ff6719]" />
                     <span className="font-semibold">{featuredArticle.reposts}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <MessageCircle className="w-5 h-5 text-green-600" />
+                    <MessageCircle className="w-5 h-5 text-stone-500" />
                     <span className="font-semibold">{featuredArticle.comments}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Heart className="w-5 h-5 text-red-600" />
+                    <Heart className="w-5 h-5 text-[#ff6719]" />
                     <span className="font-semibold">{featuredArticle.likes}</span>
                   </div>
                 </div>
                 
                 <button 
                   onClick={() => handleArticleClick(featuredArticle)}
-                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-bold hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-fit cursor-pointer"
+                  className="inline-flex w-fit cursor-pointer items-center space-x-3 rounded-full bg-[#ff6719] px-8 py-4 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#e85b13]"
                 >
                   <span>READ FULL ARTICLE</span>
                   {featuredArticle.realUrl ? (
@@ -332,10 +332,10 @@ const Blogspot = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 
                 {/* Floating Popularity Badge */}
-                <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-full p-3 shadow-lg">
+                <div className="absolute top-6 right-6 rounded-full bg-[#fffdf8]/95 p-3 shadow-md backdrop-blur-sm">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-bold text-gray-900">
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#ff6719]"></div>
+                    <span className="text-sm font-semibold text-[#211d1a]">
                       {featuredArticle.popularity}% Popular
                     </span>
                   </div>
@@ -347,7 +347,7 @@ const Blogspot = () => {
           {/* Popular Articles Horizontal Slider */}
           <div className="mb-16">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-white flex items-center space-x-3">
+              <h2 className="flex items-center space-x-3 font-serif text-3xl font-semibold tracking-tight text-white">
                {/*} <TrendingUp className="w-8 h-8 text-orange-600" />*/}
                 <span>Most Popular This Week</span>
               </h2>
@@ -356,18 +356,18 @@ const Blogspot = () => {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={prevSlide}
-                  className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50"
+                  className="rounded-full border border-white/40 bg-[#fffdf8] p-3 shadow-sm transition-colors hover:bg-white"
                 >
-                  <ChevronLeft className="w-6 h-6 text-gray-600" />
+                  <ChevronLeft className="w-6 h-6 text-stone-700" />
                 </button>
-                <span className="text-sm text-gray-600 font-medium">
+                <span className="text-sm font-medium text-white/85">
                   {popularSlideIndex + 1} - {Math.min(popularSlideIndex + 2, popularArticles.length)} of {popularArticles.length}
                 </span>
                 <button
                   onClick={nextSlide}
-                  className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50"
+                  className="rounded-full border border-white/40 bg-[#fffdf8] p-3 shadow-sm transition-colors hover:bg-white"
                 >
-                  <ChevronRight className="w-6 h-6 text-gray-600" />
+                  <ChevronRight className="w-6 h-6 text-stone-700" />
                 </button>
               </div>
             </div>
@@ -381,7 +381,7 @@ const Blogspot = () => {
                 {popularArticles.map((article, index) => (
                   <div key={article.id} className="w-1/2 flex-shrink-0 px-4">
                     <div 
-                      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden h-full cursor-pointer"
+                      className="h-full cursor-pointer overflow-hidden rounded-xl border border-stone-200/80 bg-[#fffdf8] shadow-sm transition-shadow duration-300 hover:shadow-lg"
                       onClick={() => handleArticleClick(article)}
                     >
                       <div className="relative h-48">
@@ -390,14 +390,14 @@ const Blogspot = () => {
                           alt={article.title}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-4 left-4 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="absolute top-4 left-4 rounded-full bg-[#fff0e8] px-3 py-1 text-xs font-bold text-[#c94d16]">
                           #{index + 1} POPULAR
                         </div>
-                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
-                          <span className="text-xs font-bold text-gray-900">{article.popularity}%</span>
+                        <div className="absolute top-4 right-4 rounded-full bg-[#fffdf8]/90 px-2 py-1 backdrop-blur-sm">
+                          <span className="text-xs font-bold text-[#211d1a]">{article.popularity}%</span>
                         </div>
                         {article.realUrl && (
-                          <div className="absolute bottom-4 right-4 bg-blue-600 text-white rounded-full p-2">
+                          <div className="absolute bottom-4 right-4 rounded-full bg-[#ff6719] p-2 text-white">
                             <ExternalLink className="w-4 h-4" />
                           </div>
                         )}
@@ -405,27 +405,27 @@ const Blogspot = () => {
                       
                       <div className="p-6">
                         <div className="flex items-center space-x-2 mb-3">
-                          <Tag className="w-4 h-4 text-blue-600" />
-                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
+                          <Tag className="w-4 h-4 text-[#ff6719]" />
+                          <span className="rounded-full bg-[#fff0e8] px-2 py-1 text-xs font-semibold text-[#c94d16]">
                             {article.category}
                           </span>
                         </div>
                         
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
+                        <h3 className="mb-3 line-clamp-2 font-serif text-lg font-semibold text-[#211d1a]">
                           {article.title}
                         </h3>
                         
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                        <p className="mb-4 line-clamp-2 text-sm text-stone-600">
                           {article.introduction}
                         </p>
                         
-                        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                          <span className="font-semibold">{article.author}</span>
+                        <div className="mb-4 flex items-center justify-between text-xs text-stone-500">
+                          <span className="font-semibold text-stone-700">{article.author}</span>
                           <span>{article.readTime}</span>
                         </div>
                         
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4 text-xs">
+                          <div className="flex items-center space-x-4 text-xs text-stone-500">
                             <span className="flex items-center space-x-1">
                               <Repeat className="w-3 h-3" />
                               <span>{formatNumber(parseInt(article.reposts))}</span>
@@ -441,9 +441,9 @@ const Blogspot = () => {
                           </div>
                           
                           {article.realUrl ? (
-                            <ExternalLink className="w-5 h-5 text-blue-600" />
+                            <ExternalLink className="w-5 h-5 text-[#ff6719]" />
                           ) : (
-                            <ChevronRight className="w-5 h-5 text-blue-600" />
+                            <ChevronRight className="w-5 h-5 text-[#ff6719]" />
                           )}
                         </div>
                       </div>
@@ -455,13 +455,13 @@ const Blogspot = () => {
           </div>
 
           {/* === SUBMISSION GUIDELINES SECTION === */}
-          <div className="mb-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-blue-900 p-6 flex items-center justify-between">
+          <div className="mb-16 overflow-hidden rounded-2xl border border-stone-200/80 bg-[#fffdf8] shadow-lg">
+            <div className="flex items-center justify-between bg-[#29231f] p-6">
               <div className="flex items-center space-x-3">
-                <FileText className="w-8 h-8 text-blue-300" />
-                <h2 className="text-2xl font-bold text-white">Submission Guidelines</h2>
+                <FileText className="w-8 h-8 text-[#ff9a66]" />
+                <h2 className="font-serif text-2xl font-semibold text-white">Submission Guidelines</h2>
               </div>
-              <span className="bg-blue-800 text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+              <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold text-orange-100">
                 Rolling Basis
               </span>
             </div>
@@ -470,28 +470,28 @@ const Blogspot = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                    <CheckCircle className="mr-2 h-5 w-5 text-[#ff6719]" />
                     Key Requirements
                   </h3>
                   <ul className="space-y-3">
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">1.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">1.</div>
                       <span>Word count: 1,000 - 1,500 words (flexible subject to approval).</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">2.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">2.</div>
                       <span>Topic must relate to Art & Cultural Heritage Law.</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">3.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">3.</div>
                       <span>Original and unpublished manuscripts only.</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">4.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">4.</div>
                       <span>Co-authorship allowed (max 2 authors).</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">5.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">5.</div>
                       <span>Include at least 3 relevant images with clear sources.</span>
                     </li>
                   </ul>
@@ -499,24 +499,24 @@ const Blogspot = () => {
 
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <FileText className="w-5 h-5 text-blue-600 mr-2" />
+                    <FileText className="mr-2 h-5 w-5 text-[#ff6719]" />
                     Formatting & Policy
                   </h3>
                   <ul className="space-y-3">
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">6.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">6.</div>
                       <span>Font: Garamond, Size 12.</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">7.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">7.</div>
                       <span>Mandatory citations (footnotes + hyperlinks). Uniform style.</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">8.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">8.</div>
                       <span>Strict no-plagiarism policy. Rejection without review if violated.</span>
                     </li>
                     <li className="flex items-start text-sm text-gray-700">
-                      <div className="min-w-6 font-bold text-blue-600">9.</div>
+                      <div className="min-w-6 font-bold text-[#c94d16]">9.</div>
                       <span>Authors are responsible for facts and views stated.</span>
                     </li>
                   </ul>
@@ -524,7 +524,7 @@ const Blogspot = () => {
               </div>
 
               <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-lg">
+                <div className="flex items-center rounded-full bg-[#fff0e8] px-4 py-2 text-sm font-medium text-[#b84017]">
                   <AlertCircle className="w-4 h-4 mr-2" />
                   Non-adherence leads to rejection without review.
                 </div>
@@ -533,7 +533,7 @@ const Blogspot = () => {
                   href="https://forms.gle/AdNb8uAFJDxmzvk27" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                  className="inline-flex items-center justify-center rounded-full bg-[#ff6719] px-8 py-3 font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#e85b13]"
                 >
                   Submit via Google Form
                   <ExternalLink className="w-4 h-4 ml-2" />
@@ -552,8 +552,8 @@ const Blogspot = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-blue-50 shadow-md hover:shadow-lg'
+                      ? 'bg-[#ff6719] text-white shadow-sm'
+                      : 'border border-white/60 bg-[#fffdf8] text-stone-700 shadow-sm hover:bg-white'
                   }`}
                 >
                   {category}
@@ -570,7 +570,7 @@ const Blogspot = () => {
             {filteredArticles.map((article) => (
               <article 
                 key={article.id} 
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden cursor-pointer"
+                className="cursor-pointer overflow-hidden rounded-xl border border-stone-200/80 bg-[#fffdf8] shadow-sm transition-shadow duration-300 hover:shadow-lg"
                 onClick={() => handleArticleClick(article)}
               >
                 <div className="relative h-48">
@@ -580,50 +580,50 @@ const Blogspot = () => {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
-                    <span className="text-xs font-bold text-gray-900">{article.category}</span>
+                  <div className="absolute top-4 left-4 rounded-full bg-[#fffdf8]/90 px-3 py-1 backdrop-blur-sm">
+                    <span className="text-xs font-bold text-[#211d1a]">{article.category}</span>
                   </div>
-                  <div className="absolute top-4 right-4 bg-green-100 text-green-800 rounded-full px-2 py-1">
+                  <div className="absolute top-4 right-4 rounded-full bg-[#fff0e8] px-2 py-1 text-[#c94d16]">
                     <span className="text-xs font-bold">{article.popularity}%</span>
                   </div>
                   {article.realUrl && (
-                    <div className="absolute bottom-4 right-4 bg-blue-600 text-white rounded-full p-2">
+                    <div className="absolute bottom-4 right-4 rounded-full bg-[#ff6719] p-2 text-white">
                       <ExternalLink className="w-4 h-4" />
                     </div>
                   )}
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
+                  <h3 className="mb-3 font-serif text-xl font-semibold text-[#211d1a] transition-colors hover:text-[#c94d16]">
                     {article.title}
                   </h3>
                   
-                  <div className="flex items-center space-x-2 mb-3 text-sm text-gray-600">
+                  <div className="mb-3 flex items-center space-x-2 text-sm text-stone-500">
                     <User className="w-4 h-4" />
-                    <span className="font-semibold">{article.author}</span>
+                    <span className="font-semibold text-stone-700">{article.author}</span>
                     <span>•</span>
                     <span>{article.date}</span>
                   </div>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="mb-4 line-clamp-3 text-sm text-stone-600">
                     {article.introduction}
                   </p>
                   
                   {/* Subheadings Preview */}
                   {Array.isArray(article.subheadings) && article.subheadings.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                      <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
                         What You'll Learn:
                       </h4>
-                      <ul className="text-xs text-gray-600 space-y-1">
+                      <ul className="space-y-1 text-xs text-stone-600">
                         {article.subheadings.slice(0, 2).map((heading, index) => (
                           <li key={index} className="flex items-start space-x-2">
-                            <span className="text-blue-600 mt-1">•</span>
+                            <span className="mt-1 text-[#ff6719]">•</span>
                             <span>{heading}</span>
                           </li>
                         ))}
                         {article.subheadings.length > 2 && (
-                          <li className="text-blue-600 font-semibold">
+                          <li className="font-semibold text-[#c94d16]">
                             +{article.subheadings.length - 2} more topics
                           </li>
                         )}
@@ -631,8 +631,8 @@ const Blogspot = () => {
                     </div>
                   )}
                   
-                  <div className="flex items-center justify-between border-t pt-4">
-                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                  <div className="flex items-center justify-between border-t border-stone-200 pt-4">
+                    <div className="flex items-center space-x-4 text-xs text-stone-500">
                       <span className="flex items-center space-x-1">
                         <Repeat className="w-3 h-3" />
                         <span>{formatNumber(parseInt(article.reposts))}</span>
@@ -647,7 +647,7 @@ const Blogspot = () => {
                       </span>
                     </div>
                     
-                    <button className="inline-flex items-center space-x-1 text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+                    <button className="inline-flex items-center space-x-1 font-semibold text-[#c94d16] transition-colors hover:text-[#a83b10]">
                       <span className="text-sm">Read</span>
                       {article.realUrl ? (
                         <ExternalLink className="w-4 h-4" />
@@ -666,25 +666,25 @@ const Blogspot = () => {
       {/* Blog Detail Reader Modal */}
       {selectedArticle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-8 relative">
+          <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-stone-200 bg-[#fffdf8] p-6 shadow-2xl md:p-8">
             <button 
               onClick={() => setSelectedArticle(null)}
-              className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors"
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 font-bold text-stone-700 transition-colors hover:bg-stone-200"
             >
               ✕
             </button>
             
             <div className="mb-4 flex items-center space-x-3">
-              <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
+              <span className="rounded-full bg-[#fff0e8] px-3 py-1 text-xs font-bold text-[#c94d16]">
                 {selectedArticle.category || 'ART LAW'}
               </span>
-              <span className="text-xs text-gray-500">{selectedArticle.date}</span>
+              <span className="text-xs text-stone-500">{selectedArticle.date}</span>
             </div>
             
-            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2">
+            <h2 className="mb-2 font-serif text-2xl font-semibold text-[#211d1a] md:text-3xl">
               {selectedArticle.title}
             </h2>
-            <p className="text-sm font-semibold text-gray-600 mb-6">
+            <p className="mb-6 text-sm font-semibold text-stone-600">
               By {selectedArticle.author}
             </p>
             
@@ -692,36 +692,36 @@ const Blogspot = () => {
               <img 
                 src={selectedArticle.image} 
                 alt={selectedArticle.title}
-                className="w-full h-64 md:h-80 object-cover rounded-2xl mb-6 shadow-md"
+                className="mb-6 h-64 w-full rounded-xl object-cover shadow-md md:h-80"
               />
             )}
             
-            <div className="prose max-w-none text-gray-700 space-y-6">
+            <div className="prose max-w-none space-y-6 text-stone-700">
               {selectedArticle.introduction && (
-                <p className="text-base font-medium leading-relaxed italic text-gray-800 border-l-4 border-blue-600 pl-4 py-1">
+                <p className="border-l-4 border-[#ff6719] py-1 pl-4 text-base font-medium italic leading-relaxed text-stone-800">
                   {selectedArticle.introduction}
                 </p>
               )}
               
               {selectedArticle.sections && selectedArticle.sections.length > 0 ? (
                 selectedArticle.sections.map((sec, idx) => (
-                  <div key={idx} className="space-y-3 pt-4 border-t border-gray-100">
-                    {sec.heading && <h3 className="text-xl font-bold text-gray-900">{sec.heading}</h3>}
-                    {sec.subHeading && <h4 className="text-md font-semibold text-gray-700">{sec.subHeading}</h4>}
+                  <div key={idx} className="space-y-3 border-t border-stone-200 pt-4">
+                    {sec.heading && <h3 className="font-serif text-xl font-semibold text-[#211d1a]">{sec.heading}</h3>}
+                    {sec.subHeading && <h4 className="text-md font-semibold text-stone-700">{sec.subHeading}</h4>}
                     {sec.body && <p className="leading-relaxed whitespace-pre-line text-sm md:text-base">{sec.body}</p>}
                     {sec.images && sec.images.length > 0 && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
                         {sec.images.map((imgUrl, i) => (
-                          <img key={i} src={imgUrl} alt={`Section image ${i+1}`} className="rounded-xl object-cover w-full h-48 shadow-sm" />
+                          <img key={i} src={imgUrl} alt={`Section image ${i+1}`} className="h-48 w-full rounded-xl object-cover shadow-sm" />
                         ))}
                       </div>
                     )}
                     {sec.references && sec.references.length > 0 && (
-                      <div className="bg-gray-50 p-4 rounded-xl text-xs space-y-1">
-                        <span className="font-bold text-gray-700">References / Links:</span>
+                      <div className="space-y-1 rounded-xl bg-[#f8f6f1] p-4 text-xs">
+                        <span className="font-bold text-stone-700">References / Links:</span>
                         {sec.references.map((ref, rIdx) => (
                           <div key={rIdx}>
-                            <a href={ref} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                            <a href={ref} target="_blank" rel="noopener noreferrer" className="break-all text-[#c94d16] hover:underline">
                               {ref}
                             </a>
                           </div>
@@ -735,10 +735,10 @@ const Blogspot = () => {
               )}
             </div>
             
-            <div className="mt-8 pt-4 border-t flex justify-end">
+            <div className="mt-8 flex justify-end border-t border-stone-200 pt-4">
               <button 
                 onClick={() => setSelectedArticle(null)}
-                className="bg-blue-600 text-white font-bold px-6 py-2 rounded-xl hover:bg-blue-700 transition-colors"
+                className="rounded-full bg-[#ff6719] px-6 py-2 font-semibold text-white transition-colors hover:bg-[#e85b13]"
               >
                 Close
               </button>
