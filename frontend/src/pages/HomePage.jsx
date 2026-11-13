@@ -269,13 +269,13 @@ const HomePage = () => {
           <div className="flex flex-wrap justify-center gap-4 pt-2">
             <Link
               to="https://forms.gle/sU34TSnJWsmNNM3E8"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/8 px-7 py-3.5 text-base font-medium text-white transition hover:bg-white/12"
+              className="inline-flex items-center justify-center rounded-full border border-white/25 bg-black/70 px-7 py-3.5 text-base font-medium text-white transition hover:bg-black/85"
             >
               Write To Us
             </Link>
             <Link
               to="/bl"
-              className="inline-flex items-center justify-center rounded-full border border-amber-200/30 bg-amber-500/10 px-7 py-3.5 text-base font-medium text-amber-100 transition hover:bg-amber-500/15"
+              className="inline-flex items-center justify-center rounded-full border border-amber-200/40 bg-amber-900/80 px-7 py-3.5 text-base font-medium text-amber-100 transition hover:bg-amber-950/90"
             >
               Contribute to our Blog - ALC Fenestra
             </Link>
