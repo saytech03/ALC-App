@@ -726,7 +726,7 @@ const AltNavbar = () => {
           <Link to={`/${patronId}/memberh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Team
           </Link>
-          <Link to={`/${patronId}/res`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
+          <Link to={`/${patronId}/resh`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
             Resources
           </Link>
           <Link to={`/${patronId}/blog`} className="text-white hover:text-blue-400 transition-colors p-2 hover:bg-gray-900 rounded-full">
@@ -785,7 +785,7 @@ const AltNavbar = () => {
               Team
             </Link>
             <Link 
-              to={`/${patronId}/res`} 
+              to={`/${patronId}/resh`} 
               className="text-white hover:text-blue-400 transition-colors py-2 px-4 hover:bg-gray-900 rounded-lg"
               onClick={() => setIsMobileMenuOpen(false)}
             >
